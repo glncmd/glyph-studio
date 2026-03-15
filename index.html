@@ -505,7 +505,71 @@
       if (variant.mode === 'replacement') {
         renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY);
       }
-      // overlay mode handled in later task
+      if (variant.mode === 'overlay') {
+        renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY);
+      }
+    }
+
+    function sobelAt(pixels, srcW, srcH, x, y) {
+      function lum(px, py) {
+        px = Math.max(0, Math.min(srcW - 1, px));
+        py = Math.max(0, Math.min(srcH - 1, py));
+        const i = (py * srcW + px) * 4;
+        return 0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
+      }
+      const tl = lum(x - 1, y - 1), tc = lum(x, y - 1), tr = lum(x + 1, y - 1);
+      const ml = lum(x - 1, y),                           mr = lum(x + 1, y);
+      const bl = lum(x - 1, y + 1), bc = lum(x, y + 1), br = lum(x + 1, y + 1);
+      const gx = -tl + tr - 2 * ml + 2 * mr - bl + br;
+      const gy = -tl - 2 * tc - tr + bl + 2 * bc + br;
+      return {
+        magnitude: Math.sqrt(gx * gx + gy * gy),
+        angle: Math.atan2(gy, gx)
+      };
+    }
+
+    function renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY) {
+      const outW = outputCanvas.width;
+      const outH = outputCanvas.height;
+      const drawW = srcW * scale;
+      const drawH = srcH * scale;
+      outputCtx.drawImage(sourceCanvas, offsetX, offsetY, drawW, drawH);
+
+      const fontSize = cellSize * scale;
+      outputCtx.font = `${fontSize}px monospace`;
+      outputCtx.textBaseline = 'middle';
+      outputCtx.textAlign = 'center';
+
+      const thresholds = [0, 30, 80, 150, 220];
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const cx = col * cellSize + Math.floor(cellSize / 2);
+          const cy = row * cellSize + Math.floor(cellSize / 2);
+          const { magnitude, angle } = sobelAt(pixels, srcW, srcH, cx, cy);
+          let charIndex = 0;
+          for (let t = thresholds.length - 1; t >= 0; t--) {
+            if (magnitude >= thresholds[t]) { charIndex = t; break; }
+          }
+          const char = chars[charIndex];
+          const x = offsetX + (col + 0.5) * cellSize * scale;
+          const y = offsetY + (row + 0.5) * cellSize * scale;
+          const pi = (cy * srcW + cx) * 4;
+          const r = pixels[pi], g = pixels[pi + 1], b = pixels[pi + 2];
+
+          outputCtx.save();
+          outputCtx.globalAlpha = 0.7;
+          outputCtx.fillStyle = state.colorMode ? `rgb(${r},${g},${b})` : '#ffffff';
+          if (state.charRotation) {
+            outputCtx.translate(x, y);
+            outputCtx.rotate(angle);
+            outputCtx.fillText(char, 0, 0);
+          } else {
+            outputCtx.fillText(char, x, y);
+          }
+          outputCtx.restore();
+        }
+      }
     }
 
     function renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY) {
@@ -543,7 +607,18 @@
           const y = offsetY + (row + 0.5) * cellSize * scale;
 
           outputCtx.fillStyle = state.colorMode ? `rgb(${r},${g},${b})` : '#ffffff';
-          outputCtx.fillText(char, x, y);
+          if (state.charRotation) {
+            const cx = col * cellSize + Math.floor(cellSize / 2);
+            const cy = row * cellSize + Math.floor(cellSize / 2);
+            const { angle } = sobelAt(pixels, srcW, srcH, cx, cy);
+            outputCtx.save();
+            outputCtx.translate(x, y);
+            outputCtx.rotate(angle);
+            outputCtx.fillText(char, 0, 0);
+            outputCtx.restore();
+          } else {
+            outputCtx.fillText(char, x, y);
+          }
         }
       }
     }
