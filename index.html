@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCII Art Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom range slider */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #333;
+      border-radius: 9999px;
+      transition: background-color 0.2s;
+    }
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #888;
+      border-radius: 50%;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #555;
+    }
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(16px);
+      background-color: #fff;
+    }
+
+    /* Settings drawer transition */
+    #settingsDrawer {
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col">
+
+  <!-- Top Bar -->
+  <div class="bg-[#111] border-b border-[#222] flex items-center justify-between px-3 py-2">
+    <!-- Left buttons -->
+    <div class="flex items-center gap-2">
+      <!-- Image upload -->
+      <button id="imageBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Upload Image">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </button>
+      <!-- Video upload -->
+      <button id="videoBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Upload Video">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+          <line x1="7" y1="2" x2="7" y2="22"/>
+          <line x1="17" y1="2" x2="17" y2="22"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <line x1="2" y1="7" x2="7" y2="7"/>
+          <line x1="2" y1="17" x2="7" y2="17"/>
+          <line x1="17" y1="7" x2="22" y2="7"/>
+          <line x1="17" y1="17" x2="22" y2="17"/>
+        </svg>
+      </button>
+      <!-- Webcam -->
+      <button id="webcamBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Start Webcam">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Right buttons -->
+    <div class="flex items-center gap-2">
+      <!-- Export PNG -->
+      <button id="exportPngBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Export PNG">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+      <!-- Record Video -->
+      <button id="recordBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Record Video">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="4" fill="currentColor"/>
+        </svg>
+      </button>
+      <!-- Settings -->
+      <button id="settingsBtn" class="bg-[#222] border border-[#333] rounded-lg p-2 text-[#aaa] hover:text-white hover:border-[#555]" title="Settings">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"/>
+          <line x1="4" y1="10" x2="4" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12" y2="3"/>
+          <line x1="20" y1="21" x2="20" y2="16"/>
+          <line x1="20" y1="12" x2="20" y2="3"/>
+          <line x1="1" y1="14" x2="7" y2="14"/>
+          <line x1="9" y1="8" x2="15" y2="8"/>
+          <line x1="17" y1="16" x2="23" y2="16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main area -->
+  <div class="flex flex-1 overflow-hidden relative">
+    <div id="canvasArea" class="flex-1 relative">
+      <canvas id="outputCanvas" class="absolute inset-0 w-full h-full"></canvas>
+      <!-- Empty state -->
+      <div id="emptyState" class="absolute inset-0 flex items-center justify-center text-[#555] text-lg pointer-events-none select-none">
+        Drop an image or video here, or use the buttons above
+      </div>
+    </div>
+
+    <!-- Settings Drawer -->
+    <div id="settingsDrawer" class="absolute right-0 top-0 bottom-0 w-[300px] bg-[#111] border-l border-[#222] translate-x-full overflow-y-auto z-10">
+      <div class="p-4 flex flex-col gap-5">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <span class="text-white font-semibold text-base">Settings</span>
+          <button id="drawerClose" class="cursor-pointer text-[#666] hover:text-white">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Variant selector -->
+        <div class="flex items-center gap-2">
+          <button id="variantPrev" class="text-[#aaa] hover:text-white bg-[#222] border border-[#333] rounded-lg p-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <select id="variantSelect" class="flex-1 bg-[#222] border border-[#333] rounded-lg text-white text-sm px-3 py-1.5 text-center appearance-none cursor-pointer">
+            <option>Standard</option>
+            <option>Dense</option>
+            <option>Minimal</option>
+            <option>Blocks</option>
+            <option>Braille</option>
+            <option>Technical</option>
+            <option>Matrix</option>
+            <option>Hatching</option>
+            <option>Contour</option>
+          </select>
+          <button id="variantNext" class="text-[#aaa] hover:text-white bg-[#222] border border-[#333] rounded-lg p-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Basic Settings -->
+        <div class="flex flex-col gap-3">
+          <span class="text-[#888] text-xs uppercase tracking-wider">Basic Settings</span>
+
+          <!-- Cell Size -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-[#ccc] text-sm">Cell Size</label>
+              <span id="cellSizeValue" class="bg-[#222] border border-[#333] rounded px-2 text-white text-sm">10</span>
+            </div>
+            <input type="range" id="cellSize" min="4" max="30" value="10" step="1">
+          </div>
+
+          <!-- Invert -->
+          <div class="flex items-center justify-between">
+            <label class="text-[#ccc] text-sm">Invert</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="invertToggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Color Mode -->
+          <div class="flex items-center justify-between">
+            <label class="text-[#ccc] text-sm">Color Mode</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="colorModeToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Character Rotation -->
+          <div class="flex items-center justify-between">
+            <label class="text-[#ccc] text-sm">Character Rotation</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="charRotationToggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Adjustments -->
+        <div class="flex flex-col gap-3">
+          <span class="text-[#888] text-xs uppercase tracking-wider">Adjustments</span>
+
+          <!-- Brightness -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-[#ccc] text-sm">Brightness</label>
+              <span id="brightnessValue" class="bg-[#222] border border-[#333] rounded px-2 text-white text-sm">1</span>
+            </div>
+            <input type="range" id="brightness" min="0" max="3" step="0.05" value="1">
+          </div>
+
+          <!-- Contrast -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-[#ccc] text-sm">Contrast</label>
+              <span id="contrastValue" class="bg-[#222] border border-[#333] rounded px-2 text-white text-sm">1</span>
+            </div>
+            <input type="range" id="contrast" min="0" max="3" step="0.05" value="1">
+          </div>
+
+          <!-- Saturation -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-[#ccc] text-sm">Saturation</label>
+              <span id="saturationValue" class="bg-[#222] border border-[#333] rounded px-2 text-white text-sm">1</span>
+            </div>
+            <input type="range" id="saturation" min="0" max="3" step="0.05" value="1">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden elements -->
+  <canvas id="sourceCanvas" class="hidden"></canvas>
+  <video id="videoSource" class="hidden"></video>
+  <input type="file" id="imageInput" accept="image/*" class="hidden">
+  <input type="file" id="videoInput" accept="video/*" class="hidden">
+
+  <script>
+    // ============ STATE ============
+    const state = {
+      source: null,
+      sourceElement: null,
+      drawerOpen: false,
+      variant: 'Standard',
+      cellSize: 10,
+      invert: false,
+      colorMode: true,
+      charRotation: false,
+      brightness: 1,
+      contrast: 1,
+      saturation: 1,
+      recording: false,
+      webcamStream: null
+    };
+
+    // ============ DOM REFS ============
+    const sourceCanvas = document.getElementById('sourceCanvas');
+    const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
+    const outputCanvas = document.getElementById('outputCanvas');
+    const outputCtx = outputCanvas.getContext('2d');
+    const canvasArea = document.getElementById('canvasArea');
+    const drawer = document.getElementById('settingsDrawer');
+    const settingsBtn = document.getElementById('settingsBtn');
+
+    // ============ STUB FUNCTIONS (replaced in later tasks) ============
+    function stopWebcam() {}
+    function hideVideoControls() {}
+    function loadVideo(file) {}
+    let animFrameId = null;
+
+    // ============ VARIANTS ============
+    function popcount(n) { let c = 0; while (n) { c += n & 1; n >>= 1; } return c; }
+
+    function generateBrailleChars() {
+      const chars = [];
+      for (let i = 0; i < 64; i++) chars.push({ cp: 0x2800 + i, bits: popcount(i) });
+      chars.sort((a, b) => a.bits - b.bits || a.cp - b.cp);
+      return chars.map(c => String.fromCharCode(c.cp)).join('');
+    }
+
+    const VARIANTS = {
+      Standard:  { mode: 'replacement', chars: ' .:-=+*#%@' },
+      Dense:     { mode: 'replacement', chars: ' .\'"`:;I!i><~+_-?][}{1)(\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$' },
+      Minimal:   { mode: 'replacement', chars: ' .:*#' },
+      Blocks:    { mode: 'replacement', chars: ' \u2591\u2592\u2593\u2588' },
+      Braille:   { mode: 'replacement', chars: generateBrailleChars() },
+      Technical: { mode: 'replacement', chars: ' .-+:;=!*#$@' },
+      Matrix:    { mode: 'replacement', chars: ' 0123456789ABCDEF' },
+      Hatching:  { mode: 'replacement', chars: ' \\/|-+=X#' },
+      Contour:   { mode: 'overlay', chars: '.:o0O' }
+    };
+
+    // ============ DRAWER TOGGLE ============
+    settingsBtn.addEventListener('click', () => {
+      state.drawerOpen = !state.drawerOpen;
+      drawer.classList.toggle('translate-x-full', !state.drawerOpen);
+      resizeCanvas();
+    });
+    document.getElementById('drawerClose').addEventListener('click', () => {
+      state.drawerOpen = false;
+      drawer.classList.add('translate-x-full');
+      resizeCanvas();
+    });
+
+    // ============ SETTINGS BINDINGS ============
+    // Cell Size
+    const cellSizeInput = document.getElementById('cellSize');
+    const cellSizeValue = document.getElementById('cellSizeValue');
+    cellSizeInput.addEventListener('input', () => {
+      state.cellSize = parseInt(cellSizeInput.value);
+      cellSizeValue.textContent = state.cellSize;
+      render();
+    });
+
+    // Brightness
+    const brightnessInput = document.getElementById('brightness');
+    const brightnessValue = document.getElementById('brightnessValue');
+    brightnessInput.addEventListener('input', () => {
+      state.brightness = parseFloat(brightnessInput.value);
+      brightnessValue.textContent = state.brightness.toFixed(2).replace(/\.?0+$/, '') || '0';
+      render();
+    });
+
+    // Contrast
+    const contrastInput = document.getElementById('contrast');
+    const contrastValue = document.getElementById('contrastValue');
+    contrastInput.addEventListener('input', () => {
+      state.contrast = parseFloat(contrastInput.value);
+      contrastValue.textContent = state.contrast.toFixed(2).replace(/\.?0+$/, '') || '0';
+      render();
+    });
+
+    // Saturation
+    const saturationInput = document.getElementById('saturation');
+    const saturationValue = document.getElementById('saturationValue');
+    saturationInput.addEventListener('input', () => {
+      state.saturation = parseFloat(saturationInput.value);
+      saturationValue.textContent = state.saturation.toFixed(2).replace(/\.?0+$/, '') || '0';
+      render();
+    });
+
+    // Toggles
+    document.getElementById('invertToggle').addEventListener('change', (e) => {
+      state.invert = e.target.checked;
+      render();
+    });
+    document.getElementById('colorModeToggle').addEventListener('change', (e) => {
+      state.colorMode = e.target.checked;
+      render();
+    });
+    document.getElementById('charRotationToggle').addEventListener('change', (e) => {
+      state.charRotation = e.target.checked;
+      render();
+    });
+
+    // Variant select
+    const variantSelect = document.getElementById('variantSelect');
+    variantSelect.addEventListener('change', () => {
+      state.variant = variantSelect.value;
+      render();
+    });
+
+    // Variant arrow buttons
+    const variantOptions = Array.from(variantSelect.options).map(o => o.value);
+    document.getElementById('variantPrev').addEventListener('click', () => {
+      let idx = variantOptions.indexOf(state.variant);
+      idx = (idx - 1 + variantOptions.length) % variantOptions.length;
+      state.variant = variantOptions[idx];
+      variantSelect.value = state.variant;
+      render();
+    });
+    document.getElementById('variantNext').addEventListener('click', () => {
+      let idx = variantOptions.indexOf(state.variant);
+      idx = (idx + 1) % variantOptions.length;
+      state.variant = variantOptions[idx];
+      variantSelect.value = state.variant;
+      render();
+    });
+
+    // ============ IMAGE LOADING ============
+    function loadImage(file) {
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      stopWebcam();
+      const img = new Image();
+      img.onload = () => {
+        state.source = 'image';
+        state.sourceElement = img;
+        hideVideoControls();
+        document.getElementById('emptyState').classList.add('hidden');
+        resizeCanvas();
+        URL.revokeObjectURL(img.src);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+    document.getElementById('imageInput').addEventListener('change', e => {
+      if (e.target.files[0]) loadImage(e.target.files[0]);
+    });
+
+    // Image button triggers file input
+    document.getElementById('imageBtn').addEventListener('click', () => {
+      document.getElementById('imageInput').click();
+    });
+
+    // Video button triggers file input
+    document.getElementById('videoBtn').addEventListener('click', () => {
+      document.getElementById('videoInput').click();
+    });
+
+    // Drag-and-drop
+    canvasArea.addEventListener('dragover', e => { e.preventDefault(); });
+    canvasArea.addEventListener('drop', e => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      if (file.type.startsWith('image/')) loadImage(file);
+      else if (file.type.startsWith('video/')) loadVideo(file);
+    });
+
+    // ============ RESIZE ============
+    function resizeCanvas() {
+      const area = canvasArea.getBoundingClientRect();
+      outputCanvas.width = area.width;
+      outputCanvas.height = area.height;
+      if (!state.sourceElement) return;
+      const src = state.sourceElement;
+      const srcW = src.videoWidth || src.naturalWidth || src.width;
+      const srcH = src.videoHeight || src.naturalHeight || src.height;
+      sourceCanvas.width = srcW;
+      sourceCanvas.height = srcH;
+      if (state.source === 'image') render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // ============ RENDER ============
+    function render() {
+      if (!state.sourceElement) return;
+      const variant = VARIANTS[state.variant];
+      const src = state.sourceElement;
+      const srcW = sourceCanvas.width;
+      const srcH = sourceCanvas.height;
+
+      sourceCtx.filter = `brightness(${state.brightness}) contrast(${state.contrast}) saturate(${state.saturation})`;
+      sourceCtx.drawImage(src, 0, 0, srcW, srcH);
+      sourceCtx.filter = 'none';
+
+      const imageData = sourceCtx.getImageData(0, 0, srcW, srcH);
+      const pixels = imageData.data;
+      const outW = outputCanvas.width;
+      const outH = outputCanvas.height;
+      const scale = Math.min(outW / srcW, outH / srcH);
+      const offsetX = (outW - srcW * scale) / 2;
+      const offsetY = (outH - srcH * scale) / 2;
+      const cellSize = state.cellSize;
+      const cols = Math.floor(srcW / cellSize);
+      const rows = Math.floor(srcH / cellSize);
+
+      outputCtx.fillStyle = '#0a0a0a';
+      outputCtx.fillRect(0, 0, outW, outH);
+
+      if (variant.mode === 'replacement') {
+        renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY);
+      }
+      // overlay mode handled in later task
+    }
+
+    function renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY) {
+      const fontSize = cellSize * scale;
+      outputCtx.font = `${fontSize}px monospace`;
+      outputCtx.textBaseline = 'middle';
+      outputCtx.textAlign = 'center';
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          let r = 0, g = 0, b = 0, count = 0;
+          for (let dy = 0; dy < cellSize; dy++) {
+            for (let dx = 0; dx < cellSize; dx++) {
+              const px = col * cellSize + dx;
+              const py = row * cellSize + dy;
+              const i = (py * srcW + px) * 4;
+              r += pixels[i];
+              g += pixels[i + 1];
+              b += pixels[i + 2];
+              count++;
+            }
+          }
+          r = Math.round(r / count);
+          g = Math.round(g / count);
+          b = Math.round(b / count);
+
+          let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          if (state.invert) lum = 1 - lum;
+
+          const charIndex = Math.min(Math.floor(lum * chars.length), chars.length - 1);
+          const char = chars[charIndex];
+          if (char === ' ') continue;
+
+          const x = offsetX + (col + 0.5) * cellSize * scale;
+          const y = offsetY + (row + 0.5) * cellSize * scale;
+
+          outputCtx.fillStyle = state.colorMode ? `rgb(${r},${g},${b})` : '#ffffff';
+          outputCtx.fillText(char, x, y);
+        }
+      }
+    }
+
+    // ============ INIT ============
+    resizeCanvas();
+  </script>
+</body>
+</html>
