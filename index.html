@@ -273,6 +273,13 @@
     </div>
   </div>
 
+  <!-- Video Controls -->
+  <div id="videoControls" class="hidden px-4 py-2 bg-[#111] border-t border-[#222] flex items-center gap-3">
+    <button id="playPauseBtn" class="text-white text-lg">&#9654;</button>
+    <input type="range" id="seekBar" class="flex-1" min="0" max="100" step="0.1" value="0">
+    <span id="timeDisplay" class="text-[#666] text-xs font-mono">0:00 / 0:00</span>
+  </div>
+
   <!-- Hidden elements -->
   <canvas id="sourceCanvas" class="hidden"></canvas>
   <video id="videoSource" class="hidden"></video>
@@ -306,11 +313,93 @@
     const drawer = document.getElementById('settingsDrawer');
     const settingsBtn = document.getElementById('settingsBtn');
 
-    // ============ STUB FUNCTIONS (replaced in later tasks) ============
-    function stopWebcam() {}
-    function hideVideoControls() {}
-    function loadVideo(file) {}
     let animFrameId = null;
+
+    // ============ VIDEO / WEBCAM FUNCTIONS ============
+    function stopWebcam() {
+      if (state.webcamStream) {
+        state.webcamStream.getTracks().forEach(t => t.stop());
+        state.webcamStream = null;
+      }
+    }
+
+    function showVideoControls() {
+      document.getElementById('videoControls').classList.remove('hidden');
+    }
+
+    function hideVideoControls() {
+      document.getElementById('videoControls').classList.add('hidden');
+    }
+
+    function loadVideo(file) {
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      stopWebcam();
+      const video = document.getElementById('videoSource');
+      video.src = URL.createObjectURL(file);
+      video.onloadedmetadata = () => {
+        state.source = 'video';
+        state.sourceElement = video;
+        document.getElementById('emptyState').classList.add('hidden');
+        showVideoControls();
+        resizeCanvas();
+        video.play();
+        animFrameId = requestAnimationFrame(renderLoop);
+      };
+    }
+
+    let lastFrameTime = 0;
+    const targetFrameInterval = 1000 / 30;
+
+    function renderLoop(timestamp) {
+      if (state.source !== 'video' && state.source !== 'webcam') {
+        animFrameId = null;
+        return;
+      }
+      const video = state.sourceElement;
+      if (state.source === 'video' && video.paused && lastFrameTime > 0) {
+        animFrameId = requestAnimationFrame(renderLoop);
+        return;
+      }
+      if (timestamp - lastFrameTime >= targetFrameInterval) {
+        render();
+        updateTimeDisplay();
+        lastFrameTime = timestamp;
+      }
+      animFrameId = requestAnimationFrame(renderLoop);
+    }
+
+    function updateTimeDisplay() {
+      if (state.source !== 'video') return;
+      const video = state.sourceElement;
+      document.getElementById('timeDisplay').textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      document.getElementById('seekBar').value = (video.currentTime / video.duration) * 100;
+    }
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    async function startWebcam() {
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      stopWebcam();
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const video = document.getElementById('videoSource');
+        video.srcObject = stream;
+        video.play();
+        state.source = 'webcam';
+        state.sourceElement = video;
+        state.webcamStream = stream;
+        document.getElementById('emptyState').classList.add('hidden');
+        hideVideoControls();
+        resizeCanvas();
+        animFrameId = requestAnimationFrame(renderLoop);
+      } catch (err) {
+        console.error('Webcam access denied:', err);
+      }
+    }
 
     // ============ VARIANTS ============
     function popcount(n) { let c = 0; while (n) { c += n & 1; n >>= 1; } return c; }
@@ -622,6 +711,40 @@
         }
       }
     }
+
+    // ============ VIDEO/WEBCAM EVENT WIRING ============
+    document.getElementById('videoInput').addEventListener('change', e => {
+      if (e.target.files[0]) loadVideo(e.target.files[0]);
+    });
+
+    document.getElementById('playPauseBtn').addEventListener('click', () => {
+      const video = state.sourceElement;
+      if (video.paused) video.play();
+      else video.pause();
+    });
+
+    document.getElementById('seekBar').addEventListener('input', e => {
+      const video = state.sourceElement;
+      video.currentTime = (e.target.value / 100) * video.duration;
+      if (video.paused) {
+        video.onseeked = () => { render(); updateTimeDisplay(); video.onseeked = null; };
+      }
+    });
+
+    // Play/pause icon updates
+    const videoEl = document.getElementById('videoSource');
+    videoEl.addEventListener('play', () => {
+      document.getElementById('playPauseBtn').innerHTML = '&#9646;&#9646;';
+    });
+    videoEl.addEventListener('pause', () => {
+      document.getElementById('playPauseBtn').innerHTML = '&#9654;';
+    });
+    videoEl.addEventListener('ended', () => {
+      document.getElementById('playPauseBtn').innerHTML = '&#9654;';
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+    });
+
+    document.getElementById('webcamBtn').addEventListener('click', startWebcam);
 
     // ============ INIT ============
     resizeCanvas();
