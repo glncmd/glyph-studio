@@ -77,6 +77,16 @@
     #settingsDrawer {
       transition: transform 0.3s ease;
     }
+
+    /* Recording indicator */
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    }
+    .recording {
+      background: #ef4444 !important;
+      animation: pulse-red 1.5s infinite;
+    }
   </style>
 </head>
 <body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col">
@@ -741,10 +751,80 @@
     });
     videoEl.addEventListener('ended', () => {
       document.getElementById('playPauseBtn').innerHTML = '&#9654;';
+      if (state.recording) stopRecording();
       if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
     });
 
     document.getElementById('webcamBtn').addEventListener('click', startWebcam);
+
+    // ============ PNG EXPORT ============
+    function exportPNG() {
+      if (!state.sourceElement) return;
+      outputCanvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ascii-export.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    document.getElementById('exportPngBtn').addEventListener('click', exportPNG);
+
+    // ============ VIDEO RECORDING ============
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    function startRecording() {
+      if (!state.sourceElement) return;
+      const stream = outputCanvas.captureStream(30);
+      mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      recordedChunks = [];
+      mediaRecorder.ondataavailable = e => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ascii-recording.webm';
+        a.click();
+        URL.revokeObjectURL(url);
+        state.recording = false;
+        updateRecordButton();
+      };
+      mediaRecorder.start();
+      state.recording = true;
+      updateRecordButton();
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+    }
+
+    function toggleRecording() {
+      if (state.recording) stopRecording();
+      else startRecording();
+    }
+
+    function updateRecordButton() {
+      const btn = document.getElementById('recordBtn');
+      if (state.recording) {
+        btn.classList.add('recording');
+        btn.title = 'Stop Recording';
+        btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+      } else {
+        btn.classList.remove('recording');
+        btn.title = 'Record Video';
+        btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/></svg>';
+      }
+    }
+
+    document.getElementById('recordBtn').addEventListener('click', toggleRecording);
 
     // ============ INIT ============
     resizeCanvas();
