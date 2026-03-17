@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -180,18 +179,43 @@
 <body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col font-mono text-white">
 
   <!-- Top Bar -->
-  <div class="flex items-center justify-between px-4 py-2 border-b border-[#1a1a1a] bg-[#0a0a0a]">
-    <!-- Left — source buttons -->
+  <div class="flex items-center px-3 py-1.5 border-b border-[#1a1a1a] bg-[#0a0a0a] gap-2">
+    <!-- Brand -->
+    <div class="text-[10px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mr-1 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
+    <div class="w-px h-5 bg-[#222] hidden sm:block"></div>
+
+    <!-- Source -->
     <div class="flex items-center gap-1">
-      <button id="imageBtn" class="tb" title="Upload Image">IMG</button>
+      <button id="imageBtn" class="tb" title="Upload Image (drag & drop supported)">IMG</button>
       <button id="videoBtn" class="tb" title="Upload Video">VID</button>
-      <button id="layerPanelToggle" class="tb" title="Toggle Layers">LAYERS</button>
+    </div>
+    <div class="w-px h-5 bg-[#222]"></div>
+
+    <!-- Project -->
+    <div class="relative">
+      <button id="projectBtn" class="tb" title="Project" style="max-width:160px;overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
+      <div id="projectMenu" class="hidden absolute left-0 top-full mt-px bg-[#111] border border-[#333] z-50 whitespace-nowrap min-w-[180px]">
+        <button id="projectSave" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono">Save<span class="float-right text-[#444] normal-case tracking-normal ml-4">&#8984;S</span></button>
+        <button id="projectSaveAs" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Save As…</button>
+        <button id="projectRename" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Rename</button>
+        <button id="projectDelete" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Delete</button>
+        <button id="projectClose" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Close</button>
+        <div id="projectListDivider" class="border-t border-[#333] mt-1 pt-1 hidden"></div>
+        <div id="projectList"></div>
+      </div>
     </div>
 
-    <!-- Center — title -->
-    <div class="text-[10px] tracking-[0.3em] text-[#333] uppercase select-none hidden sm:block">ASCII_FX</div>
+    <!-- Spacer -->
+    <div class="flex-1"></div>
 
-    <!-- Right — actions -->
+    <!-- Workspace -->
+    <div class="flex items-center gap-1">
+      <button id="layerPanelToggle" class="tb" title="Toggle Layers">LAYERS</button>
+      <button id="settingsBtn" class="tb" title="Settings">CFG</button>
+    </div>
+    <div class="w-px h-5 bg-[#222]"></div>
+
+    <!-- Export -->
     <div class="flex items-center gap-1">
       <div class="relative">
         <button id="exportPngBtn" class="tb" title="Export PNG">EXPORT</button>
@@ -201,7 +225,6 @@
         </div>
       </div>
       <button id="recordBtn" class="tb" title="Record Video">REC</button>
-      <button id="settingsBtn" class="tb" title="Settings">CFG</button>
     </div>
   </div>
 
@@ -251,8 +274,10 @@
       <canvas id="outputCanvas" class="absolute inset-0 w-full h-full"></canvas>
       <div id="selectionToolbar" class="hidden absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[rgba(10,10,10,0.92)] border border-[#333] px-2 py-2 backdrop-blur-sm">
         <button id="lassoToolBtn" class="tb tb-active px-2 py-1 text-[10px]">LASSO</button>
+        <span id="selectionModeLabel" class="text-[10px] text-[#666] font-mono px-1 select-none">NEW</span>
         <button id="selectionClearBtn" class="tb px-2 py-1 text-[10px]">CLEAR</button>
         <button id="selectionInvertBtn" class="tb px-2 py-1 text-[10px]">INVERT</button>
+        <button id="selectionGuidesBtn" class="tb tb-active px-2 py-1 text-[10px]">GUIDES</button>
         <button id="selectionDoneBtn" class="tb px-2 py-1 text-[10px]">DONE</button>
       </div>
       <!-- Empty state -->
@@ -275,7 +300,7 @@
         </div>
 
         <!-- Variant selector -->
-        <div>
+        <div id="variantSection">
           <div class="section-label">VARIANT</div>
           <div class="flex items-stretch relative">
             <button id="variantPrev" class="variant-arrow tb text-[10px] px-3 -mr-px flex items-center">&lt;</button>
@@ -329,7 +354,7 @@
         </div>
 
         <!-- Basic Settings -->
-        <div>
+        <div id="settingsSection">
           <div class="section-label">SETTINGS</div>
           <div class="flex flex-col gap-3">
             <!-- Cell Size -->
@@ -468,38 +493,11 @@
                 </div>
               </div>
             </div>
-            <div class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Bloom</label>
-              <label class="toggle-switch"><input type="checkbox" id="bloomToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="bloomControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
-              <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Style</label>
-                <select id="bloomStyle" class="bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider">
-                  <option value="soft">Soft</option>
-                  <option value="intense">Intense</option>
-                </select>
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Radius</label>
-                  <input id="bloomRadiusValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="8">
-                </div>
-                <input type="range" id="bloomRadius" min="2" max="100" value="8" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Intensity</label>
-                  <input id="bloomIntensityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="0.6">
-                </div>
-                <input type="range" id="bloomIntensity" min="0" max="3" value="0.6" step="0.05">
-              </div>
-            </div>
           </div>
         </div>
 
         <!-- Artifacts -->
-        <div>
+        <div id="artifactsSection">
           <div class="section-label">ARTIFACTS</div>
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
@@ -530,7 +528,7 @@
         </div>
 
         <!-- Adjustments -->
-        <div>
+        <div id="adjustSection">
           <div class="section-label">ADJUST</div>
           <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
@@ -602,6 +600,60 @@
                 <input type="range" id="inkSoftness" min="0" max="100" value="0" step="1">
               </div>
             </div>
+            <div class="flex items-center justify-between">
+              <label class="text-[#666] text-[10px] uppercase tracking-wider">Bloom</label>
+              <label class="toggle-switch"><input type="checkbox" id="bloomToggle"><span class="toggle-slider"></span></label>
+            </div>
+            <div id="bloomControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <label class="text-[#666] text-[10px] uppercase tracking-wider">Style</label>
+                <select id="bloomStyle" class="bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider">
+                  <option value="soft">Soft</option>
+                  <option value="intense">Intense</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Radius</label>
+                  <input id="bloomRadiusValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="8">
+                </div>
+                <input type="range" id="bloomRadius" min="2" max="100" value="8" step="1">
+              </div>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Intensity</label>
+                  <input id="bloomIntensityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="0.6">
+                </div>
+                <input type="range" id="bloomIntensity" min="0" max="3" value="0.6" step="0.05">
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-[#666] text-[10px] uppercase tracking-wider">Grain</label>
+              <label class="toggle-switch"><input type="checkbox" id="grainToggle"><span class="toggle-slider"></span></label>
+            </div>
+            <div id="grainControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Amount</label>
+                  <input id="grainAmountValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="25">
+                </div>
+                <input type="range" id="grainAmount" min="0" max="100" value="25" step="1">
+              </div>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Size</label>
+                  <input id="grainSizeValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="25">
+                </div>
+                <input type="range" id="grainSize" min="1" max="100" value="25" step="1">
+              </div>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Roughness</label>
+                  <input id="grainRoughnessValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="50">
+                </div>
+                <input type="range" id="grainRoughness" min="0" max="100" value="50" step="1">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -651,6 +703,10 @@
       bloomStyle: 'soft',
       bloomRadius: 8,
       bloomIntensity: 0.6,
+      grain: false,
+      grainAmount: 25,
+      grainSize: 25,
+      grainRoughness: 50,
       wordArtifactEnabled: false,
       wordArtifact: '',
       wordArtifactDensity: 0.05,
@@ -710,6 +766,196 @@
     };
     state.activeLayerId = state.layers[0].id;
 
+    // ============ PROJECT SAVES ============
+    let currentProjectName = null;
+    const STORAGE_KEY = 'glyphStudio_projects';
+
+    function getProjects() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch { return {}; }
+    }
+
+    function saveProjectToStorage(name, data) {
+      const projects = getProjects();
+      projects[name] = { saved: Date.now(), data };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    }
+
+    function deleteProjectFromStorage(name) {
+      const projects = getProjects();
+      delete projects[name];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    }
+
+    function listProjects() {
+      const projects = getProjects();
+      return Object.entries(projects)
+        .map(([name, v]) => ({ name, saved: v.saved }))
+        .sort((a, b) => b.saved - a.saved);
+    }
+
+    function serializeProject() {
+      return {
+        version: 1,
+        activeLayerId: state.activeLayerId,
+        sourceHint: state.source,
+        layers: state.layers.map(l => {
+          const clone = { ...l };
+          if (l.postProcess) clone.postProcess = { ...l.postProcess };
+          if (l.mask) {
+            clone.mask = { ...l.mask };
+            if (l.mask.regions) {
+              clone.mask.regions = l.mask.regions.map(r => ({ ...r, points: r.points.map(p => [...p]) }));
+            }
+            // Legacy compat: also clone points if present
+            if (l.mask.points) clone.mask.points = l.mask.points.map(p => [...p]);
+          }
+          return clone;
+        })
+      };
+    }
+
+    function deserializeProject(data) {
+      state.layers = data.layers.map(l => {
+        if (l.postProcess) l.postProcess = { ...l.postProcess };
+        if (l.mask) {
+          l.mask = { ...l.mask };
+          // Migrate old single-polygon format
+          if (l.mask.points && !l.mask.regions) {
+            l.mask.regions = [{ points: l.mask.points, op: 'new' }];
+            delete l.mask.points;
+          }
+        }
+        return l;
+      });
+      state.activeLayerId = data.activeLayerId || state.layers[0]?.id;
+      invalidateMaskCaches();
+      invalidatePostProcessCache();
+      renderLayerPanel();
+      syncUIToLayer(activeLayer());
+      if (state.sourceElement) {
+        document.getElementById('emptyState').classList.add('hidden');
+        resizeCanvas();
+        render();
+      } else {
+        // Show empty state with upload prompt
+        const es = document.getElementById('emptyState');
+        es.classList.remove('hidden');
+        es.children[0].textContent = 'LAYERS RESTORED';
+        es.children[1].textContent = 'UPLOAD AN IMAGE TO RENDER';
+        // Clear canvas
+        outputCtx.fillStyle = '#0a0a0a';
+        outputCtx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
+        // Auto-open file picker so user can quickly re-upload
+        document.getElementById('imageInput').click();
+      }
+    }
+
+    function updateProjectBtnText() {
+      document.getElementById('projectBtn').textContent = (currentProjectName || 'Untitled') + ' \u25BE';
+    }
+
+    function doSaveProject() {
+      if (!currentProjectName) {
+        const name = prompt('Project name:');
+        if (!name || !name.trim()) return;
+        currentProjectName = name.trim();
+      }
+      saveProjectToStorage(currentProjectName, serializeProject());
+      updateProjectBtnText();
+    }
+
+    function doSaveAsProject() {
+      const name = prompt('Save as:', currentProjectName || '');
+      if (!name || !name.trim()) return;
+      currentProjectName = name.trim();
+      saveProjectToStorage(currentProjectName, serializeProject());
+      updateProjectBtnText();
+    }
+
+    function doRenameProject() {
+      if (!currentProjectName) return;
+      const name = prompt('Rename to:', currentProjectName);
+      if (!name || !name.trim() || name.trim() === currentProjectName) return;
+      const oldName = currentProjectName;
+      const projects = getProjects();
+      if (projects[oldName]) {
+        projects[name.trim()] = projects[oldName];
+        delete projects[oldName];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+      }
+      currentProjectName = name.trim();
+      updateProjectBtnText();
+    }
+
+    function doDeleteProject() {
+      if (!currentProjectName) return;
+      if (!confirm(`Delete project "${currentProjectName}"?`)) return;
+      deleteProjectFromStorage(currentProjectName);
+      currentProjectName = null;
+      updateProjectBtnText();
+    }
+
+    function doCloseProject() {
+      currentProjectName = null;
+      // Clear source
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      state.source = null;
+      state.sourceElement = null;
+      state.sourceVersion = 0;
+      sourceCanvas.width = 0;
+      sourceCanvas.height = 0;
+      hideVideoControls();
+      // Reset to a single default layer
+      layerCounter = 1;
+      state.layers = [createLayer()];
+      state.activeLayerId = state.layers[0].id;
+      invalidateMaskCaches();
+      invalidatePostProcessCache();
+      renderLayerPanel();
+      syncUIToLayer(activeLayer());
+      updateProjectBtnText();
+      // Show empty state
+      const es = document.getElementById('emptyState');
+      es.classList.remove('hidden');
+      es.children[0].textContent = 'NO SOURCE';
+      es.children[1].textContent = 'DROP FILE OR SELECT INPUT';
+      outputCtx.fillStyle = '#0a0a0a';
+      outputCtx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
+    }
+
+    function doLoadProject(name) {
+      const projects = getProjects();
+      const entry = projects[name];
+      if (!entry) return;
+      currentProjectName = name;
+      deserializeProject(entry.data);
+      updateProjectBtnText();
+    }
+
+    function renderProjectList() {
+      const list = document.getElementById('projectList');
+      const divider = document.getElementById('projectListDivider');
+      const projects = listProjects();
+      list.innerHTML = '';
+      if (projects.length === 0) {
+        divider.classList.add('hidden');
+        return;
+      }
+      divider.classList.remove('hidden');
+      for (const p of projects) {
+        const btn = document.createElement('button');
+        btn.className = 'block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono';
+        if (p.name === currentProjectName) btn.classList.add('text-white');
+        btn.textContent = p.name;
+        btn.addEventListener('click', () => {
+          doLoadProject(p.name);
+          document.getElementById('projectMenu').classList.add('hidden');
+        });
+        list.appendChild(btn);
+      }
+    }
+
     function activeLayer() {
       return state.layers.find(l => l.id === state.activeLayerId) || state.layers[0];
     }
@@ -740,19 +986,10 @@
       rawPoints: [],
       previewPoints: [],
       pointerId: null,
-      videoWasPlaying: false
+      videoWasPlaying: false,
+      compositionMode: 'new',
+      showGuides: true
     };
-    const samState = {
-      loading: false,
-      ready: false,
-      encoderSession: null,
-      decoderSession: null,
-      embedding: null,
-      embeddingSourceId: null,
-      error: null
-    };
-    const SAM_ENCODER_URL = 'https://huggingface.co/aletrn/sam-quantized/resolve/main/machine_learning_models/mobile_sam.encoder.quant.onnx';
-    const SAM_DECODER_URL = 'https://huggingface.co/aletrn/sam-quantized/resolve/main/machine_learning_models/mobile_sam.decoder.onnx';
     const maskPathCache = new Map();
     const maskAlphaCache = new Map();
     const postProcessCache = new Map();
@@ -780,11 +1017,24 @@
 
     function getMask(layer) {
       if (!layer.mask) return null;
-      if (!Array.isArray(layer.mask.points)) layer.mask.points = [];
+      // Auto-migrate old single-polygon format to multi-region format
+      if (layer.mask.points && !layer.mask.regions) {
+        layer.mask.regions = [{ points: layer.mask.points, op: 'new' }];
+        delete layer.mask.points;
+      }
+      if (!Array.isArray(layer.mask.regions)) layer.mask.regions = [];
+      for (const region of layer.mask.regions) {
+        if (!Array.isArray(region.points)) region.points = [];
+        if (typeof region.op !== 'string') region.op = 'new';
+      }
       if (typeof layer.mask.inverted !== 'boolean') layer.mask.inverted = false;
       if (typeof layer.mask.feather !== 'number' || Number.isNaN(layer.mask.feather)) layer.mask.feather = 0;
       layer.mask.feather = clamp(Math.round(layer.mask.feather), 0, 200);
       return layer.mask;
+    }
+
+    function maskHasRegions(mask) {
+      return mask && mask.regions && mask.regions.some(r => r.points.length >= 3);
     }
 
     function getPostProcess(layer) {
@@ -872,25 +1122,101 @@
       return withSpace[attenuateIndex(idx, strength)] || ' ';
     }
 
+    function buildMaskAlphaBitmap(layerId, mask, srcW, srcH) {
+      const cached = maskAlphaCache.get(layerId);
+      if (cached && cached.w === srcW && cached.h === srcH) return cached;
+
+      const canvas = getScratchCanvas('maskAlpha', srcW, srcH);
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, srcW, srcH);
+
+      for (const region of mask.regions) {
+        if (region.points.length < 3) continue;
+        const path = new Path2D();
+        for (let i = 0; i < region.points.length; i++) {
+          const x = region.points[i][0] * srcW;
+          const y = region.points[i][1] * srcH;
+          if (i === 0) path.moveTo(x, y);
+          else path.lineTo(x, y);
+        }
+        path.closePath();
+
+        switch (region.op) {
+          case 'new':
+            ctx.clearRect(0, 0, srcW, srcH);
+            ctx.globalCompositeOperation = 'source-over';
+            break;
+          case 'add':
+            ctx.globalCompositeOperation = 'source-over';
+            break;
+          case 'subtract':
+            ctx.globalCompositeOperation = 'destination-out';
+            break;
+          case 'intersect':
+            ctx.globalCompositeOperation = 'destination-in';
+            break;
+        }
+        ctx.fillStyle = '#fff';
+        ctx.fill(path);
+      }
+
+      const imageData = ctx.getImageData(0, 0, srcW, srcH);
+      const bitmap = new Uint8Array(srcW * srcH);
+      for (let i = 0; i < bitmap.length; i++) {
+        bitmap[i] = imageData.data[i * 4 + 3];
+      }
+
+      // Build distance field for feather support (chamfer 3-4 approximation)
+      const distField = new Float32Array(srcW * srcH);
+      const INF = 1e6;
+      for (let i = 0; i < bitmap.length; i++) {
+        // Distance from edge: 0 at boundary, positive going inward
+        distField[i] = bitmap[i] > 128 ? INF : 0;
+      }
+      // Forward pass
+      for (let y = 0; y < srcH; y++) {
+        for (let x = 0; x < srcW; x++) {
+          const idx = y * srcW + x;
+          if (distField[idx] === 0) continue;
+          let d = INF;
+          if (y > 0) d = Math.min(d, distField[(y-1)*srcW+x] + 1);
+          if (x > 0) d = Math.min(d, distField[y*srcW+(x-1)] + 1);
+          if (y > 0 && x > 0) d = Math.min(d, distField[(y-1)*srcW+(x-1)] + 1.414);
+          if (y > 0 && x < srcW-1) d = Math.min(d, distField[(y-1)*srcW+(x+1)] + 1.414);
+          distField[idx] = d;
+        }
+      }
+      // Backward pass
+      for (let y = srcH - 1; y >= 0; y--) {
+        for (let x = srcW - 1; x >= 0; x--) {
+          const idx = y * srcW + x;
+          if (distField[idx] === 0) continue;
+          let d = distField[idx];
+          if (y < srcH-1) d = Math.min(d, distField[(y+1)*srcW+x] + 1);
+          if (x < srcW-1) d = Math.min(d, distField[y*srcW+(x+1)] + 1);
+          if (y < srcH-1 && x < srcW-1) d = Math.min(d, distField[(y+1)*srcW+(x+1)] + 1.414);
+          if (y < srcH-1 && x > 0) d = Math.min(d, distField[(y+1)*srcW+(x-1)] + 1.414);
+          distField[idx] = d;
+        }
+      }
+
+      const result = { bitmap, distField, w: srcW, h: srcH };
+      maskAlphaCache.set(layerId, result);
+      return result;
+    }
+
     function prepareMaskMetrics(layer, srcW, srcH) {
       const mask = getMask(layer);
-      if (!mask || mask.points.length < 3) return null;
-      const points = mask.points.map(([nx, ny]) => [nx * srcW, ny * srcH]);
-      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-      for (const [x, y] of points) {
-        if (x < minX) minX = x;
-        if (y < minY) minY = y;
-        if (x > maxX) maxX = x;
-        if (y > maxY) maxY = y;
-      }
+      if (!mask || !maskHasRegions(mask)) return null;
+
+      const bitmapData = buildMaskAlphaBitmap(layer.id, mask, srcW, srcH);
       return {
         inverted: mask.inverted,
         feather: mask.feather,
-        points,
-        minX,
-        minY,
-        maxX,
-        maxY
+        bitmap: bitmapData.bitmap,
+        distField: bitmapData.distField,
+        w: bitmapData.w,
+        h: bitmapData.h
       };
     }
 
@@ -931,12 +1257,18 @@
 
     function sampleMaskStrength(maskMetrics, x, y) {
       if (!maskMetrics) return 1;
-      const inside = pointInPolygon(x, y, maskMetrics.points);
+      const ix = Math.round(x);
+      const iy = Math.round(y);
+      if (ix < 0 || ix >= maskMetrics.w || iy < 0 || iy >= maskMetrics.h) {
+        return maskMetrics.inverted ? 1 : 0;
+      }
+      const idx = iy * maskMetrics.w + ix;
+      const alpha = maskMetrics.bitmap[idx];
+      const inside = alpha > 128;
       const keep = maskMetrics.inverted ? !inside : inside;
       if (!keep) return 0;
       if (!maskMetrics.feather) return 1;
-      const dist = distanceToPolygonEdges(x, y, maskMetrics.points);
-      return clamp(dist / maskMetrics.feather, 0, 1);
+      return clamp(maskMetrics.distField[idx] / maskMetrics.feather, 0, 1);
     }
 
     function shouldRenderByStrength(strength, row, col) {
@@ -1084,7 +1416,7 @@
         post.splatter,
         post.roundness,
         post.softness,
-        mask ? `${mask.inverted ? 1 : 0}:${mask.feather}:${mask.points.length}` : 'nomask'
+        mask ? `${mask.inverted ? 1 : 0}:${mask.feather}:${mask.regions.map(r => r.op + r.points.length).join(',')}` : 'nomask'
       ].join('|');
     }
 
@@ -1323,6 +1655,16 @@
       layerCtx.drawImage(fillC, 0, 0);
     }
 
+    function updateSelectionModeLabel() {
+      const label = document.getElementById('selectionModeLabel');
+      if (!label) return;
+      const modeNames = { 'new': 'NEW', 'add': 'ADD', 'subtract': 'SUB', 'intersect': 'ISECT' };
+      const modeColors = { 'new': '#666', 'add': '#8f8', 'subtract': '#f88', 'intersect': '#8bf' };
+      const mode = selectionState.compositionMode || 'new';
+      label.textContent = modeNames[mode] || 'NEW';
+      label.style.color = modeColors[mode] || '#666';
+    }
+
     function clearSelectionTransient() {
       selectionState.drawing = false;
       selectionState.rawPoints = [];
@@ -1333,7 +1675,9 @@
     function exitSelectionMode() {
       selectionState.active = false;
       selectionState.videoWasPlaying = false;
+      selectionState.compositionMode = 'new';
       clearSelectionTransient();
+      updateSelectionModeLabel();
       updateSelectionUI();
     }
 
@@ -1385,8 +1729,6 @@
       clearSelectionTransient();
       updateSelectionUI();
       render();
-      // Run SAM encoder on current frame (especially important for video)
-      runSAMEncoder();
     }
 
     function toggleSelectionMode() {
@@ -1443,8 +1785,6 @@
         resizeCanvas();
         video.play();
         animFrameId = requestAnimationFrame(renderLoop);
-        // Preload SAM models for video too
-        loadSAMModels();
       };
     }
 
@@ -1520,8 +1860,6 @@
         drawer.classList.remove('w-[280px]');
         drawer.classList.add('w-0');
       }
-      // Delay resize to let transition finish
-      setTimeout(resizeCanvas, 310);
     }
     settingsBtn.addEventListener('click', () => {
       setDrawerOpen(!state.drawerOpen);
@@ -1945,6 +2283,58 @@
       render();
     });
 
+    // Grain controls
+    const grainToggle = document.getElementById('grainToggle');
+    const grainControls = document.getElementById('grainControls');
+    const grainAmountSlider = document.getElementById('grainAmount');
+    const grainAmountValue = document.getElementById('grainAmountValue');
+    const grainSizeSlider = document.getElementById('grainSize');
+    const grainSizeValue = document.getElementById('grainSizeValue');
+    const grainRoughnessSlider = document.getElementById('grainRoughness');
+    const grainRoughnessValue = document.getElementById('grainRoughnessValue');
+
+    grainToggle.addEventListener('change', (e) => {
+      activeLayer().grain = e.target.checked;
+      grainControls.classList.toggle('hidden', !activeLayer().grain);
+      render();
+    });
+    grainAmountSlider.addEventListener('input', () => {
+      activeLayer().grainAmount = parseInt(grainAmountSlider.value);
+      grainAmountValue.value = activeLayer().grainAmount;
+      render();
+    });
+    grainAmountValue.addEventListener('change', () => {
+      const v = Math.min(100, Math.max(0, parseInt(grainAmountValue.value) || 25));
+      activeLayer().grainAmount = v;
+      grainAmountSlider.value = v;
+      grainAmountValue.value = v;
+      render();
+    });
+    grainSizeSlider.addEventListener('input', () => {
+      activeLayer().grainSize = parseInt(grainSizeSlider.value);
+      grainSizeValue.value = activeLayer().grainSize;
+      render();
+    });
+    grainSizeValue.addEventListener('change', () => {
+      const v = Math.min(100, Math.max(1, parseInt(grainSizeValue.value) || 25));
+      activeLayer().grainSize = v;
+      grainSizeSlider.value = v;
+      grainSizeValue.value = v;
+      render();
+    });
+    grainRoughnessSlider.addEventListener('input', () => {
+      activeLayer().grainRoughness = parseInt(grainRoughnessSlider.value);
+      grainRoughnessValue.value = activeLayer().grainRoughness;
+      render();
+    });
+    grainRoughnessValue.addEventListener('change', () => {
+      const v = Math.min(100, Math.max(0, parseInt(grainRoughnessValue.value) || 50));
+      activeLayer().grainRoughness = v;
+      grainRoughnessSlider.value = v;
+      grainRoughnessValue.value = v;
+      render();
+    });
+
     // Word artifact controls
     const wordArtifactToggle = document.getElementById('wordArtifactToggle');
     const wordArtifactInput = document.getElementById('wordArtifactInput');
@@ -2116,8 +2506,6 @@
           resizeCanvas();
           render();
           URL.revokeObjectURL(url);
-          // Load SAM models and run encoder on new image
-          loadSAMModels().then(() => runSAMEncoder());
         });
       };
       img.src = URL.createObjectURL(file);
@@ -2150,8 +2538,11 @@
     // ============ RESIZE ============
     function resizeCanvas() {
       const area = canvasArea.getBoundingClientRect();
-      outputCanvas.width = area.width;
-      outputCanvas.height = area.height;
+      const w = Math.round(area.width);
+      const h = Math.round(area.height);
+      if (outputCanvas.width === w && outputCanvas.height === h) return;
+      outputCanvas.width = w;
+      outputCanvas.height = h;
       invalidateMaskCaches();
       invalidatePostProcessCache();
       if (!state.sourceElement) return;
@@ -2162,6 +2553,7 @@
       sourceCanvas.height = srcH;
       if (state.source === 'image' || (state.source === 'video' && state.sourceElement.paused)) render();
     }
+    new ResizeObserver(resizeCanvas).observe(canvasArea);
     window.addEventListener('resize', resizeCanvas);
 
     // ============ OFFSCREEN CANVAS POOL ============
@@ -2177,7 +2569,10 @@
       return entry;
     }
 
-    function renderSourceLayer(layerCtx, geometry) {
+    function renderSourceLayer(layerCtx, layer, geometry) {
+      const filter = `brightness(${layer.brightness ?? 1}) contrast(${layer.contrast ?? 1}) saturate(${layer.saturation ?? 1})`;
+      layerCtx.save();
+      layerCtx.filter = filter;
       layerCtx.drawImage(
         state.sourceElement,
         geometry.offsetX,
@@ -2185,35 +2580,67 @@
         geometry.srcW * geometry.scale,
         geometry.srcH * geometry.scale
       );
+      layerCtx.restore();
     }
 
     function buildMaskPath(layer, geometry) {
       const mask = getMask(layer);
-      if (!mask || mask.points.length < 3) return null;
+      if (!mask || !maskHasRegions(mask)) return null;
       const entry = maskPathCache.get(layer.id);
-      if (entry && entry.key === geometry.key) return entry.path;
+      if (entry && entry.key === geometry.key) return entry.paths;
 
-      const path = new Path2D();
-      for (let i = 0; i < mask.points.length; i++) {
-        const pt = mask.points[i];
-        const x = geometry.offsetX + clamp(pt[0], 0, 1) * geometry.srcW * geometry.scale;
-        const y = geometry.offsetY + clamp(pt[1], 0, 1) * geometry.srcH * geometry.scale;
-        if (i === 0) path.moveTo(x, y);
-        else path.lineTo(x, y);
+      const paths = [];
+      for (const region of mask.regions) {
+        if (region.points.length < 3) continue;
+        const path = new Path2D();
+        for (let i = 0; i < region.points.length; i++) {
+          const pt = region.points[i];
+          const x = geometry.offsetX + clamp(pt[0], 0, 1) * geometry.srcW * geometry.scale;
+          const y = geometry.offsetY + clamp(pt[1], 0, 1) * geometry.srcH * geometry.scale;
+          if (i === 0) path.moveTo(x, y);
+          else path.lineTo(x, y);
+        }
+        path.closePath();
+        paths.push({ path, op: region.op });
       }
-      path.closePath();
-      maskPathCache.set(layer.id, { key: geometry.key, path });
-      return path;
+      maskPathCache.set(layer.id, { key: geometry.key, paths });
+      return paths;
     }
 
     function applyLayerMask(layerCtx, layer, geometry, forExport) {
       const mask = getMask(layer);
-      const path = buildMaskPath(layer, geometry);
-      if (!mask || !path) return;
+      const paths = buildMaskPath(layer, geometry);
+      if (!mask || !paths || paths.length === 0) return;
+
+      const w = geometry.outW;
+      const h = geometry.outH;
+      const scratch = getScratchCanvas('maskComposite', w, h);
+      const sctx = scratch.getContext('2d');
+      sctx.clearRect(0, 0, w, h);
+
+      for (const { path, op } of paths) {
+        switch (op) {
+          case 'new':
+            sctx.clearRect(0, 0, w, h);
+            sctx.globalCompositeOperation = 'source-over';
+            break;
+          case 'add':
+            sctx.globalCompositeOperation = 'source-over';
+            break;
+          case 'subtract':
+            sctx.globalCompositeOperation = 'destination-out';
+            break;
+          case 'intersect':
+            sctx.globalCompositeOperation = 'destination-in';
+            break;
+        }
+        sctx.fillStyle = '#fff';
+        sctx.fill(path);
+      }
+
       layerCtx.save();
       layerCtx.globalCompositeOperation = mask.inverted ? 'destination-out' : 'destination-in';
-      layerCtx.fillStyle = '#fff';
-      layerCtx.fill(path);
+      layerCtx.drawImage(scratch, 0, 0);
       layerCtx.restore();
     }
 
@@ -2225,7 +2652,7 @@
       layerCtx.clearRect(0, 0, outW, outH);
 
       if (layer.kind === 'source') {
-        renderSourceLayer(layerCtx, geometry);
+        renderSourceLayer(layerCtx, layer, geometry);
         return layerCanvas;
       }
 
@@ -2265,6 +2692,9 @@
         if (layer.bloom) {
           outputCtx = layerCtx;
           applyBloomPost(layerCtx, asciiCanvas, outW, outH, layer);
+        }
+        if (layer.grain) {
+          applyGrain(layerCtx, outW, outH, layer);
         }
         applyLayerMask(layerCtx, layer, geometry, forExport);
         applyPostProcess(layerCtx, layer, geometry, forExport);
@@ -2335,27 +2765,53 @@
     }
 
     function drawSelectionOverlay(geometry) {
-      const mask = getMask(activeLayer());
-      if (mask && mask.points.length >= 3) {
-        const path = buildMaskPath(activeLayer(), geometry);
-        if (path) {
-          outputCtx.save();
-          outputCtx.setLineDash([6, 4]);
-          outputCtx.strokeStyle = 'rgba(255,255,255,0.6)';
-          outputCtx.lineWidth = 1;
-          outputCtx.stroke(path);
-          outputCtx.restore();
+      if (!selectionState.active) return;
+
+      const guidesOn = selectionState.showGuides;
+
+      // Draw existing mask region outlines (marching ants)
+      if (guidesOn) {
+        const mask = getMask(activeLayer());
+        if (mask && maskHasRegions(mask)) {
+          const paths = buildMaskPath(activeLayer(), geometry);
+          if (paths) {
+            for (const { path } of paths) {
+              // Dark outline underneath for contrast on light areas
+              outputCtx.save();
+              outputCtx.setLineDash([6, 4]);
+              outputCtx.strokeStyle = 'rgba(0,0,0,0.5)';
+              outputCtx.lineWidth = 2;
+              outputCtx.stroke(path);
+              outputCtx.restore();
+              // Cyan marching ants on top
+              outputCtx.save();
+              outputCtx.setLineDash([6, 4]);
+              outputCtx.strokeStyle = 'rgba(0,255,255,0.85)';
+              outputCtx.lineWidth = 1;
+              outputCtx.stroke(path);
+              outputCtx.restore();
+            }
+          }
         }
       }
 
-      if (selectionState.active && selectionState.drawing && selectionState.rawPoints.length > 1) {
-        drawPathOverlay(selectionState.rawPoints, geometry, false, true, 'rgba(255,255,255,0.9)', 1.25);
+      // In-progress stroke — always visible, colored by mode
+      if (selectionState.drawing && selectionState.rawPoints.length > 1) {
+        const modeColors = {
+          'new': 'rgba(0,255,255,0.9)',
+          'add': 'rgba(0,255,255,0.9)',
+          'subtract': 'rgba(255,80,80,0.9)',
+          'intersect': 'rgba(255,220,60,0.9)'
+        };
+        const color = modeColors[selectionState.compositionMode] || 'rgba(0,255,255,0.9)';
+        drawPathOverlay(selectionState.rawPoints, geometry, false, true, color, 1.25);
       }
 
-      if (selectionState.active && !selectionState.drawing && selectionState.previewPoints.length > 2) {
-        drawPathOverlay(selectionState.previewPoints, geometry, true, true, 'rgba(255,255,255,0.35)', 1);
+      // Preview points after stroke finalized
+      if (guidesOn && !selectionState.drawing && selectionState.previewPoints.length > 2) {
+        drawPathOverlay(selectionState.previewPoints, geometry, true, true, 'rgba(0,255,255,0.35)', 1);
         outputCtx.save();
-        outputCtx.fillStyle = '#fff';
+        outputCtx.fillStyle = 'rgba(0,255,255,0.7)';
         for (const point of selectionState.previewPoints) {
           const pt = sourceToCanvasPoint(point[0], point[1], geometry);
           outputCtx.beginPath();
@@ -2411,376 +2867,7 @@
       return samples.length >= 3 ? samples : points.slice();
     }
 
-    /* ── Object-aware mask refinement ── */
-
-    function traceMaskBoundary(mask, w, h) {
-      // Moore neighborhood boundary tracing (8-connected, clockwise)
-      // Returns array of [x,y] boundary pixel coordinates
-      const DX = [1, 1, 0, -1, -1, -1, 0, 1];
-      const DY = [0, 1, 1, 1, 0, -1, -1, -1];
-      let sx = -1, sy = -1;
-      for (let y = 0; y < h && sx < 0; y++)
-        for (let x = 0; x < w; x++)
-          if (mask[y * w + x]) { sx = x; sy = y; break; }
-      if (sx < 0) return [];
-      const pts = [];
-      let cx = sx, cy = sy, back = 4;
-      const limit = w * h * 4;
-      for (let iter = 0; iter < limit; iter++) {
-        pts.push([cx, cy]);
-        let found = false;
-        for (let i = 1; i <= 7; i++) {
-          const d = (back + i) % 8;
-          const nx = cx + DX[d], ny = cy + DY[d];
-          if (nx >= 0 && ny >= 0 && nx < w && ny < h && mask[ny * w + nx]) {
-            back = (d + 5) % 8;
-            cx = nx; cy = ny;
-            found = true;
-            break;
-          }
-        }
-        if (!found) break;
-        if (cx === sx && cy === sy) break;
-      }
-      return pts;
-    }
-
-    function perpDist(pt, a, b) {
-      const dx = b[0] - a[0], dy = b[1] - a[1];
-      const len = Math.sqrt(dx * dx + dy * dy);
-      if (len === 0) return distance2D(pt, a);
-      return Math.abs(dx * (a[1] - pt[1]) - dy * (a[0] - pt[0])) / len;
-    }
-
-    function douglasPeucker(points, epsilon) {
-      if (points.length <= 2) return points.slice();
-      let maxD = 0, maxI = 0;
-      const first = points[0], last = points[points.length - 1];
-      for (let i = 1; i < points.length - 1; i++) {
-        const d = perpDist(points[i], first, last);
-        if (d > maxD) { maxD = d; maxI = i; }
-      }
-      if (maxD > epsilon) {
-        const left = douglasPeucker(points.slice(0, maxI + 1), epsilon);
-        const right = douglasPeucker(points.slice(maxI), epsilon);
-        return left.slice(0, -1).concat(right);
-      }
-      return [first, last];
-    }
-
-    // ── SAM (Segment Anything) integration ──
-
-    async function loadSAMModels() {
-      if (samState.loading || samState.ready) return;
-      if (typeof ort === 'undefined') { samState.error = 'ONNX Runtime not loaded'; return; }
-      samState.loading = true;
-      samState.error = null;
-      try {
-        const opts = { executionProviders: ['wasm'] };
-        const [enc, dec] = await Promise.all([
-          ort.InferenceSession.create(SAM_ENCODER_URL, opts),
-          ort.InferenceSession.create(SAM_DECODER_URL, opts)
-        ]);
-        samState.encoderSession = enc;
-        samState.decoderSession = dec;
-        samState.ready = true;
-        console.log('[SAM] Models loaded');
-        runSAMEncoder();
-      } catch (e) {
-        samState.error = e.message;
-        console.warn('[SAM] Failed to load models:', e);
-      } finally {
-        samState.loading = false;
-      }
-    }
-
-    function getSourceId() {
-      if (!state.sourceElement) return null;
-      if (state.source === 'image') return 'img-' + state.sourceElement.src.slice(-32);
-      if (state.source === 'video') return 'vid-' + state.sourceElement.currentTime.toFixed(2);
-      if (state.source === 'webcam') return 'cam-' + Date.now();
-      return null;
-    }
-
-    async function runSAMEncoder() {
-      if (!samState.ready || !state.sourceElement) return;
-      const srcId = getSourceId();
-      if (samState.embeddingSourceId === srcId && samState.embedding) return;
-
-      const size = 1024;
-      const c = getScratchCanvas('sam-enc', size, size);
-      const ctx = c.getContext('2d', { willReadFrequently: true });
-      ctx.clearRect(0, 0, size, size);
-
-      // Draw source image scaled to fit 1024×1024 maintaining aspect ratio
-      const el = state.sourceElement;
-      const sw = el.videoWidth || el.naturalWidth || el.width;
-      const sh = el.videoHeight || el.naturalHeight || el.height;
-      const scale = Math.min(size / sw, size / sh);
-      const dw = Math.round(sw * scale);
-      const dh = Math.round(sh * scale);
-      ctx.drawImage(el, 0, 0, sw, sh, 0, 0, dw, dh);
-
-      const imgData = ctx.getImageData(0, 0, size, size);
-      const pixels = imgData.data;
-
-      // Normalize to float32 [C, H, W] with ImageNet mean/std
-      const mean = [123.675, 116.28, 103.53];
-      const std = [58.395, 57.12, 57.375];
-      const float32 = new Float32Array(3 * size * size);
-      for (let i = 0; i < size * size; i++) {
-        float32[i] = (pixels[i * 4] - mean[0]) / std[0];                     // R
-        float32[size * size + i] = (pixels[i * 4 + 1] - mean[1]) / std[1];   // G
-        float32[2 * size * size + i] = (pixels[i * 4 + 2] - mean[2]) / std[2]; // B
-      }
-
-      try {
-        const inputTensor = new ort.Tensor('float32', float32, [1, 3, size, size]);
-        // Detect encoder input name dynamically
-        const encInputName = samState.encoderSession.inputNames[0] || 'input_image';
-        const results = await samState.encoderSession.run({ [encInputName]: inputTensor });
-        // MobileSAM encoder outputs image_embeddings
-        samState.embedding = results.image_embeddings || results[Object.keys(results)[0]];
-        samState.encodedSize = { w: dw, h: dh, srcW: sw, srcH: sh, scale };
-        samState.embeddingSourceId = srcId;
-        console.log('[SAM] Encoder done, outputs:', Object.keys(results));
-      } catch (e) {
-        console.warn('[SAM] Encoder failed:', e);
-        samState.embedding = null;
-        samState.embeddingSourceId = null;
-      }
-    }
-
-    async function runSAMDecoder(rawPoints, geometry) {
-      if (!samState.ready || !samState.embedding) return null;
-
-      const { srcW, srcH } = geometry;
-      const size = 1024;
-      const scale = Math.min(size / srcW, size / srcH);
-
-      // Compute centroid of lasso (foreground point)
-      let cx = 0, cy = 0;
-      for (const [x, y] of rawPoints) { cx += x; cy += y; }
-      cx /= rawPoints.length;
-      cy /= rawPoints.length;
-
-      // Compute bounding box of lasso
-      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-      for (const [x, y] of rawPoints) {
-        if (x < minX) minX = x;
-        if (y < minY) minY = y;
-        if (x > maxX) maxX = x;
-        if (y > maxY) maxY = y;
-      }
-      const margin = Math.max((maxX - minX), (maxY - minY)) * 0.15;
-
-      // Point prompts: 1 fg center + 4 bg corners outside bbox
-      // Coordinates in 1024×1024 encoder space
-      const fgX = cx * scale, fgY = cy * scale;
-      const bgPoints = [
-        [Math.max(0, (minX - margin) * scale), Math.max(0, (minY - margin) * scale)],
-        [Math.min(size, (maxX + margin) * scale), Math.max(0, (minY - margin) * scale)],
-        [Math.max(0, (minX - margin) * scale), Math.min(size, (maxY + margin) * scale)],
-        [Math.min(size, (maxX + margin) * scale), Math.min(size, (maxY + margin) * scale)]
-      ];
-
-      const numPoints = 5;
-      const pointCoords = new Float32Array(numPoints * 2);
-      const pointLabels = new Float32Array(numPoints);
-
-      // Foreground point
-      pointCoords[0] = fgX; pointCoords[1] = fgY;
-      pointLabels[0] = 1;
-      // Background points
-      for (let i = 0; i < 4; i++) {
-        pointCoords[(i + 1) * 2] = bgPoints[i][0];
-        pointCoords[(i + 1) * 2 + 1] = bgPoints[i][1];
-        pointLabels[i + 1] = 0;
-      }
-
-      const maskInput = new Float32Array(256 * 256);
-      const hasMaskInput = new Float32Array([0]);
-
-      try {
-        const origImSize = new Float32Array([srcH, srcW]); // [H, W]
-        const feeds = {
-          image_embeddings: samState.embedding,
-          point_coords: new ort.Tensor('float32', pointCoords, [1, numPoints, 2]),
-          point_labels: new ort.Tensor('float32', pointLabels, [1, numPoints]),
-          mask_input: new ort.Tensor('float32', maskInput, [1, 1, 256, 256]),
-          has_mask_input: new ort.Tensor('float32', hasMaskInput, [1]),
-          orig_im_size: new ort.Tensor('float32', origImSize, [2])
-        };
-
-        const results = await samState.decoderSession.run(feeds);
-        console.log('[SAM] Decoder outputs:', Object.keys(results));
-        const masks = results.masks || results.low_res_masks;
-        const ious = results.iou_predictions;
-
-        if (!masks) { console.warn('[SAM] No masks in output'); return null; }
-
-        // Pick best mask (highest IoU)
-        const iouData = ious.data;
-        let bestIdx = 0;
-        for (let i = 1; i < iouData.length; i++) {
-          if (iouData[i] > iouData[bestIdx]) bestIdx = i;
-        }
-
-        // Extract mask — shape is [1, numMasks, H, W]
-        const dims = masks.dims;
-        const maskH = dims[dims.length - 2];
-        const maskW = dims[dims.length - 1];
-        const maskData = masks.data;
-        const pixelsPerMask = maskH * maskW;
-        const offset = bestIdx * pixelsPerMask;
-        const binaryMask = new Uint8Array(pixelsPerMask);
-        for (let i = 0; i < pixelsPerMask; i++) {
-          binaryMask[i] = maskData[offset + i] > 0 ? 1 : 0;
-        }
-
-        // Trace boundary and simplify
-        const boundary = traceMaskBoundary(binaryMask, maskW, maskH);
-        if (boundary.length < 10) return null;
-
-        const simplified = douglasPeucker(boundary, Math.max(1.5, maskW / 200));
-        if (simplified.length < 3) return null;
-
-        // Convert from mask space → source normalized [0,1]
-        return simplified.map(([x, y]) => [
-          clamp(x / maskW, 0, 1),
-          clamp(y / maskH, 0, 1)
-        ]);
-      } catch (e) {
-        console.warn('[SAM] Decoder failed:', e);
-        return null;
-      }
-    }
-
-    function refineSelectionMask(rawPoints, geometry) {
-      const { srcW, srcH } = geometry;
-
-      // Get source pixels
-      sourceCtx.filter = 'none';
-      sourceCtx.drawImage(state.sourceElement, 0, 0, srcW, srcH);
-      const pixels = sourceCtx.getImageData(0, 0, srcW, srcH).data;
-
-      // Work resolution: cap at 400px longest side
-      const maxDim = 400;
-      const ws = Math.min(1, maxDim / Math.max(srcW, srcH));
-      const wW = Math.max(1, Math.round(srcW * ws));
-      const wH = Math.max(1, Math.round(srcH * ws));
-
-      // 1. Rasterize lasso polygon at work resolution
-      const lassoC = getScratchCanvas('sel-lasso', wW, wH);
-      const lassoX = lassoC.getContext('2d');
-      lassoX.clearRect(0, 0, wW, wH);
-      lassoX.fillStyle = '#fff';
-      lassoX.beginPath();
-      for (let i = 0; i < rawPoints.length; i++) {
-        const x = rawPoints[i][0] * ws, y = rawPoints[i][1] * ws;
-        i === 0 ? lassoX.moveTo(x, y) : lassoX.lineTo(x, y);
-      }
-      lassoX.closePath();
-      lassoX.fill();
-
-      const lassoPx = lassoX.getImageData(0, 0, wW, wH).data;
-      const lassoMask = new Uint8Array(wW * wH);
-      for (let i = 0; i < wW * wH; i++) lassoMask[i] = lassoPx[i * 4 + 3] > 128 ? 1 : 0;
-
-      // 2. Erode (definite fg) and dilate (search boundary) via blur+threshold
-      const erodeR = Math.max(2, Math.round(Math.min(wW, wH) * 0.04));
-      const dilateR = Math.max(3, Math.round(Math.min(wW, wH) * 0.06));
-
-      const erodeC = getScratchCanvas('sel-erode', wW, wH);
-      blurCanvas(lassoC, erodeC, erodeR);
-      const erodePx = erodeC.getContext('2d', { willReadFrequently: true })
-        .getImageData(0, 0, wW, wH).data;
-
-      const dilateC = getScratchCanvas('sel-dilate', wW, wH);
-      blurCanvas(lassoC, dilateC, dilateR);
-      const dilatePx = dilateC.getContext('2d', { willReadFrequently: true })
-        .getImageData(0, 0, wW, wH).data;
-
-      // 3. Sample fg/bg mean colors
-      let fgR = 0, fgG = 0, fgB = 0, fgN = 0;
-      let bgR = 0, bgG = 0, bgB = 0, bgN = 0;
-      for (let wy = 0; wy < wH; wy++) {
-        for (let wx = 0; wx < wW; wx++) {
-          const wi = wy * wW + wx;
-          const sx = clamp(Math.round(wx / ws), 0, srcW - 1);
-          const sy = clamp(Math.round(wy / ws), 0, srcH - 1);
-          const si = (sy * srcW + sx) * 4;
-          if (erodePx[wi * 4 + 3] > 220) {
-            fgR += pixels[si]; fgG += pixels[si + 1]; fgB += pixels[si + 2]; fgN++;
-          } else if (dilatePx[wi * 4 + 3] < 30) {
-            bgR += pixels[si]; bgG += pixels[si + 1]; bgB += pixels[si + 2]; bgN++;
-          }
-        }
-      }
-      if (fgN < 20 || bgN < 20) return null;
-      fgR /= fgN; fgG /= fgN; fgB /= fgN;
-      bgR /= bgN; bgG /= bgN; bgB /= bgN;
-
-      const colorSep = Math.sqrt((fgR - bgR) ** 2 + (fgG - bgG) ** 2 + (fgB - bgB) ** 2);
-      if (colorSep < 12) return null;
-
-      // 4. Classify each pixel in dilated zone
-      const refined = new Uint8Array(wW * wH);
-      for (let wy = 0; wy < wH; wy++) {
-        for (let wx = 0; wx < wW; wx++) {
-          const wi = wy * wW + wx;
-          if (dilatePx[wi * 4 + 3] < 20) continue;
-          const sx = clamp(Math.round(wx / ws), 0, srcW - 1);
-          const sy = clamp(Math.round(wy / ws), 0, srcH - 1);
-          const si = (sy * srcW + sx) * 4;
-          const r = pixels[si], g = pixels[si + 1], b = pixels[si + 2];
-          const dFg = Math.sqrt((r - fgR) ** 2 + (g - fgG) ** 2 + (b - fgB) ** 2);
-          const dBg = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-          const bias = lassoMask[wi] ? -10 : 10;
-          refined[wi] = (dFg + bias) < dBg ? 1 : 0;
-        }
-      }
-
-      // 5. Smooth: render to canvas, blur+threshold twice
-      const refC = getScratchCanvas('sel-ref', wW, wH);
-      const refX = refC.getContext('2d', { willReadFrequently: true });
-      const refImg = refX.createImageData(wW, wH);
-      for (let i = 0; i < wW * wH; i++) {
-        refImg.data[i * 4] = refImg.data[i * 4 + 1] = refImg.data[i * 4 + 2] = 255;
-        refImg.data[i * 4 + 3] = refined[i] ? 255 : 0;
-      }
-      refX.putImageData(refImg, 0, 0);
-
-      const tmpC = getScratchCanvas('sel-tmp', wW, wH);
-      for (let pass = 0; pass < 2; pass++) {
-        blurCanvas(refC, tmpC, 1.5);
-        const tmpX = tmpC.getContext('2d', { willReadFrequently: true });
-        const tmpImg = tmpX.getImageData(0, 0, wW, wH);
-        for (let i = 3; i < tmpImg.data.length; i += 4)
-          tmpImg.data[i] = tmpImg.data[i] > 128 ? 255 : 0;
-        tmpX.putImageData(tmpImg, 0, 0);
-        copyCanvas(tmpC, refC);
-      }
-
-      // 6. Read final mask and trace boundary
-      const finalPx = refX.getImageData(0, 0, wW, wH).data;
-      const finalMask = new Uint8Array(wW * wH);
-      for (let i = 0; i < wW * wH; i++) finalMask[i] = finalPx[i * 4 + 3] > 128 ? 1 : 0;
-
-      const boundary = traceMaskBoundary(finalMask, wW, wH);
-      if (boundary.length < 10) return null;
-
-      // 7. Simplify and convert to source-space normalized coords
-      const simplified = douglasPeucker(boundary, 1.2);
-      if (simplified.length < 3) return null;
-
-      return simplified.map(([x, y]) => [
-        clamp((x / ws) / srcW, 0, 1),
-        clamp((y / ws) / srcH, 0, 1)
-      ]);
-    }
-
-    async function finalizeSelectionStroke() {
+    function finalizeSelectionStroke() {
       if (!selectionState.drawing) return;
       selectionState.drawing = false;
 
@@ -2804,44 +2891,25 @@
       }
 
       const savedRawPoints = [...selectionState.rawPoints];
-
-      // Try SAM first, then color-based, then raw lasso
-      let normalized = null;
-      let previewPts = null;
-
-      if (samState.ready && samState.embedding) {
-        const samResult = await runSAMDecoder(savedRawPoints, geometry);
-        if (samResult) {
-          normalized = samResult;
-          previewPts = samResult.map(([nx, ny]) => [nx * geometry.srcW, ny * geometry.srcH]);
-          console.log('[SAM] Selection refined with SAM');
-        }
-      }
-
-      if (!normalized) {
-        const colorResult = refineSelectionMask(savedRawPoints, geometry);
-        if (colorResult) {
-          normalized = colorResult;
-          previewPts = colorResult.map(([nx, ny]) => [nx * geometry.srcW, ny * geometry.srcH]);
-        }
-      }
-
-      if (!normalized) {
-        const sampleSpacing = Math.max(2, 5 / geometry.scale);
-        const sampled = resampleClosedPath(savedRawPoints, sampleSpacing);
-        previewPts = sampled;
-        normalized = sampled.map(([x, y]) => [
-          clamp(x / geometry.srcW, 0, 1),
-          clamp(y / geometry.srcH, 0, 1)
-        ]);
-      }
+      const sampleSpacing = Math.max(2, 5 / geometry.scale);
+      const sampled = resampleClosedPath(savedRawPoints, sampleSpacing);
+      const previewPts = sampled;
+      const normalized = sampled.map(([x, y]) => [
+        clamp(x / geometry.srcW, 0, 1),
+        clamp(y / geometry.srcH, 0, 1)
+      ]);
 
       const currentMask = getMask(activeLayer());
-      activeLayer().mask = {
-        points: normalized,
-        inverted: currentMask ? currentMask.inverted : false,
-        feather: currentMask ? currentMask.feather : 0
-      };
+      const mode = selectionState.compositionMode || 'new';
+      if (mode === 'new' || !currentMask || !maskHasRegions(currentMask)) {
+        activeLayer().mask = {
+          regions: [{ points: normalized, op: 'new' }],
+          inverted: currentMask ? currentMask.inverted : false,
+          feather: currentMask ? currentMask.feather : 0
+        };
+      } else {
+        currentMask.regions.push({ points: normalized, op: mode });
+      }
       selectionState.previewPoints = previewPts;
       selectionState.rawPoints = [];
       invalidateMaskCaches(activeLayer().id);
@@ -3238,6 +3306,39 @@
       return { canvas: _bloomAsciiCanvas, ctx: _bloomAsciiCtx };
     }
 
+    let _grainSeed = 0;
+    function applyGrain(ctx, w, h, layer) {
+      const amount = layer.grainAmount / 100;
+      if (amount <= 0) return;
+      const size = Math.max(1, layer.grainSize);
+      const roughness = layer.grainRoughness / 100;
+      const strength = amount * 80; // max ±80 levels at full amount
+      const seed = _grainSeed++;
+
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const data = imageData.data;
+      const invSize = 1 / size;
+
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i + 3] === 0) continue; // skip transparent pixels
+        const px = (i >> 2) % w;
+        const py = ((i >> 2) / w) | 0;
+
+        const nx = px * invSize;
+        const ny = py * invSize;
+
+        const smooth = valueNoise2D(nx, ny, seed) * 2 - 1;
+        const harsh = hashNoise2D(px, py, seed) * 2 - 1;
+        const noise = smooth + roughness * (harsh - smooth);
+        const offset = noise * strength;
+
+        data[i]     = Math.max(0, Math.min(255, data[i]     + offset));
+        data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + offset));
+        data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + offset));
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+
     function wordArtifactChar(row, col, layer) {
       if (!layer.wordArtifactEnabled || !layer.wordArtifact) return null;
       const word = layer.wordArtifact;
@@ -3255,7 +3356,7 @@
     function renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
       const stride = Math.round(cellSize * (1 + layer.gap));
       const isBraille = layer.variant === 'Braille';
-      const fontSize = stride * scale * (isBraille ? 1.14 : 1);
+      const fontSize = cellSize * scale * (isBraille ? 1.14 : 1);
       outputCtx.font = `${fontSize}px ${layer.font}`;
       outputCtx.textBaseline = 'middle';
       outputCtx.textAlign = 'center';
@@ -3722,6 +3823,18 @@
       video.loop = videoLoop;
     });
 
+    // Update selection mode label on modifier key changes
+    function updateModeFromModifiers(e) {
+      if (!selectionState.active || selectionState.drawing) return;
+      selectionState.compositionMode =
+        (e.shiftKey && e.altKey) ? 'intersect' :
+        e.shiftKey ? 'add' :
+        e.altKey ? 'subtract' : 'new';
+      updateSelectionModeLabel();
+    }
+    document.addEventListener('keydown', updateModeFromModifiers);
+    document.addEventListener('keyup', updateModeFromModifiers);
+
     // Spacebar play/pause
     document.addEventListener('keydown', (e) => {
       if (e.code === 'Escape' && selectionState.active) {
@@ -3746,6 +3859,11 @@
       const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
       if (!sourcePoint.inside) return;
 
+      selectionState.compositionMode =
+        (e.shiftKey && e.altKey) ? 'intersect' :
+        e.shiftKey ? 'add' :
+        e.altKey ? 'subtract' : 'new';
+      updateSelectionModeLabel();
       selectionState.drawing = true;
       selectionState.pointerId = e.pointerId;
       selectionState.rawPoints = [[sourcePoint.x, sourcePoint.y]];
@@ -4085,7 +4203,22 @@
     }
 
     function syncUIToLayer(layer) {
-      if (layer.kind === 'source') {
+      const isSource = layer.kind === 'source';
+      // Toggle section visibility based on layer kind
+      for (const id of ['variantSection', 'contourControls', 'outlineControls', 'settingsSection', 'artifactsSection', 'postProcessSection']) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', isSource);
+      }
+      const adjustEl = document.getElementById('adjustSection');
+      if (adjustEl) adjustEl.classList.remove('hidden');
+
+      if (isSource) {
+        brightnessInput.value = layer.brightness ?? 1;
+        brightnessValue.value = formatAdj(layer.brightness ?? 1);
+        contrastInput.value = layer.contrast ?? 1;
+        contrastValue.value = formatAdj(layer.contrast ?? 1);
+        saturationInput.value = layer.saturation ?? 1;
+        saturationValue.value = formatAdj(layer.saturation ?? 1);
         return;
       }
       // Variant
@@ -4113,6 +4246,15 @@
       bloomIntensitySlider.value = layer.bloomIntensity;
       bloomIntensityValue.value = layer.bloomIntensity;
       bloomControls.classList.toggle('hidden', !layer.bloom);
+      // Grain
+      grainToggle.checked = layer.grain;
+      grainAmountSlider.value = layer.grainAmount;
+      grainAmountValue.value = layer.grainAmount;
+      grainSizeSlider.value = layer.grainSize;
+      grainSizeValue.value = layer.grainSize;
+      grainRoughnessSlider.value = layer.grainRoughness;
+      grainRoughnessValue.value = layer.grainRoughness;
+      grainControls.classList.toggle('hidden', !layer.grain);
       // Contour
       contourSpreadSlider.value = layer.contourSpread;
       contourSpreadValue.value = layer.contourSpread;
@@ -4294,7 +4436,6 @@
         panel.classList.remove('w-[220px]');
         panel.classList.add('w-0');
       }
-      setTimeout(resizeCanvas, 310);
     }
 
     // Layer panel event listeners
@@ -4353,6 +4494,13 @@
     });
     document.getElementById('selectionInvertBtn').addEventListener('click', () => {
       document.getElementById('maskInvertBtn').click();
+    });
+    document.getElementById('selectionGuidesBtn').addEventListener('click', () => {
+      selectionState.showGuides = !selectionState.showGuides;
+      const btn = document.getElementById('selectionGuidesBtn');
+      btn.classList.toggle('tb-active', selectionState.showGuides);
+      btn.style.color = selectionState.showGuides ? '' : '#333';
+      render();
     });
     document.getElementById('selectionDoneBtn').addEventListener('click', () => {
       exitSelectionMode();
@@ -4430,6 +4578,52 @@
       document.getElementById('layerOpacity').value = v;
       e.target.value = v;
       render();
+    });
+
+    // ============ PROJECT MENU EVENTS ============
+    const projectBtn = document.getElementById('projectBtn');
+    const projectMenu = document.getElementById('projectMenu');
+
+    projectBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasHidden = projectMenu.classList.contains('hidden');
+      projectMenu.classList.toggle('hidden');
+      if (wasHidden) renderProjectList();
+    });
+
+    document.getElementById('projectSave').addEventListener('click', () => {
+      doSaveProject();
+      projectMenu.classList.add('hidden');
+    });
+    document.getElementById('projectSaveAs').addEventListener('click', () => {
+      doSaveAsProject();
+      projectMenu.classList.add('hidden');
+    });
+    document.getElementById('projectRename').addEventListener('click', () => {
+      doRenameProject();
+      projectMenu.classList.add('hidden');
+    });
+    document.getElementById('projectDelete').addEventListener('click', () => {
+      doDeleteProject();
+      projectMenu.classList.add('hidden');
+    });
+    document.getElementById('projectClose').addEventListener('click', () => {
+      doCloseProject();
+      projectMenu.classList.add('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!projectMenu.contains(e.target) && e.target !== projectBtn) {
+        projectMenu.classList.add('hidden');
+      }
+    });
+
+    // Ctrl/Cmd+S to save project
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        doSaveProject();
+      }
     });
 
     // ============ INIT ============
