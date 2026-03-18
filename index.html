@@ -158,6 +158,16 @@
       box-shadow: inset 0 -2px 0 0 rgba(255,255,255,0.95);
       background: #171717;
     }
+    .fx-card { border: 1px solid #222; border-radius: 4px; background: #111; margin-bottom: 2px; }
+    .fx-card.dragging { opacity: 0.35; transform: scale(0.985); }
+    .fx-card.drop-before { box-shadow: inset 0 2px 0 0 rgba(255,255,255,0.95); background: #171717; }
+    .fx-card.drop-after { box-shadow: inset 0 -2px 0 0 rgba(255,255,255,0.95); background: #171717; }
+    .fx-drag { cursor: grab; user-select: none; font-size: 14px; line-height: 1; }
+    .fx-card[draggable="true"]:active .fx-drag { cursor: grabbing; }
+    #addEffectDropdown { position: absolute; z-index: 50; background: #111; border: 1px solid #333; border-radius: 4px; min-width: 180px; max-height: 300px; overflow-y: auto; }
+    #addEffectDropdown .fx-menu-item { padding: 6px 12px; font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #888; cursor: pointer; }
+    #addEffectDropdown .fx-menu-item:hover { background: #1a1a1a; color: #fff; }
+    #addEffectDropdown .fx-menu-header { padding: 6px 12px; font-size: 9px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; color: #444; pointer-events: none; }
     .layer-vis svg {
       width: 16px;
       height: 16px;
@@ -555,106 +565,15 @@
           </div>
         </div>
 
-        <!-- Post Process Controls -->
+        <!-- Effects Chain -->
         <div id="postProcessSection">
-          <div class="section-label">POST PROCESS</div>
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Ink Bleed</label>
-              <label class="toggle-switch"><input type="checkbox" id="postProcessToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="postProcessControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Spread</label>
-                  <input id="inkSpreadValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="50">
-                </div>
-                <input type="range" id="inkSpread" min="0" max="100" value="50" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Organic</label>
-                  <input id="inkOrganicValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="30">
-                </div>
-                <input type="range" id="inkOrganic" min="0" max="100" value="30" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Splatter</label>
-                  <input id="inkSplatterValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="0">
-                </div>
-                <input type="range" id="inkSplatter" min="0" max="100" value="0" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Roundness</label>
-                  <input id="inkRoundnessValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="60">
-                </div>
-                <input type="range" id="inkRoundness" min="0" max="100" value="60" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Softness</label>
-                  <input id="inkSoftnessValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="0">
-                </div>
-                <input type="range" id="inkSoftness" min="0" max="100" value="0" step="1">
-              </div>
-            </div>
-            <div class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Bloom</label>
-              <label class="toggle-switch"><input type="checkbox" id="bloomToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="bloomControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
-              <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Style</label>
-                <select id="bloomStyle" class="bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider">
-                  <option value="soft">Soft</option>
-                  <option value="intense">Intense</option>
-                </select>
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Radius</label>
-                  <input id="bloomRadiusValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="8">
-                </div>
-                <input type="range" id="bloomRadius" min="2" max="100" value="8" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Intensity</label>
-                  <input id="bloomIntensityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="0.6">
-                </div>
-                <input type="range" id="bloomIntensity" min="0" max="3" value="0.6" step="0.05">
-              </div>
-            </div>
-            <div class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Grain</label>
-              <label class="toggle-switch"><input type="checkbox" id="grainToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="grainControls" class="hidden pl-3 border-l border-[#333] flex flex-col gap-3">
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Amount</label>
-                  <input id="grainAmountValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="25">
-                </div>
-                <input type="range" id="grainAmount" min="0" max="100" value="25" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Size</label>
-                  <input id="grainSizeValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="25">
-                </div>
-                <input type="range" id="grainSize" min="1" max="100" value="25" step="1">
-              </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Roughness</label>
-                  <input id="grainRoughnessValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="50">
-                </div>
-                <input type="range" id="grainRoughness" min="0" max="100" value="50" step="1">
-              </div>
+          <div class="section-label flex items-center justify-between">
+            <span>EFFECTS</span>
+            <div class="relative">
+              <button id="addEffectBtn" class="text-[10px] text-[#666] hover:text-white border border-[#333] px-2 py-0.5 font-mono uppercase tracking-wider cursor-pointer bg-transparent">+ Add</button>
             </div>
           </div>
+          <div id="effectChainList" class="flex flex-col gap-1"></div>
         </div>
       </div>
     </div>
@@ -677,6 +596,81 @@
   <script>
     // ============ STATE ============
     let layerCounter = 1;
+    /* ── Effect Registry ── */
+    const EFFECT_REGISTRY = {
+      bloom: {
+        label: 'Bloom',
+        defaults: { style: 'soft', radius: 8, intensity: 0.6 },
+        params: [
+          { key: 'style', type: 'select', options: ['soft', 'intense'], label: 'Style' },
+          { key: 'radius', type: 'range', min: 2, max: 100, step: 1, label: 'Radius' },
+          { key: 'intensity', type: 'range', min: 0, max: 3, step: 0.05, label: 'Intensity' }
+        ]
+      },
+      grain: {
+        label: 'Grain',
+        defaults: { amount: 25, size: 25, roughness: 50 },
+        params: [
+          { key: 'amount', type: 'range', min: 0, max: 100, step: 1, label: 'Amount' },
+          { key: 'size', type: 'range', min: 1, max: 100, step: 1, label: 'Size' },
+          { key: 'roughness', type: 'range', min: 0, max: 100, step: 1, label: 'Roughness' }
+        ]
+      },
+      inkBleed: {
+        label: 'Ink Bleed',
+        defaults: { spread: 50, organic: 30, splatter: 0, roundness: 60, softness: 0 },
+        params: [
+          { key: 'spread', type: 'range', min: 0, max: 100, step: 1, label: 'Spread' },
+          { key: 'organic', type: 'range', min: 0, max: 100, step: 1, label: 'Organic' },
+          { key: 'splatter', type: 'range', min: 0, max: 100, step: 1, label: 'Splatter' },
+          { key: 'roundness', type: 'range', min: 0, max: 100, step: 1, label: 'Roundness' },
+          { key: 'softness', type: 'range', min: 0, max: 100, step: 1, label: 'Softness' }
+        ]
+      },
+      chromatic: {
+        label: 'Chromatic Aberration',
+        defaults: { amount: 5, angle: 0 },
+        params: [
+          { key: 'amount', type: 'range', min: 0, max: 30, step: 0.5, label: 'Offset' },
+          { key: 'angle', type: 'range', min: 0, max: 360, step: 1, label: 'Angle' }
+        ]
+      },
+      pixelate: {
+        label: 'Pixelate',
+        defaults: { amount: 8 },
+        params: [
+          { key: 'amount', type: 'range', min: 2, max: 64, step: 1, label: 'Block Size' }
+        ]
+      },
+      blur: {
+        label: 'Blur',
+        subtypes: {
+          gaussian:  { label: 'Gaussian',  defaults: { amount: 5 },  params: [{ key: 'amount', type: 'range', min: 0, max: 50, step: 0.5, label: 'Radius' }] },
+          motion:    { label: 'Motion',    defaults: { amount: 10, angle: 0 }, params: [{ key: 'amount', type: 'range', min: 0, max: 50, step: 1, label: 'Distance' }, { key: 'angle', type: 'range', min: 0, max: 360, step: 1, label: 'Angle' }] },
+          radial:    { label: 'Radial',    defaults: { amount: 10, centerX: 50, centerY: 50 }, params: [{ key: 'amount', type: 'range', min: 0, max: 50, step: 1, label: 'Amount' }, { key: 'centerX', type: 'range', min: 0, max: 100, step: 1, label: 'Center X' }, { key: 'centerY', type: 'range', min: 0, max: 100, step: 1, label: 'Center Y' }] },
+          box:       { label: 'Box Blur',  defaults: { amount: 5 },  params: [{ key: 'amount', type: 'range', min: 1, max: 30, step: 1, label: 'Radius' }] }
+        }
+      }
+    };
+
+    let _fxIdCounter = 0;
+    function newFxId() { return 'fx-' + (++_fxIdCounter); }
+
+    function createEffect(type, subtype) {
+      const reg = EFFECT_REGISTRY[type];
+      if (!reg) return null;
+      let defaults;
+      if (reg.subtypes) {
+        const st = reg.subtypes[subtype || Object.keys(reg.subtypes)[0]];
+        defaults = st ? { ...st.defaults } : {};
+        subtype = subtype || Object.keys(reg.subtypes)[0];
+      } else {
+        defaults = { ...reg.defaults };
+        subtype = null;
+      }
+      return { id: newFxId(), type, subtype, enabled: true, params: defaults };
+    }
+
     const DEFAULT_ASCII_LAYER_SETTINGS = Object.freeze({
       visible: true,
       opacity: 1.0,
@@ -719,6 +713,7 @@
         roundness: 60,
         softness: 0
       },
+      effectChain: null,
       mask: null
     });
 
@@ -726,6 +721,7 @@
       return {
         ...DEFAULT_ASCII_LAYER_SETTINGS,
         postProcess: { ...DEFAULT_ASCII_LAYER_SETTINGS.postProcess },
+        effectChain: null,
         mask: null
       };
     }
@@ -796,18 +792,22 @@
 
     function serializeProject() {
       return {
-        version: 1,
+        version: 2,
         activeLayerId: state.activeLayerId,
         sourceHint: state.source,
         layers: state.layers.map(l => {
           const clone = { ...l };
           if (l.postProcess) clone.postProcess = { ...l.postProcess };
+          if (l.effectChain) {
+            clone.effectChain = l.effectChain.map(fx => ({
+              ...fx, params: { ...fx.params }
+            }));
+          }
           if (l.mask) {
             clone.mask = { ...l.mask };
             if (l.mask.regions) {
               clone.mask.regions = l.mask.regions.map(r => ({ ...r, points: r.points.map(p => [...p]) }));
             }
-            // Legacy compat: also clone points if present
             if (l.mask.points) clone.mask.points = l.mask.points.map(p => [...p]);
           }
           return clone;
@@ -820,12 +820,13 @@
         if (l.postProcess) l.postProcess = { ...l.postProcess };
         if (l.mask) {
           l.mask = { ...l.mask };
-          // Migrate old single-polygon format
           if (l.mask.points && !l.mask.regions) {
             l.mask.regions = [{ points: l.mask.points, op: 'new' }];
             delete l.mask.points;
           }
         }
+        // Trigger effect chain migration from old format if needed
+        getEffectChain(l);
         return l;
       });
       state.activeLayerId = data.activeLayerId || state.layers[0]?.id;
@@ -1015,6 +1016,13 @@
       return Math.max(min, Math.min(max, v));
     }
 
+    function gapFontScale(gap) {
+      // At gap=0 scale font up ~1.35x so glyphs visually fill the cell;
+      // tapers to 1x by gap=0.4, no effect above that.
+      if (gap >= 0.4) return 1;
+      return 1 + 0.35 * (1 - gap / 0.4);
+    }
+
     function getMask(layer) {
       if (!layer.mask) return null;
       // Auto-migrate old single-polygon format to multi-region format
@@ -1054,6 +1062,41 @@
       pp.roundness = clamp(Math.round(pp.roundness), 0, 100);
       pp.softness = clamp(Math.round(pp.softness), 0, 100);
       return pp;
+    }
+
+    function getEffectChain(layer) {
+      if (Array.isArray(layer.effectChain)) {
+        // Migrate blur subtypes that became top-level types
+        for (const fx of layer.effectChain) {
+          if (fx.type === 'blur' && (fx.subtype === 'chromatic' || fx.subtype === 'pixelate')) {
+            fx.type = fx.subtype;
+            fx.subtype = null;
+          }
+        }
+        return layer.effectChain;
+      }
+      // Migrate from old format
+      layer.effectChain = [];
+      if (layer.bloom) {
+        layer.effectChain.push({
+          id: newFxId(), type: 'bloom', subtype: null, enabled: true,
+          params: { style: layer.bloomStyle || 'soft', radius: layer.bloomRadius || 8, intensity: layer.bloomIntensity || 0.6 }
+        });
+      }
+      if (layer.grain) {
+        layer.effectChain.push({
+          id: newFxId(), type: 'grain', subtype: null, enabled: true,
+          params: { amount: layer.grainAmount || 25, size: layer.grainSize || 25, roughness: layer.grainRoughness || 50 }
+        });
+      }
+      const pp = layer.postProcess;
+      if (pp && pp.enabled) {
+        layer.effectChain.push({
+          id: newFxId(), type: 'inkBleed', subtype: null, enabled: true,
+          params: { spread: pp.spread ?? 50, organic: pp.organic ?? 30, splatter: pp.splatter ?? 0, roundness: pp.roundness ?? 60, softness: pp.softness ?? 0 }
+        });
+      }
+      return layer.effectChain;
     }
 
     function geometryKey(geometry) {
@@ -1377,12 +1420,320 @@
       ctx.drawImage(src, 0, 0);
     }
 
-    function buildPostProcessKey(layer, geometry, forExport) {
-      const post = getPostProcess(layer);
-      const mask = getMask(layer);
+    /* ── Blur effect implementations ── */
+
+    // Create a padded canvas with edge pixels clamped (mirrored) to prevent
+    // dark vignetting when blur samples outside the image bounds.
+    function padCanvasForBlur(srcCanvas, w, h, pad, fxId) {
+      const pw = w + pad * 2;
+      const ph = h + pad * 2;
+      const padded = getScratchCanvas('fx-pad-' + fxId, pw, ph);
+      const pctx = padded.getContext('2d');
+      // Center: original image
+      pctx.drawImage(srcCanvas, 0, 0, w, h, pad, pad, w, h);
+      // Edges: stretch 1px strips to fill padding
+      // Top
+      pctx.drawImage(srcCanvas, 0, 0, w, 1, pad, 0, w, pad);
+      // Bottom
+      pctx.drawImage(srcCanvas, 0, h - 1, w, 1, pad, pad + h, w, pad);
+      // Left
+      pctx.drawImage(srcCanvas, 0, 0, 1, h, 0, pad, pad, h);
+      // Right
+      pctx.drawImage(srcCanvas, w - 1, 0, 1, h, pad + w, pad, pad, h);
+      // Corners: stretch 1x1 pixel
+      pctx.drawImage(srcCanvas, 0, 0, 1, 1, 0, 0, pad, pad);
+      pctx.drawImage(srcCanvas, w - 1, 0, 1, 1, pad + w, 0, pad, pad);
+      pctx.drawImage(srcCanvas, 0, h - 1, 1, 1, 0, pad + h, pad, pad);
+      pctx.drawImage(srcCanvas, w - 1, h - 1, 1, 1, pad + w, pad + h, pad, pad);
+      return { canvas: padded, pad, pw, ph };
+    }
+
+    function applyGaussianBlur(ctx, w, h, fx) {
+      const r = fx.params.amount;
+      if (r <= 0.5) return;
+      const pad = Math.ceil(r * 3);
+      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id);
+      const blurred = getScratchCanvas('fx-gauss-' + fx.id, pw, ph);
+      const bctx = blurred.getContext('2d');
+      bctx.filter = `blur(${r}px)`;
+      bctx.drawImage(padded, 0, 0);
+      bctx.filter = 'none';
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(blurred, pad, pad, w, h, 0, 0, w, h);
+    }
+
+    function applyMotionBlur(ctx, w, h, fx) {
+      const dist = fx.params.amount;
+      if (dist <= 0) return;
+      const angle = (fx.params.angle || 0) * Math.PI / 180;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      const steps = Math.min(24, Math.max(8, Math.round(dist)));
+      const pad = Math.ceil(dist + 2);
+      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id + '-m');
+      const result = getScratchCanvas('fx-motion-' + fx.id, pw, ph);
+      const rctx = result.getContext('2d');
+      const total = 2 * steps + 1;
+      for (let i = -steps; i <= steps; i++) {
+        rctx.globalAlpha = 1 / total;
+        rctx.drawImage(padded, dx * i * dist / steps, dy * i * dist / steps);
+      }
+      rctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(result, pad, pad, w, h, 0, 0, w, h);
+    }
+
+    function applyRadialBlur(ctx, w, h, fx) {
+      const amount = fx.params.amount;
+      if (amount <= 0) return;
+      const steps = Math.min(20, Math.max(8, Math.round(amount)));
+      const pad = Math.ceil(amount * 1.5 + 2);
+      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id + '-r');
+      const result = getScratchCanvas('fx-radial-' + fx.id, pw, ph);
+      const rctx = result.getContext('2d');
+      const pcx = (fx.params.centerX ?? 50) / 100 * w + pad;
+      const pcy = (fx.params.centerY ?? 50) / 100 * h + pad;
+      const total = 2 * steps + 1;
+      for (let i = -steps; i <= steps; i++) {
+        const s = 1 + (i / steps) * (amount / 100);
+        rctx.save();
+        rctx.globalAlpha = 1 / total;
+        rctx.translate(pcx, pcy);
+        rctx.scale(s, s);
+        rctx.translate(-pcx, -pcy);
+        rctx.drawImage(padded, 0, 0);
+        rctx.restore();
+      }
+      rctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(result, pad, pad, w, h, 0, 0, w, h);
+    }
+
+    function applyChromaticAberration(ctx, w, h, fx) {
+      const offset = fx.params.amount;
+      if (offset <= 0) return;
+      const angle = (fx.params.angle || 0) * Math.PI / 180;
+      const dx = Math.cos(angle) * offset;
+      const dy = Math.sin(angle) * offset;
+      const src = ctx.getImageData(0, 0, w, h);
+      const dst = ctx.createImageData(w, h);
+      const sd = src.data;
+      const dd = dst.data;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const idx = (y * w + x) * 4;
+          // Red channel: offset in +direction
+          const rx = Math.round(x + dx);
+          const ry = Math.round(y + dy);
+          if (rx >= 0 && rx < w && ry >= 0 && ry < h) {
+            dd[idx] = sd[(ry * w + rx) * 4];
+          }
+          // Green channel: no offset
+          dd[idx + 1] = sd[idx + 1];
+          // Blue channel: offset in -direction
+          const bx = Math.round(x - dx);
+          const by = Math.round(y - dy);
+          if (bx >= 0 && bx < w && by >= 0 && by < h) {
+            dd[idx + 2] = sd[(by * w + bx) * 4 + 2];
+          }
+          // Alpha: max of all sampled positions
+          dd[idx + 3] = sd[idx + 3];
+        }
+      }
+      ctx.putImageData(dst, 0, 0);
+    }
+
+    function applyPixelate(ctx, w, h, fx) {
+      const blockSize = Math.max(2, Math.round(fx.params.amount));
+      if (blockSize < 2) return;
+      const sw = Math.max(1, Math.ceil(w / blockSize));
+      const sh = Math.max(1, Math.ceil(h / blockSize));
+      const small = getScratchCanvas('fx-pix-' + fx.id, sw, sh);
+      const sctx = small.getContext('2d');
+      sctx.imageSmoothingEnabled = true;
+      sctx.drawImage(ctx.canvas, 0, 0, sw, sh);
+      ctx.clearRect(0, 0, w, h);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(small, 0, 0, w, h);
+      ctx.imageSmoothingEnabled = true;
+    }
+
+    function applyBoxBlur(ctx, w, h, fx) {
+      const radius = Math.max(1, Math.round(fx.params.amount));
+      if (radius < 1) return;
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const src = imageData.data;
+      const dst = new Uint8ClampedArray(src.length);
+      // Horizontal pass — clamp edges, preserve alpha
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          let r = 0, g = 0, b = 0, count = 0;
+          for (let k = -radius; k <= radius; k++) {
+            const sx = Math.min(w - 1, Math.max(0, x + k));
+            const si = (y * w + sx) * 4;
+            r += src[si]; g += src[si+1]; b += src[si+2]; count++;
+          }
+          const di = (y * w + x) * 4;
+          dst[di] = r / count; dst[di+1] = g / count; dst[di+2] = b / count; dst[di+3] = src[di+3];
+        }
+      }
+      // Vertical pass — clamp edges, preserve alpha
+      const result = new Uint8ClampedArray(src.length);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          let r = 0, g = 0, b = 0, count = 0;
+          for (let k = -radius; k <= radius; k++) {
+            const sy = Math.min(h - 1, Math.max(0, y + k));
+            const si = (sy * w + x) * 4;
+            r += dst[si]; g += dst[si+1]; b += dst[si+2]; count++;
+          }
+          const di = (y * w + x) * 4;
+          result[di] = r / count; result[di+1] = g / count; result[di+2] = b / count; result[di+3] = src[di+3];
+        }
+      }
+      imageData.data.set(result);
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    function applyBlurEffect(ctx, fx, context) {
+      const { outW, outH } = context;
+      switch (fx.subtype) {
+        case 'gaussian': applyGaussianBlur(ctx, outW, outH, fx); break;
+        case 'motion': applyMotionBlur(ctx, outW, outH, fx); break;
+        case 'radial': applyRadialBlur(ctx, outW, outH, fx); break;
+        case 'chromatic': applyChromaticAberration(ctx, outW, outH, fx); break;
+        case 'pixelate': applyPixelate(ctx, outW, outH, fx); break;
+        case 'box': applyBoxBlur(ctx, outW, outH, fx); break;
+      }
+    }
+
+    function applyBloomEffect(ctx, fx, context) {
+      const { asciiCanvas, outW, outH } = context;
+      // Create a temporary layer-like object for the existing applyBloomPost
+      const pseudoLayer = {
+        bloom: true,
+        bloomStyle: fx.params.style || 'soft',
+        bloomRadius: fx.params.radius ?? 8,
+        bloomIntensity: fx.params.intensity ?? 0.6
+      };
+      applyBloomPost(ctx, asciiCanvas, outW, outH, pseudoLayer);
+    }
+
+    function applyGrainEffect(ctx, fx, context) {
+      const { outW, outH } = context;
+      const pseudoLayer = {
+        grain: true,
+        grainAmount: fx.params.amount ?? 25,
+        grainSize: fx.params.size ?? 25,
+        grainRoughness: fx.params.roughness ?? 50
+      };
+      applyGrain(ctx, outW, outH, pseudoLayer);
+    }
+
+    function applyInkBleedEffect(ctx, fx, context) {
+      const { layer, geometry, forExport, outW, outH } = context;
+      const pp = fx.params;
+      if (!pp || (pp.spread ?? 0) <= 0) return;
+
+      const origC = getScratchCanvas(`pp-orig-${fx.id}`, outW, outH);
+      origC.getContext('2d').drawImage(ctx.canvas, 0, 0);
+
+      // Build cache key for this specific effect instance
       const frameKey = state.source === 'video'
         ? `${state.sourceVersion}:${state.sourceElement?.currentTime?.toFixed(3) || '0'}`
         : `${state.sourceVersion}`;
+      const cacheKey = [
+        geometry.key, forExport ? 'export' : 'preview', frameKey,
+        layer.variant, layer.cellSize, layer.gap, layer.font,
+        layer.invert ? 1 : 0, layer.colorMode ? 1 : 0, layer.charRotation ? 1 : 0,
+        layer.brightness, layer.contrast, layer.saturation,
+        pp.spread, pp.organic, pp.splatter, pp.roundness, pp.softness, fx.id
+      ].join('|');
+
+      let mask = null;
+      const canCache = state.source !== 'video' || (state.sourceElement && state.sourceElement.paused);
+      const entry = postProcessCache.get(fx.id);
+      if (canCache && entry && entry.key === cacheKey) {
+        mask = entry.canvas;
+      } else {
+        // Create a pseudo-layer with postProcess for buildInkBleedMask
+        const pseudoLayer = {
+          ...layer,
+          id: fx.id,
+          postProcess: { enabled: true, spread: pp.spread ?? 50, organic: pp.organic ?? 30, splatter: pp.splatter ?? 0, roundness: pp.roundness ?? 60, softness: pp.softness ?? 0 }
+        };
+        mask = buildInkBleedMask(origC, pseudoLayer, geometry, forExport);
+        if (canCache) postProcessCache.set(fx.id, { key: cacheKey, canvas: mask });
+      }
+      if (!mask) return;
+
+      const nSpread = (pp.spread ?? 50) / 100;
+      const nSplatter = (pp.splatter ?? 0) / 100;
+      const nSoft = (pp.softness ?? 0) / 100;
+      const spreadCurve = Math.pow(nSpread, 1.15);
+      const splatterCurve = Math.pow(nSplatter, 2.5);
+
+      const { scale } = geometry;
+      const cellScreen = Math.max(1, layer.cellSize * scale);
+      const splatterReach = splatterCurve * cellScreen * 2.5;
+      const colorBlurR = Math.max(cellScreen * 0.6, spreadCurve * cellScreen * 1.2 + spreadCurve * 4, splatterReach);
+
+      const fillC = getScratchCanvas(`pp-fill-${fx.id}`, outW, outH);
+      const fillX = fillC.getContext('2d');
+      fillX.clearRect(0, 0, outW, outH);
+      if (colorBlurR > 0.5) fillX.filter = `blur(${colorBlurR}px)`;
+      fillX.drawImage(origC, 0, 0);
+      fillX.filter = 'none';
+      fillX.drawImage(origC, 0, 0);
+
+      fillX.globalCompositeOperation = 'destination-in';
+      fillX.drawImage(mask, 0, 0);
+      fillX.globalCompositeOperation = 'source-over';
+
+      const maskData = mask.getContext('2d', { willReadFrequently: true })
+        .getImageData(0, 0, outW, outH).data;
+      const fillImg = fillX.getImageData(0, 0, outW, outH);
+      const fd = fillImg.data;
+
+      if (nSoft < 0.01) {
+        for (let i = 0; i < outW * outH; i++) {
+          if (maskData[i * 4 + 3] > 20) fd[i * 4 + 3] = 255;
+        }
+      } else {
+        for (let i = 0; i < outW * outH; i++) {
+          const ma = maskData[i * 4 + 3];
+          if (ma > fd[i * 4 + 3]) fd[i * 4 + 3] = ma;
+        }
+      }
+
+      fillX.putImageData(fillImg, 0, 0);
+      ctx.clearRect(0, 0, outW, outH);
+      ctx.drawImage(fillC, 0, 0);
+    }
+
+    const EFFECT_APPLY = {
+      bloom: applyBloomEffect,
+      grain: applyGrainEffect,
+      inkBleed: applyInkBleedEffect,
+      chromatic: (ctx, fx, context) => applyChromaticAberration(ctx, context.outW, context.outH, fx),
+      pixelate: (ctx, fx, context) => applyPixelate(ctx, context.outW, context.outH, fx),
+      blur: applyBlurEffect
+    };
+
+    function applyEffect(ctx, fx, context) {
+      const fn = EFFECT_APPLY[fx.type];
+      if (fn) fn(ctx, fx, context);
+    }
+
+    function buildPostProcessKey(layer, geometry, forExport) {
+      const mask = getMask(layer);
+      const chain = getEffectChain(layer);
+      const frameKey = state.source === 'video'
+        ? `${state.sourceVersion}:${state.sourceElement?.currentTime?.toFixed(3) || '0'}`
+        : `${state.sourceVersion}`;
+      const chainKey = chain.map(fx =>
+        `${fx.type}:${fx.subtype || ''}:${fx.enabled ? 1 : 0}:${JSON.stringify(fx.params)}`
+      ).join('|');
       return [
         geometry.key,
         forExport ? 'export' : 'preview',
@@ -1402,20 +1753,11 @@
         layer.outlineStrokeSize,
         layer.outlineCornerRadius,
         layer.outlineFill ? 1 : 0,
-        layer.bloom ? 1 : 0,
-        layer.bloomStyle,
-        layer.bloomRadius,
-        layer.bloomIntensity,
         layer.wordArtifactEnabled ? 1 : 0,
         layer.wordArtifact,
         layer.wordArtifactDensity,
         layer.wordArtifactCoherence,
-        post.enabled ? 1 : 0,
-        post.spread,
-        post.organic,
-        post.splatter,
-        post.roundness,
-        post.softness,
+        chainKey,
         mask ? `${mask.inverted ? 1 : 0}:${mask.feather}:${mask.regions.map(r => r.op + r.points.length).join(',')}` : 'nomask'
       ].join('|');
     }
@@ -1992,18 +2334,6 @@
     const outlineStrokeSizeValue = document.getElementById('outlineStrokeSizeValue');
     const outlineCornerRadiusSlider = document.getElementById('outlineCornerRadius');
     const outlineCornerRadiusValue = document.getElementById('outlineCornerRadiusValue');
-    const postProcessToggle = document.getElementById('postProcessToggle');
-    const postProcessControls = document.getElementById('postProcessControls');
-    const inkSpreadSlider = document.getElementById('inkSpread');
-    const inkSpreadVal = document.getElementById('inkSpreadValue');
-    const inkOrganicSlider = document.getElementById('inkOrganic');
-    const inkOrganicVal = document.getElementById('inkOrganicValue');
-    const inkSplatterSlider = document.getElementById('inkSplatter');
-    const inkSplatterVal = document.getElementById('inkSplatterValue');
-    const inkRoundnessSlider = document.getElementById('inkRoundness');
-    const inkRoundnessVal = document.getElementById('inkRoundnessValue');
-    const inkSoftnessSlider = document.getElementById('inkSoftness');
-    const inkSoftnessVal = document.getElementById('inkSoftnessValue');
     contourSpreadSlider.addEventListener('input', () => {
       activeLayer().contourSpread = parseInt(contourSpreadSlider.value);
       contourSpreadValue.value = activeLayer().contourSpread;
@@ -2052,37 +2382,6 @@
       outlineCornerRadiusValue.value = formatAdj(v);
       render();
     });
-    postProcessToggle.addEventListener('change', (e) => {
-      getPostProcess(activeLayer()).enabled = e.target.checked;
-      postProcessControls.classList.toggle('hidden', !e.target.checked);
-      invalidatePostProcessCache(activeLayer().id);
-      render();
-    });
-
-    function inkSlider(slider, valEl, field, min, max) {
-      slider.addEventListener('input', () => {
-        const post = getPostProcess(activeLayer());
-        post[field] = clamp(parseInt(slider.value) || 0, min, max);
-        valEl.value = post[field];
-        invalidatePostProcessCache(activeLayer().id);
-        render();
-      });
-      valEl.addEventListener('change', () => {
-        const post = getPostProcess(activeLayer());
-        const v = clamp(parseInt(valEl.value) || 0, min, max);
-        post[field] = v;
-        slider.value = v;
-        valEl.value = v;
-        invalidatePostProcessCache(activeLayer().id);
-        render();
-      });
-    }
-    inkSlider(inkSpreadSlider, inkSpreadVal, 'spread', 0, 100);
-    inkSlider(inkOrganicSlider, inkOrganicVal, 'organic', 0, 100);
-    inkSlider(inkSplatterSlider, inkSplatterVal, 'splatter', 0, 100);
-    inkSlider(inkRoundnessSlider, inkRoundnessVal, 'roundness', 0, 100);
-    inkSlider(inkSoftnessSlider, inkSoftnessVal, 'softness', 0, 100);
-
     // Toggles
     document.getElementById('invertToggle').addEventListener('change', (e) => {
       activeLayer().invert = e.target.checked;
@@ -2239,100 +2538,306 @@
       }
     });
 
-    // Bloom controls
-    const bloomToggle = document.getElementById('bloomToggle');
-    const bloomStyleSelect = document.getElementById('bloomStyle');
-    const bloomRadiusSlider = document.getElementById('bloomRadius');
-    const bloomRadiusValue = document.getElementById('bloomRadiusValue');
-    const bloomIntensitySlider = document.getElementById('bloomIntensity');
-    const bloomIntensityValue = document.getElementById('bloomIntensityValue');
-    const bloomControls = document.getElementById('bloomControls');
+    // ============ EFFECT CHAIN UI ============
+    const fxDragState = { draggedId: null, targetId: null, placement: null };
 
-    bloomToggle.addEventListener('change', (e) => {
-      activeLayer().bloom = e.target.checked;
-      bloomControls.classList.toggle('hidden', !activeLayer().bloom);
-      render();
-    });
-    bloomStyleSelect.addEventListener('change', () => {
-      activeLayer().bloomStyle = bloomStyleSelect.value;
-      render();
-    });
-    bloomRadiusSlider.addEventListener('input', () => {
-      activeLayer().bloomRadius = parseInt(bloomRadiusSlider.value);
-      bloomRadiusValue.value = activeLayer().bloomRadius;
-      render();
-    });
-    bloomRadiusValue.addEventListener('change', () => {
-      const v = Math.min(100, Math.max(2, parseInt(bloomRadiusValue.value) || 8));
-      activeLayer().bloomRadius = v;
-      bloomRadiusSlider.value = v;
-      bloomRadiusValue.value = v;
-      render();
-    });
-    bloomIntensitySlider.addEventListener('input', () => {
-      activeLayer().bloomIntensity = parseFloat(bloomIntensitySlider.value);
-      bloomIntensityValue.value = activeLayer().bloomIntensity;
-      render();
-    });
-    bloomIntensityValue.addEventListener('change', () => {
-      const parsed = parseFloat(bloomIntensityValue.value);
-      const v = Math.min(3, Math.max(0, isNaN(parsed) ? 0.6 : parsed));
-      activeLayer().bloomIntensity = v;
-      bloomIntensitySlider.value = v;
-      bloomIntensityValue.value = v;
-      render();
-    });
+    function clearFxDropIndicators() {
+      document.querySelectorAll('.fx-card.drop-before, .fx-card.drop-after').forEach(el => {
+        el.classList.remove('drop-before', 'drop-after');
+      });
+    }
 
-    // Grain controls
-    const grainToggle = document.getElementById('grainToggle');
-    const grainControls = document.getElementById('grainControls');
-    const grainAmountSlider = document.getElementById('grainAmount');
-    const grainAmountValue = document.getElementById('grainAmountValue');
-    const grainSizeSlider = document.getElementById('grainSize');
-    const grainSizeValue = document.getElementById('grainSizeValue');
-    const grainRoughnessSlider = document.getElementById('grainRoughness');
-    const grainRoughnessValue = document.getElementById('grainRoughnessValue');
+    function getEffectLabel(fx) {
+      const reg = EFFECT_REGISTRY[fx.type];
+      if (!reg) return fx.type;
+      if (reg.subtypes && fx.subtype) {
+        const st = reg.subtypes[fx.subtype];
+        return st ? st.label : reg.label;
+      }
+      return reg.label;
+    }
 
-    grainToggle.addEventListener('change', (e) => {
-      activeLayer().grain = e.target.checked;
-      grainControls.classList.toggle('hidden', !activeLayer().grain);
-      render();
-    });
-    grainAmountSlider.addEventListener('input', () => {
-      activeLayer().grainAmount = parseInt(grainAmountSlider.value);
-      grainAmountValue.value = activeLayer().grainAmount;
-      render();
-    });
-    grainAmountValue.addEventListener('change', () => {
-      const v = Math.min(100, Math.max(0, parseInt(grainAmountValue.value) || 25));
-      activeLayer().grainAmount = v;
-      grainAmountSlider.value = v;
-      grainAmountValue.value = v;
-      render();
-    });
-    grainSizeSlider.addEventListener('input', () => {
-      activeLayer().grainSize = parseInt(grainSizeSlider.value);
-      grainSizeValue.value = activeLayer().grainSize;
-      render();
-    });
-    grainSizeValue.addEventListener('change', () => {
-      const v = Math.min(100, Math.max(1, parseInt(grainSizeValue.value) || 25));
-      activeLayer().grainSize = v;
-      grainSizeSlider.value = v;
-      grainSizeValue.value = v;
-      render();
-    });
-    grainRoughnessSlider.addEventListener('input', () => {
-      activeLayer().grainRoughness = parseInt(grainRoughnessSlider.value);
-      grainRoughnessValue.value = activeLayer().grainRoughness;
-      render();
-    });
-    grainRoughnessValue.addEventListener('change', () => {
-      const v = Math.min(100, Math.max(0, parseInt(grainRoughnessValue.value) || 50));
-      activeLayer().grainRoughness = v;
-      grainRoughnessSlider.value = v;
-      grainRoughnessValue.value = v;
-      render();
+    function getEffectParams(fx) {
+      const reg = EFFECT_REGISTRY[fx.type];
+      if (!reg) return [];
+      if (reg.subtypes && fx.subtype) {
+        const st = reg.subtypes[fx.subtype];
+        return st ? st.params : [];
+      }
+      return reg.params || [];
+    }
+
+    function renderEffectChainUI() {
+      const layer = activeLayer();
+      if (!layer) return;
+      const chain = getEffectChain(layer);
+      const list = document.getElementById('effectChainList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      chain.forEach((fx, idx) => {
+        const card = document.createElement('div');
+        card.className = 'fx-card';
+        card.draggable = false;
+        card.dataset.fxId = fx.id;
+
+        // Header row
+        const header = document.createElement('div');
+        header.className = 'flex items-center gap-2 px-2 py-1.5';
+        header.innerHTML = `
+          <span class="fx-drag text-[#444]">≡</span>
+          <span class="text-[10px] text-[#888] uppercase tracking-wider flex-1 cursor-pointer fx-toggle-params" style="font-family:monospace">${getEffectLabel(fx)}</span>
+          <label class="toggle-switch" style="flex-shrink:0"><input type="checkbox" class="fx-enabled" ${fx.enabled ? 'checked' : ''}><span class="toggle-slider"></span></label>
+          <button class="fx-del text-[10px] text-[#444] hover:text-red-400 cursor-pointer bg-transparent border-none" style="font-family:monospace">✕</button>
+        `;
+        card.appendChild(header);
+
+        // Params container (collapsible)
+        const paramsDiv = document.createElement('div');
+        paramsDiv.className = 'fx-params pl-5 pr-2 pb-2 flex flex-col gap-2';
+        paramsDiv.style.display = fx.enabled ? '' : 'none';
+
+        // Blur subtype selector
+        const reg = EFFECT_REGISTRY[fx.type];
+        if (reg && reg.subtypes) {
+          const stRow = document.createElement('div');
+          stRow.className = 'flex items-center justify-between';
+          const stLabel = document.createElement('label');
+          stLabel.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+          stLabel.textContent = 'Type';
+          const stSelect = document.createElement('select');
+          stSelect.className = 'bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider';
+          for (const [key, st] of Object.entries(reg.subtypes)) {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = st.label;
+            if (fx.subtype === key) opt.selected = true;
+            stSelect.appendChild(opt);
+          }
+          stSelect.addEventListener('change', () => {
+            const newSub = stSelect.value;
+            const newDefs = reg.subtypes[newSub];
+            fx.subtype = newSub;
+            // Reset params to new subtype defaults, keeping any shared keys
+            fx.params = { ...newDefs.defaults };
+            invalidatePostProcessCache();
+            renderEffectChainUI();
+            render();
+          });
+          stRow.appendChild(stLabel);
+          stRow.appendChild(stSelect);
+          paramsDiv.appendChild(stRow);
+        }
+
+        // Generate param controls
+        const params = getEffectParams(fx);
+        params.forEach(pDef => {
+          const row = document.createElement('div');
+          row.className = 'flex flex-col gap-1';
+
+          if (pDef.type === 'range') {
+            const labelRow = document.createElement('div');
+            labelRow.className = 'flex items-center justify-between';
+            const label = document.createElement('label');
+            label.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+            label.textContent = pDef.label;
+            const valInput = document.createElement('input');
+            valInput.type = 'text';
+            valInput.className = 'text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]';
+            valInput.value = fx.params[pDef.key] ?? pDef.min;
+            labelRow.appendChild(label);
+            labelRow.appendChild(valInput);
+            row.appendChild(labelRow);
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = pDef.min;
+            slider.max = pDef.max;
+            slider.step = pDef.step;
+            slider.value = fx.params[pDef.key] ?? pDef.min;
+
+            slider.addEventListener('input', () => {
+              const v = parseFloat(slider.value);
+              fx.params[pDef.key] = v;
+              valInput.value = v;
+              if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
+              render();
+            });
+            valInput.addEventListener('change', () => {
+              let v = parseFloat(valInput.value);
+              if (isNaN(v)) v = pDef.min;
+              v = Math.min(pDef.max, Math.max(pDef.min, v));
+              fx.params[pDef.key] = v;
+              slider.value = v;
+              valInput.value = v;
+              if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
+              render();
+            });
+            row.appendChild(slider);
+          } else if (pDef.type === 'select') {
+            const labelRow = document.createElement('div');
+            labelRow.className = 'flex items-center justify-between';
+            const label = document.createElement('label');
+            label.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+            label.textContent = pDef.label;
+            const select = document.createElement('select');
+            select.className = 'bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider';
+            pDef.options.forEach(opt => {
+              const o = document.createElement('option');
+              o.value = opt;
+              o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+              if (fx.params[pDef.key] === opt) o.selected = true;
+              select.appendChild(o);
+            });
+            select.addEventListener('change', () => {
+              fx.params[pDef.key] = select.value;
+              render();
+            });
+            labelRow.appendChild(label);
+            labelRow.appendChild(select);
+            row.appendChild(labelRow);
+          }
+          paramsDiv.appendChild(row);
+        });
+
+        card.appendChild(paramsDiv);
+
+        // Toggle params visibility on label click
+        header.querySelector('.fx-toggle-params').addEventListener('click', () => {
+          paramsDiv.style.display = paramsDiv.style.display === 'none' ? '' : 'none';
+        });
+
+        // Enable/disable toggle
+        header.querySelector('.fx-enabled').addEventListener('change', (e) => {
+          fx.enabled = e.target.checked;
+          paramsDiv.style.display = fx.enabled ? '' : 'none';
+          if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
+          render();
+        });
+
+        // Delete button
+        header.querySelector('.fx-del').addEventListener('click', () => {
+          const i = chain.indexOf(fx);
+          if (i >= 0) chain.splice(i, 1);
+          if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
+          renderEffectChainUI();
+          render();
+        });
+
+        // Only allow drag initiation from the ≡ handle
+        const dragHandle = header.querySelector('.fx-drag');
+        dragHandle.addEventListener('mousedown', () => { card.draggable = true; });
+
+        // Drag-and-drop reorder
+        card.addEventListener('dragstart', (e) => {
+          fxDragState.draggedId = fx.id;
+          e.dataTransfer.setData('text/plain', fx.id);
+          e.dataTransfer.effectAllowed = 'move';
+          card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', () => {
+          card.draggable = false;
+          clearFxDropIndicators();
+          card.classList.remove('dragging');
+          fxDragState.draggedId = null;
+          fxDragState.targetId = null;
+          fxDragState.placement = null;
+        });
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (fxDragState.draggedId === fx.id) return;
+          const rect = card.getBoundingClientRect();
+          const placement = e.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
+          clearFxDropIndicators();
+          card.classList.add(placement === 'before' ? 'drop-before' : 'drop-after');
+          fxDragState.targetId = fx.id;
+          fxDragState.placement = placement;
+        });
+        card.addEventListener('dragleave', () => {
+          if (fxDragState.targetId === fx.id) {
+            card.classList.remove('drop-before', 'drop-after');
+          }
+        });
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          clearFxDropIndicators();
+          const draggedId = fxDragState.draggedId;
+          if (!draggedId || draggedId === fx.id) return;
+          const fromIdx = chain.findIndex(f => f.id === draggedId);
+          const toIdx = chain.findIndex(f => f.id === fx.id);
+          if (fromIdx < 0 || toIdx < 0) return;
+          const [moved] = chain.splice(fromIdx, 1);
+          const insertIdx = fxDragState.placement === 'before' ? chain.findIndex(f => f.id === fx.id) : chain.findIndex(f => f.id === fx.id) + 1;
+          chain.splice(insertIdx < 0 ? chain.length : insertIdx, 0, moved);
+          fxDragState.draggedId = null;
+          fxDragState.targetId = null;
+          fxDragState.placement = null;
+          invalidatePostProcessCache();
+          renderEffectChainUI();
+          render();
+        });
+
+        list.appendChild(card);
+      });
+    }
+
+    // Add effect dropdown
+    document.getElementById('addEffectBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      let dropdown = document.getElementById('addEffectDropdown');
+      if (dropdown) { dropdown.remove(); return; }
+
+      dropdown = document.createElement('div');
+      dropdown.id = 'addEffectDropdown';
+
+      function addItem(label, type, subtype) {
+        const item = document.createElement('div');
+        item.className = 'fx-menu-item';
+        item.textContent = label;
+        item.addEventListener('click', () => {
+          const layer = activeLayer();
+          if (!layer) return;
+          const chain = getEffectChain(layer);
+          const fx = createEffect(type, subtype);
+          if (fx) chain.push(fx);
+          dropdown.remove();
+          invalidatePostProcessCache();
+          renderEffectChainUI();
+          render();
+        });
+        dropdown.appendChild(item);
+      }
+
+      addItem('Ink Bleed', 'inkBleed', null);
+      addItem('Bloom', 'bloom', null);
+      addItem('Grain', 'grain', null);
+      addItem('Chromatic Aberration', 'chromatic', null);
+      addItem('Pixelate', 'pixelate', null);
+
+      // Blur subtypes
+      const blurHeader = document.createElement('div');
+      blurHeader.className = 'fx-menu-header';
+      blurHeader.textContent = '— Blur —';
+      dropdown.appendChild(blurHeader);
+
+      for (const [key, st] of Object.entries(EFFECT_REGISTRY.blur.subtypes)) {
+        addItem(st.label, 'blur', key);
+      }
+
+      const btn = document.getElementById('addEffectBtn');
+      const rect = btn.getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = (rect.bottom + 4) + 'px';
+      dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+      document.body.appendChild(dropdown);
+
+      const closeDropdown = (ev) => {
+        if (!dropdown.contains(ev.target) && ev.target !== btn) {
+          dropdown.remove();
+          document.removeEventListener('click', closeDropdown);
+        }
+      };
+      setTimeout(() => document.addEventListener('click', closeDropdown), 0);
     });
 
     // Word artifact controls
@@ -2644,6 +3149,18 @@
       layerCtx.restore();
     }
 
+    function clipToImageBounds(ctx, geometry) {
+      const { offsetX, offsetY, srcW, srcH, scale, outW, outH } = geometry;
+      const imgW = srcW * scale;
+      const imgH = srcH * scale;
+      // Use destination-in to erase everything outside the image rect
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(offsetX, offsetY, imgW, imgH);
+      ctx.restore();
+    }
+
     // ============ RENDER LAYER ============
     function renderLayer(layer, pixels, geometry, forExport = false) {
       const { srcW, srcH, scale, offsetX, offsetY, outW, outH } = geometry;
@@ -2653,6 +3170,16 @@
 
       if (layer.kind === 'source') {
         renderSourceLayer(layerCtx, layer, geometry);
+        // Apply effect chain to source layer too
+        const srcChain = getEffectChain(layer);
+        if (srcChain.length > 0) {
+          for (const fx of srcChain) {
+            if (!fx.enabled) continue;
+            applyEffect(layerCtx, fx, { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport });
+          }
+          // Clip to image bounds
+          clipToImageBounds(layerCtx, geometry);
+        }
         return layerCanvas;
       }
 
@@ -2666,15 +3193,10 @@
       // Swap outputCtx to layer canvas
       const savedCtx = outputCtx;
       try {
-        outputCtx = layerCtx;
-
-        // Handle bloom: render to ASCII offscreen canvas first
-        let asciiCanvas = null;
-        if (layer.bloom) {
-          const bloom = getBloomAsciiCanvas(outW, outH);
-          asciiCanvas = bloom.canvas;
-          outputCtx = bloom.ctx;
-        }
+        // Always render ASCII to offscreen canvas (needed if any bloom exists in the chain)
+        const offscreen = getBloomAsciiCanvas(outW, outH);
+        const asciiCanvas = offscreen.canvas;
+        outputCtx = offscreen.ctx;
 
         if (variant.mode === 'outline') {
           renderOutline(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
@@ -2689,15 +3211,23 @@
           renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY, layer, maskMetrics);
         }
 
-        if (layer.bloom) {
-          outputCtx = layerCtx;
-          applyBloomPost(layerCtx, asciiCanvas, outW, outH, layer);
+        // Copy ASCII result to layer canvas
+        outputCtx = layerCtx;
+        layerCtx.drawImage(asciiCanvas, 0, 0);
+
+        // Apply effect chain in order
+        const chain = getEffectChain(layer);
+        for (const fx of chain) {
+          if (!fx.enabled) continue;
+          applyEffect(layerCtx, fx, { asciiCanvas, outW, outH, layer, geometry, forExport });
         }
-        if (layer.grain) {
-          applyGrain(layerCtx, outW, outH, layer);
+
+        // Clip to image bounds so effects don't bleed outside the frame
+        if (chain.some(fx => fx.enabled)) {
+          clipToImageBounds(layerCtx, geometry);
         }
+
         applyLayerMask(layerCtx, layer, geometry, forExport);
-        applyPostProcess(layerCtx, layer, geometry, forExport);
       } finally {
         outputCtx = savedCtx;
       }
@@ -3073,7 +3603,7 @@
 
       // Draw contour characters
       // chars = '.:oO' — edge cells get o/O by magnitude, falloff gets ./:
-      const fontSize = cellSize * scale;
+      const fontSize = cellSize * scale * gapFontScale(layer.gap);
       outputCtx.font = `${fontSize}px ${layer.font}`;
       outputCtx.textBaseline = 'middle';
       outputCtx.textAlign = 'center';
@@ -3170,7 +3700,7 @@
           if (pattern.length === 0) continue;
           const aChar = wordArtifactChar(row, col, layer);
           if (aChar && strength > 0.66) {
-            const fontSize = cellSize * scale;
+            const fontSize = cellSize * scale * gapFontScale(layer.gap);
             outputCtx.font = `${fontSize}px ${layer.font}`;
             outputCtx.textBaseline = 'middle';
             outputCtx.textAlign = 'center';
@@ -3356,7 +3886,7 @@
     function renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
       const stride = Math.round(cellSize * (1 + layer.gap));
       const isBraille = layer.variant === 'Braille';
-      const fontSize = cellSize * scale * (isBraille ? 1.14 : 1);
+      const fontSize = cellSize * scale * (isBraille ? 1.14 : 1) * gapFontScale(layer.gap);
       outputCtx.font = `${fontSize}px ${layer.font}`;
       outputCtx.textBaseline = 'middle';
       outputCtx.textAlign = 'center';
@@ -3758,7 +4288,7 @@
 
     function drawHighlightChars(ctx, mags, angles, finalKeep, pixels, srcW, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics) {
       const stride = Math.round(cellSize * (1 + layer.gap));
-      const fontSize = cellSize * scale;
+      const fontSize = cellSize * scale * gapFontScale(layer.gap);
       ctx.font = `${fontSize}px ${layer.font}`;
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'center';
@@ -4205,10 +4735,13 @@
     function syncUIToLayer(layer) {
       const isSource = layer.kind === 'source';
       // Toggle section visibility based on layer kind
-      for (const id of ['variantSection', 'contourControls', 'outlineControls', 'settingsSection', 'artifactsSection', 'postProcessSection']) {
+      for (const id of ['variantSection', 'contourControls', 'outlineControls', 'settingsSection', 'artifactsSection']) {
         const el = document.getElementById(id);
         if (el) el.classList.toggle('hidden', isSource);
       }
+      // Effects section is always visible
+      const postEl = document.getElementById('postProcessSection');
+      if (postEl) postEl.classList.remove('hidden');
       const adjustEl = document.getElementById('adjustSection');
       if (adjustEl) adjustEl.classList.remove('hidden');
 
@@ -4219,6 +4752,7 @@
         contrastValue.value = formatAdj(layer.contrast ?? 1);
         saturationInput.value = layer.saturation ?? 1;
         saturationValue.value = formatAdj(layer.saturation ?? 1);
+        renderEffectChainUI();
         return;
       }
       // Variant
@@ -4238,23 +4772,6 @@
       document.getElementById('charRotationToggle').checked = layer.charRotation;
       manualColorToggle.checked = !!layer.manualColorEnabled;
       outlineFillToggle.checked = !!layer.outlineFill;
-      // Bloom
-      bloomToggle.checked = layer.bloom;
-      bloomStyleSelect.value = layer.bloomStyle;
-      bloomRadiusSlider.value = layer.bloomRadius;
-      bloomRadiusValue.value = layer.bloomRadius;
-      bloomIntensitySlider.value = layer.bloomIntensity;
-      bloomIntensityValue.value = layer.bloomIntensity;
-      bloomControls.classList.toggle('hidden', !layer.bloom);
-      // Grain
-      grainToggle.checked = layer.grain;
-      grainAmountSlider.value = layer.grainAmount;
-      grainAmountValue.value = layer.grainAmount;
-      grainSizeSlider.value = layer.grainSize;
-      grainSizeValue.value = layer.grainSize;
-      grainRoughnessSlider.value = layer.grainRoughness;
-      grainRoughnessValue.value = layer.grainRoughness;
-      grainControls.classList.toggle('hidden', !layer.grain);
       // Contour
       contourSpreadSlider.value = layer.contourSpread;
       contourSpreadValue.value = layer.contourSpread;
@@ -4264,19 +4781,8 @@
       outlineStrokeSizeValue.value = formatAdj(layer.outlineStrokeSize);
       outlineCornerRadiusSlider.value = layer.outlineCornerRadius;
       outlineCornerRadiusValue.value = formatAdj(layer.outlineCornerRadius);
-      const post = getPostProcess(layer);
-      postProcessToggle.checked = !!post.enabled;
-      postProcessControls.classList.toggle('hidden', !post.enabled);
-      inkSpreadSlider.value = post.spread;
-      inkSpreadVal.value = post.spread;
-      inkOrganicSlider.value = post.organic;
-      inkOrganicVal.value = post.organic;
-      inkSplatterSlider.value = post.splatter;
-      inkSplatterVal.value = post.splatter;
-      inkRoundnessSlider.value = post.roundness;
-      inkRoundnessVal.value = post.roundness;
-      inkSoftnessSlider.value = post.softness;
-      inkSoftnessVal.value = post.softness;
+      // Effect chain
+      renderEffectChainUI();
       // Word artifact
       const wordArtifactsEnabled = !!layer.wordArtifactEnabled;
       wordArtifactToggle.checked = wordArtifactsEnabled;
@@ -4368,7 +4874,6 @@
         });
         row.addEventListener('click', (e) => {
           if (e.target.closest('.layer-vis') || e.target.closest('.layer-del')) return;
-          if (layer.kind === 'source') return;
           if (selectionState.active) cancelSelectionStroke();
           state.activeLayerId = layer.id;
           syncUIToLayer(layer);
