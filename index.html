@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./dense-glyph-paths.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -123,10 +124,43 @@
     }
     .tb-active {
       color: #fff;
-      border-color: #fff;
+      border-color: #e2ff3a;
     }
     .variant-arrow { border-color: #333; position: relative; }
     .variant-arrow:hover { color: #fff; border-color: #666; z-index: 1; }
+    .panel-trigger-open {
+      position: relative;
+      z-index: 2;
+      border-color: #e2ff3a !important;
+      box-shadow: inset 0 0 0 1px rgba(226,255,58,0.12);
+    }
+    #variantBtn { position: relative; }
+    #variantBtn:hover,
+    #variantBtn:focus-visible {
+      z-index: 2;
+    }
+    .artifact-word-input {
+      width: 116px;
+      min-height: 26px;
+      padding: 5px 10px;
+      border: 1px solid #333;
+      background: #0a0a0a;
+      color: #9b9b9b;
+      font-family: monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.12s, color 0.12s;
+    }
+    .artifact-word-input::placeholder {
+      color: #4f4f4f;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .artifact-word-input:focus {
+      border-color: #666;
+      color: #c2c2c2;
+    }
 
     /* Section divider */
     .section-label {
@@ -165,9 +199,139 @@
     .fx-drag { cursor: grab; user-select: none; font-size: 14px; line-height: 1; }
     .fx-card[draggable="true"]:active .fx-drag { cursor: grabbing; }
     #addEffectDropdown { position: absolute; z-index: 50; background: #111; border: 1px solid #333; border-radius: 4px; min-width: 180px; max-height: 300px; overflow-y: auto; }
-    #addEffectDropdown .fx-menu-item { padding: 6px 12px; font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #888; cursor: pointer; }
+    #addEffectDropdown .fx-menu-item { display: block; width: 100%; padding: 6px 12px; border: 0; background: transparent; text-align: left; font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #888; cursor: pointer; white-space: nowrap; }
     #addEffectDropdown .fx-menu-item:hover { background: #1a1a1a; color: #fff; }
     #addEffectDropdown .fx-menu-header { padding: 6px 12px; font-size: 9px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; color: #444; pointer-events: none; }
+    .ui-select-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      min-height: 31px;
+      padding: 6px 12px;
+      border: 1px solid #333;
+      background: #0a0a0a;
+      color: #fff;
+      font-family: monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s, box-shadow 0.12s;
+    }
+    .ui-select-btn:hover {
+      border-color: #666;
+    }
+    .ui-select-btn.ui-select-open {
+      border-color: #e2ff3a;
+      box-shadow: inset 0 0 0 1px rgba(226,255,58,0.12);
+    }
+    .ui-select-btn-sm {
+      min-height: 26px;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .ui-select-value {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+    .ui-select-caret {
+      color: #555;
+      font-size: 10px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .ui-menu-panel {
+      z-index: 80;
+      background: #111;
+      border: 1px solid #333;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #333 transparent;
+    }
+    .ui-menu-panel::-webkit-scrollbar {
+      width: 8px;
+    }
+    .ui-menu-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .ui-menu-panel::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 999px;
+      border: 2px solid #111;
+    }
+    .ui-menu-panel::-webkit-scrollbar-thumb:hover {
+      background: #4a4a4a;
+    }
+    .ui-menu-item {
+      display: block;
+      width: 100%;
+      padding: 12px 24px;
+      border: 0;
+      background: transparent;
+      color: #888;
+      text-align: left;
+      font-family: monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+    }
+    .ui-menu-item:hover,
+    .fx-menu-item:hover {
+      background: #242424;
+      color: #fff;
+      box-shadow: inset 2px 0 0 #e2ff3a;
+    }
+    .ui-menu-item.active {
+      background: #242424;
+      color: #fff;
+      box-shadow: inset 2px 0 0 #e2ff3a;
+    }
+    .fx-menu-item.active {
+      background: #242424;
+      color: #fff;
+      box-shadow: inset 2px 0 0 #e2ff3a;
+    }
+    .ui-menu-item-compact {
+      padding: 9px 12px;
+    }
+    .ui-menu-panel button:focus,
+    .ui-menu-panel button:focus-visible,
+    .ui-menu-item:focus,
+    .ui-menu-item:focus-visible,
+    .fx-menu-item:focus {
+      outline: none;
+    }
+    .fx-menu-item:focus-visible {
+      outline: none;
+    }
+    .menu-nav-active {
+      background: #242424 !important;
+      color: #fff !important;
+      box-shadow: inset 2px 0 0 #e2ff3a;
+    }
+    .ui-menu-panel:hover .ui-menu-item.active:not(:hover):not(.menu-nav-active),
+    .ui-menu-panel:hover .fx-menu-item.active:not(:hover):not(.menu-nav-active) {
+      background: transparent;
+      color: #888;
+      box-shadow: none;
+    }
+    .ui-menu-panel.keyboard-nav .ui-menu-item.active:not(.menu-nav-active),
+    .ui-menu-panel.keyboard-nav .fx-menu-item.active:not(.menu-nav-active) {
+      background: transparent;
+      color: #888;
+      box-shadow: none;
+    }
     .layer-vis svg {
       width: 16px;
       height: 16px;
@@ -184,6 +348,58 @@
       cursor: crosshair;
       touch-action: none;
     }
+
+    .app-modal-backdrop {
+      background:
+        radial-gradient(circle at top, rgba(226,255,58,0.08), transparent 38%),
+        rgba(5,5,5,0.78);
+      backdrop-filter: blur(3px);
+    }
+    .app-modal-card {
+      border: 1px solid #333;
+      background:
+        linear-gradient(180deg, rgba(20,20,20,0.98), rgba(10,10,10,0.98));
+      box-shadow: 0 28px 80px rgba(0,0,0,0.55);
+    }
+    .app-modal-field {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid #333;
+      background: #090909;
+      color: #fff;
+      outline: none !important;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+    .app-modal-field:focus {
+      outline: none !important;
+      border-color: #e2ff3a;
+      box-shadow: 0 0 0 1px rgba(226,255,58,0.18);
+    }
+    .app-modal-field:focus-visible {
+      outline: none !important;
+      border-color: #e2ff3a;
+      box-shadow: 0 0 0 1px rgba(226,255,58,0.18);
+    }
+    .app-modal-btn {
+      border: 1px solid #333;
+      background: #111;
+      color: #888;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+    }
+    .app-modal-btn:hover {
+      border-color: #666;
+      color: #fff;
+    }
+    .app-modal-btn-primary {
+      border-color: #e2ff3a;
+      background: #e2ff3a;
+      color: #080808;
+    }
+    .app-modal-btn-primary:hover {
+      border-color: #f2ff8a;
+      background: #f2ff8a;
+      color: #000;
+    }
   </style>
 </head>
 <body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col font-mono text-white">
@@ -191,8 +407,7 @@
   <!-- Top Bar -->
   <div class="flex items-center px-3 py-1.5 border-b border-[#1a1a1a] bg-[#0a0a0a] gap-2">
     <!-- Brand -->
-    <div class="text-[10px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mr-1 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
-    <div class="w-px h-5 bg-[#222] hidden sm:block"></div>
+    <div class="text-[11px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mx-2 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
 
     <!-- Source -->
     <div class="flex items-center gap-1">
@@ -204,12 +419,12 @@
     <!-- Project -->
     <div class="relative">
       <button id="projectBtn" class="tb" title="Project" style="max-width:160px;overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
-      <div id="projectMenu" class="hidden absolute left-0 top-full mt-px bg-[#111] border border-[#333] z-50 whitespace-nowrap min-w-[180px]">
-        <button id="projectSave" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono">Save<span class="float-right text-[#444] normal-case tracking-normal ml-4">&#8984;S</span></button>
-        <button id="projectSaveAs" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Save As…</button>
-        <button id="projectRename" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Rename</button>
-        <button id="projectDelete" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Delete</button>
-        <button id="projectClose" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">Close</button>
+      <div id="projectMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap min-w-[180px] overflow-y-auto">
+        <button id="projectSave" class="ui-menu-item ui-menu-item-compact">Save<span class="float-right text-[#444] normal-case tracking-normal ml-4">&#8984;S</span></button>
+        <button id="projectSaveAs" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Save As…</button>
+        <button id="projectRename" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Rename</button>
+        <button id="projectDelete" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Delete</button>
+        <button id="projectClose" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Close</button>
         <div id="projectListDivider" class="border-t border-[#333] mt-1 pt-1 hidden"></div>
         <div id="projectList"></div>
       </div>
@@ -219,19 +434,43 @@
     <div class="flex-1"></div>
 
     <!-- Workspace -->
-    <div class="flex items-center gap-1">
-      <button id="layerPanelToggle" class="tb" title="Toggle Layers">LAYERS</button>
-      <button id="settingsBtn" class="tb" title="Settings">CFG</button>
-    </div>
-    <div class="w-px h-5 bg-[#222]"></div>
+      <div class="flex items-center gap-1">
+        <button id="layerPanelToggle" class="tb" title="Toggle Layers">LAYERS</button>
+        <button id="settingsBtn" class="tb" title="Settings">CFG</button>
+      </div>
+      <div class="w-px h-5 bg-[#222]"></div>
 
     <!-- Export -->
     <div class="flex items-center gap-1">
       <div class="relative">
         <button id="exportPngBtn" class="tb" title="Export PNG">EXPORT</button>
-        <div id="exportMenu" class="hidden absolute right-0 top-full mt-px bg-[#111] border border-[#333] z-50 whitespace-nowrap">
-          <button id="exportNormal" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono">PNG</button>
-          <button id="exportTransparent" class="block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono border-t border-[#222]">PNG TRANSPARENT</button>
+        <div id="exportMenu" class="ui-menu-panel hidden absolute right-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
+          <button id="exportNormal" class="ui-menu-item ui-menu-item-compact">PNG</button>
+          <button id="exportTransparent" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">PNG TRANSPARENT</button>
+          <div class="border-t border-[#222] px-3 py-2 flex flex-col gap-2">
+            <div class="text-[9px] uppercase tracking-[0.18em] text-[#555]">Rec WebM</div>
+            <div class="flex items-center justify-between gap-3">
+              <label for="recordQualitySelect" class="text-[10px] uppercase tracking-wider text-[#666]">Quality</label>
+              <div class="relative w-[92px]">
+                <button id="recordQualityBtn" type="button" class="ui-select-btn ui-select-btn-sm">
+                  <span class="ui-select-value">High</span>
+                  <span class="ui-select-caret">▾</span>
+                </button>
+                <input id="recordQualitySelect" type="hidden" value="high">
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+              <label for="recordFpsSelect" class="text-[10px] uppercase tracking-wider text-[#666]">FPS</label>
+              <div class="relative w-[92px]">
+                <button id="recordFpsBtn" type="button" class="ui-select-btn ui-select-btn-sm">
+                  <span class="ui-select-value">60</span>
+                  <span class="ui-select-caret">▾</span>
+                </button>
+                <input id="recordFpsSelect" type="hidden" value="60">
+              </div>
+            </div>
+            <div id="recordCodecHint" class="text-[9px] uppercase tracking-[0.14em] text-[#444]">Codec: Auto</div>
+          </div>
         </div>
       </div>
       <button id="recordBtn" class="tb" title="Record Video">REC</button>
@@ -241,7 +480,7 @@
   <!-- Main area -->
   <div class="flex flex-1 overflow-hidden relative">
     <!-- Layer Panel -->
-    <div id="layerPanel" class="w-[220px] flex-shrink-0 bg-[#111] border-r border-[#333] flex flex-col transition-all duration-200 overflow-hidden">
+      <div id="layerPanel" class="w-[220px] flex-shrink-0 bg-[#111] border-r border-[#333] flex flex-col transition-all duration-200 overflow-hidden">
       <div class="flex items-center justify-between px-3 py-2 border-b border-[#333]">
         <span class="text-[#888] text-[10px] uppercase tracking-wider font-mono">Layers</span>
         <button id="addLayerBtn" class="text-[#888] hover:text-white text-[11px] font-mono px-2 py-0.5 border border-[#333] hover:border-[#666]">+ ADD</button>
@@ -252,8 +491,8 @@
       <div id="layerProperties" class="border-t border-[#333] px-3 py-2 pb-4 flex flex-col gap-2">
         <div class="flex items-center justify-between relative">
           <label class="text-[#666] text-[10px] uppercase tracking-wider">Blend</label>
-          <button id="blendModeBtn" class="bg-[#0a0a0a] border border-[#333] text-white text-[10px] font-mono px-2 py-1 outline-none cursor-pointer hover:border-[#666] text-right">Normal</button>
-          <div id="blendModeDropdown" class="hidden absolute right-0 bottom-full mb-1 bg-[#111] border border-[#333] z-50 min-w-[120px] max-h-[260px] overflow-y-auto" style="scrollbar-width:thin;scrollbar-color:#333 transparent">
+          <button id="blendModeBtn" class="w-[132px] bg-[#0a0a0a] border border-[#333] text-white text-[10px] font-mono px-3 py-1 outline-none cursor-pointer hover:border-[#666] text-center uppercase tracking-wider">Normal</button>
+          <div id="blendModeDropdown" class="ui-menu-panel hidden absolute right-0 bottom-full mb-1 z-50 min-w-[156px] max-h-[260px]" style="scrollbar-width:thin;scrollbar-color:#333 transparent">
           </div>
         </div>
         <div class="flex items-center justify-between">
@@ -283,7 +522,6 @@
     <div id="canvasArea" class="flex-1 relative">
       <canvas id="outputCanvas" class="absolute inset-0 w-full h-full"></canvas>
       <div id="selectionToolbar" class="hidden absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[rgba(10,10,10,0.92)] border border-[#333] px-2 py-2 backdrop-blur-sm">
-        <button id="lassoToolBtn" class="tb tb-active px-2 py-1 text-[10px]">LASSO</button>
         <span id="selectionModeLabel" class="text-[10px] text-[#666] font-mono px-1 select-none">NEW</span>
         <button id="selectionClearBtn" class="tb px-2 py-1 text-[10px]">CLEAR</button>
         <button id="selectionInvertBtn" class="tb px-2 py-1 text-[10px]">INVERT</button>
@@ -317,7 +555,7 @@
             <button id="variantBtn" class="flex-1 bg-[#0a0a0a] border border-[#333] text-white text-[11px] px-3 py-1.5 text-center cursor-pointer font-mono uppercase tracking-wider hover:border-[#666]">Standard</button>
             <input type="hidden" id="variantSelect" value="Standard">
             <button id="variantNext" class="variant-arrow tb text-[10px] px-3 -ml-px flex items-center">&gt;</button>
-            <div id="variantDropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-[#111] border border-[#333] z-50 max-h-[300px] overflow-y-auto" style="scrollbar-width:thin;scrollbar-color:#333 transparent"></div>
+            <div id="variantDropdown" class="ui-menu-panel hidden absolute left-0 right-0 top-full mt-1 z-50 max-h-[300px]" style="scrollbar-width:thin;scrollbar-color:#333 transparent"></div>
           </div>
         </div>
 
@@ -373,7 +611,7 @@
                 <label class="text-[#666] text-[10px] uppercase tracking-wider">Cell Size</label>
                 <input id="cellSizeValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="10">
               </div>
-              <input type="range" id="cellSize" min="4" max="30" value="10" step="1">
+              <input type="range" id="cellSize" min="4" max="60" value="10" step="1">
             </div>
 
             <!-- Gap -->
@@ -390,14 +628,13 @@
               <div class="flex items-center justify-between">
                 <label class="text-[#666] text-[10px] uppercase tracking-wider">Font</label>
               </div>
-              <select id="fontSelect" class="w-full bg-[#0a0a0a] border border-[#333] text-white text-[11px] px-3 py-1.5 appearance-none cursor-pointer font-mono uppercase tracking-wider">
-                <option value="monospace">Mono</option>
-                <option value="'IBM Plex Mono', monospace">IBM Plex</option>
-                <option value="'Georgia', serif">Georgia</option>
-                <option value="'Times New Roman', serif">Times</option>
-                <option value="'Courier New', monospace">Courier</option>
-                <option value="'Arial', sans-serif">Arial</option>
-              </select>
+              <div class="relative">
+                <button id="fontBtn" type="button" class="ui-select-btn">
+                  <span class="ui-select-value">Mono</span>
+                  <span class="ui-select-caret">▾</span>
+                </button>
+                <input id="fontSelect" type="hidden" value="monospace">
+              </div>
             </div>
 
             <!-- Toggles -->
@@ -517,14 +754,24 @@
             <div id="wordArtifactControls" class="hidden flex flex-col gap-3">
               <div class="flex items-center justify-between">
                 <label class="text-[#666] text-[10px] uppercase tracking-wider">Word</label>
-                <input id="wordArtifactInput" type="text" class="text-[#fff] text-[10px] border border-[#333] px-1.5 py-0.5 bg-transparent w-24 font-mono outline-none focus:border-[#666]" placeholder="type word...">
+                <input id="wordArtifactInput" type="text" class="artifact-word-input" placeholder="TYPE WORD...">
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <label class="text-[#666] text-[10px] uppercase tracking-wider">Distribution</label>
+                <div class="relative w-[116px]">
+                  <button id="wordArtifactDistributionBtn" type="button" class="ui-select-btn ui-select-btn-sm">
+                    <span class="ui-select-value">Rows</span>
+                    <span class="ui-select-caret">▾</span>
+                  </button>
+                  <input id="wordArtifactDistribution" type="hidden" value="stream">
+                </div>
               </div>
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
                   <label class="text-[#666] text-[10px] uppercase tracking-wider">Density</label>
                   <input id="wordArtifactDensityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="5">
                 </div>
-                <input type="range" id="wordArtifactDensity" min="1" max="30" value="5" step="1">
+                <input type="range" id="wordArtifactDensity" min="0" max="100" value="5" step="1">
               </div>
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
@@ -592,6 +839,28 @@
   <video id="videoSource" class="hidden"></video>
   <input type="file" id="imageInput" accept="image/*" class="hidden">
   <input type="file" id="videoInput" accept="video/*" class="hidden">
+
+  <div id="projectNameModal" class="hidden fixed inset-0 z-[120] flex items-center justify-center px-4">
+    <div class="app-modal-backdrop absolute inset-0"></div>
+    <form id="projectNameModalForm" class="app-modal-card relative w-full max-w-[440px] p-4 sm:p-5 flex flex-col gap-4">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="text-[9px] uppercase tracking-[0.25em] text-[#555]">Project</div>
+          <h2 id="projectNameModalTitle" class="text-[18px] leading-none tracking-[0.12em] uppercase text-white">Save Project</h2>
+        </div>
+        <button id="projectNameModalClose" type="button" class="tb px-2 py-1 text-[10px]">[X]</button>
+      </div>
+      <label id="projectNameModalLabel" for="projectNameModalInput" class="text-[10px] uppercase tracking-[0.16em] text-[#666]">Project Name</label>
+      <input id="projectNameModalInput" type="text" autocomplete="off" spellcheck="false" class="app-modal-field w-full px-3 py-2.5 text-[14px] tracking-[0.05em]">
+      <div class="flex items-center justify-between gap-3">
+        <div id="projectNameModalHint" class="text-[10px] uppercase tracking-[0.14em] text-[#444]">Names are saved locally</div>
+        <div class="flex items-center gap-2">
+          <button id="projectNameModalCancel" type="button" class="app-modal-btn px-3 py-2 text-[10px] uppercase tracking-[0.14em]">Cancel</button>
+          <button id="projectNameModalConfirm" type="submit" class="app-modal-btn app-modal-btn-primary px-3 py-2 text-[10px] uppercase tracking-[0.14em]">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
   <script>
     // ============ STATE ============
@@ -703,6 +972,7 @@
       grainRoughness: 50,
       wordArtifactEnabled: false,
       wordArtifact: '',
+      wordArtifactDistribution: 'stream',
       wordArtifactDensity: 0.05,
       wordArtifactCoherence: 0.3,
       postProcess: {
@@ -818,6 +1088,9 @@
     function deserializeProject(data) {
       state.layers = data.layers.map(l => {
         if (l.postProcess) l.postProcess = { ...l.postProcess };
+        if (typeof l.wordArtifactDistribution !== 'string') {
+          l.wordArtifactDistribution = 'stream';
+        }
         if (l.mask) {
           l.mask = { ...l.mask };
           if (l.mask.points && !l.mask.regions) {
@@ -844,7 +1117,6 @@
         es.classList.remove('hidden');
         es.children[0].textContent = 'LAYERS RESTORED';
         es.children[1].textContent = 'UPLOAD AN IMAGE TO RENDER';
-        // Clear canvas
         outputCtx.fillStyle = '#0a0a0a';
         outputCtx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
         // Auto-open file picker so user can quickly re-upload
@@ -856,9 +1128,64 @@
       document.getElementById('projectBtn').textContent = (currentProjectName || 'Untitled') + ' \u25BE';
     }
 
-    function doSaveProject() {
+    const projectNameModal = document.getElementById('projectNameModal');
+    const projectNameModalForm = document.getElementById('projectNameModalForm');
+    const projectNameModalTitle = document.getElementById('projectNameModalTitle');
+    const projectNameModalLabel = document.getElementById('projectNameModalLabel');
+    const projectNameModalHint = document.getElementById('projectNameModalHint');
+    const projectNameModalInput = document.getElementById('projectNameModalInput');
+    const projectNameModalConfirm = document.getElementById('projectNameModalConfirm');
+    let projectNameModalResolve = null;
+
+    function closeProjectNameModal(value = null) {
+      if (projectNameModal.classList.contains('hidden')) return;
+      projectNameModal.classList.add('hidden');
+      const resolve = projectNameModalResolve;
+      projectNameModalResolve = null;
+      if (resolve) resolve(value);
+    }
+
+    function openProjectNameModal({ title, label, value = '', confirmLabel = 'Save', hint = 'Names are saved locally' }) {
+      projectNameModalTitle.textContent = title;
+      projectNameModalLabel.textContent = label;
+      projectNameModalInput.value = value;
+      projectNameModalConfirm.textContent = confirmLabel;
+      projectNameModalHint.textContent = hint;
+      projectNameModal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        projectNameModalInput.focus();
+        projectNameModalInput.select();
+      });
+      return new Promise(resolve => {
+        projectNameModalResolve = resolve;
+      });
+    }
+
+    projectNameModal.addEventListener('click', (e) => {
+      if (!projectNameModalForm.contains(e.target)) closeProjectNameModal(null);
+    });
+    projectNameModalForm.addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('projectNameModalClose').addEventListener('click', () => closeProjectNameModal(null));
+    document.getElementById('projectNameModalCancel').addEventListener('click', () => closeProjectNameModal(null));
+    projectNameModalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      closeProjectNameModal(projectNameModalInput.value);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !projectNameModal.classList.contains('hidden')) {
+        e.preventDefault();
+        closeProjectNameModal(null);
+      }
+    });
+
+    async function doSaveProject() {
       if (!currentProjectName) {
-        const name = prompt('Project name:');
+        const name = await openProjectNameModal({
+          title: 'Save Project',
+          label: 'Project Name',
+          confirmLabel: 'Save',
+          value: currentProjectName || ''
+        });
         if (!name || !name.trim()) return;
         currentProjectName = name.trim();
       }
@@ -866,17 +1193,27 @@
       updateProjectBtnText();
     }
 
-    function doSaveAsProject() {
-      const name = prompt('Save as:', currentProjectName || '');
+    async function doSaveAsProject() {
+      const name = await openProjectNameModal({
+        title: 'Save As',
+        label: 'Project Name',
+        confirmLabel: 'Save Copy',
+        value: currentProjectName || ''
+      });
       if (!name || !name.trim()) return;
       currentProjectName = name.trim();
       saveProjectToStorage(currentProjectName, serializeProject());
       updateProjectBtnText();
     }
 
-    function doRenameProject() {
+    async function doRenameProject() {
       if (!currentProjectName) return;
-      const name = prompt('Rename to:', currentProjectName);
+      const name = await openProjectNameModal({
+        title: 'Rename Project',
+        label: 'New Name',
+        confirmLabel: 'Rename',
+        value: currentProjectName
+      });
       if (!name || !name.trim() || name.trim() === currentProjectName) return;
       const oldName = currentProjectName;
       const projects = getProjects();
@@ -916,7 +1253,6 @@
       renderLayerPanel();
       syncUIToLayer(activeLayer());
       updateProjectBtnText();
-      // Show empty state
       const es = document.getElementById('emptyState');
       es.classList.remove('hidden');
       es.children[0].textContent = 'NO SOURCE';
@@ -946,12 +1282,11 @@
       divider.classList.remove('hidden');
       for (const p of projects) {
         const btn = document.createElement('button');
-        btn.className = 'block w-full text-left px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#888] hover:bg-[#1a1a1a] hover:text-white font-mono';
-        if (p.name === currentProjectName) btn.classList.add('text-white');
+        btn.className = `ui-menu-item ui-menu-item-compact${p.name === currentProjectName ? ' active' : ''}`;
         btn.textContent = p.name;
         btn.addEventListener('click', () => {
           doLoadProject(p.name);
-          document.getElementById('projectMenu').classList.add('hidden');
+          hideFloatingPanel(document.getElementById('projectMenu'));
         });
         list.appendChild(btn);
       }
@@ -1011,9 +1346,463 @@
     const settingsBtn = document.getElementById('settingsBtn');
 
     let animFrameId = null;
+    window.addEventListener('resize', refreshFloatingPanels);
+    document.addEventListener('scroll', (e) => {
+      const target = e.target;
+      for (const panel of activeFloatingPanels.keys()) {
+        if (!panel || panel.classList.contains('hidden')) continue;
+        if (target === panel || (target instanceof Node && panel.contains(target))) {
+          return;
+        }
+      }
+      refreshFloatingPanels();
+    }, true);
 
     function clamp(v, min, max) {
       return Math.max(min, Math.min(max, v));
+    }
+
+    const activeFloatingPanels = new Map();
+
+    function positionFloatingPanel(panel, anchor, options = {}) {
+      if (!panel || !anchor) return;
+      const margin = options.margin ?? 8;
+      const gap = options.gap ?? 4;
+      const anchorRect = anchor.getBoundingClientRect();
+      const viewportMaxWidth = Math.max(160, window.innerWidth - margin * 2);
+
+      panel.style.position = 'fixed';
+      panel.style.left = '0px';
+      panel.style.top = '0px';
+      panel.style.right = 'auto';
+      panel.style.bottom = 'auto';
+      if (options.matchWidth) {
+        const targetWidth = Math.min(Math.round(anchorRect.width), viewportMaxWidth);
+        panel.style.width = `${targetWidth}px`;
+        panel.style.minWidth = `${targetWidth}px`;
+      } else {
+        panel.style.width = '';
+        panel.style.minWidth = '';
+      }
+
+      panel.style.maxWidth = `${viewportMaxWidth}px`;
+      panel.style.maxHeight = `${Math.max(120, window.innerHeight - margin * 2)}px`;
+
+      const panelRect = panel.getBoundingClientRect();
+      const availBelow = window.innerHeight - anchorRect.bottom - margin - gap;
+      const availAbove = anchorRect.top - margin - gap;
+      const preferTop = options.placement === 'top';
+      const placeAbove = preferTop
+        ? (panelRect.height > availAbove && availBelow > availAbove)
+        : (panelRect.height > availBelow && availAbove > availBelow);
+      const availableHeight = Math.max(80, placeAbove ? availAbove : availBelow);
+      panel.style.maxHeight = `${Math.min(options.maxHeight ?? availableHeight, availableHeight)}px`;
+
+      const finalRect = panel.getBoundingClientRect();
+      let left;
+      if (options.align === 'right') left = anchorRect.right - finalRect.width;
+      else if (options.align === 'center') left = anchorRect.left + (anchorRect.width - finalRect.width) * 0.5;
+      else left = anchorRect.left;
+
+      let top = placeAbove
+        ? anchorRect.top - finalRect.height - gap
+        : anchorRect.bottom + gap;
+
+      left = clamp(left, margin, Math.max(margin, window.innerWidth - finalRect.width - margin));
+      top = clamp(top, margin, Math.max(margin, window.innerHeight - finalRect.height - margin));
+
+      panel.style.left = `${Math.round(left)}px`;
+      panel.style.top = `${Math.round(top)}px`;
+    }
+
+    function showFloatingPanel(panel, anchor, options = {}) {
+      if (!panel || !anchor) return;
+      closeFloatingPanelsExcept(panel);
+      panel.classList.remove('hidden');
+      anchor.classList.add(options.anchorOpenClass || 'panel-trigger-open');
+      activeFloatingPanels.set(panel, { anchor, options });
+      positionFloatingPanel(panel, anchor, options);
+    }
+
+    function hideFloatingPanel(panel) {
+      if (!panel) return;
+      const config = activeFloatingPanels.get(panel);
+      if (config?.anchor) {
+        config.anchor.classList.remove(config.options?.anchorOpenClass || 'panel-trigger-open');
+      }
+      panel.classList.remove('keyboard-nav');
+      panel.querySelectorAll('.menu-nav-active').forEach(item => item.classList.remove('menu-nav-active'));
+      panel.classList.add('hidden');
+      activeFloatingPanels.delete(panel);
+    }
+
+    function toggleFloatingPanel(panel, anchor, options = {}) {
+      if (!panel || !anchor) return false;
+      if (panel.classList.contains('hidden')) {
+        showFloatingPanel(panel, anchor, options);
+        return true;
+      }
+      hideFloatingPanel(panel);
+      return false;
+    }
+
+    function refreshFloatingPanels() {
+      for (const [panel, config] of activeFloatingPanels.entries()) {
+        if (panel.classList.contains('hidden') || !document.body.contains(panel)) {
+          activeFloatingPanels.delete(panel);
+          continue;
+        }
+        positionFloatingPanel(panel, config.anchor, config.options);
+      }
+    }
+
+    let activeOptionMenu = null;
+
+    function closeFloatingPanelsExcept(exceptPanel = null) {
+      if (activeOptionMenu && activeOptionMenu.panel !== exceptPanel) {
+        closeOptionMenu();
+      }
+      for (const panel of Array.from(activeFloatingPanels.keys())) {
+        if (!panel || panel === exceptPanel) continue;
+        hideFloatingPanel(panel);
+        if (panel.id === 'addEffectDropdown' && panel.parentNode) {
+          panel.parentNode.removeChild(panel);
+        }
+      }
+    }
+
+    function setSelectButtonLabel(button, label) {
+      if (!button) return;
+      const valueEl = button.querySelector('.ui-select-value');
+      if (valueEl) valueEl.textContent = label;
+      else button.textContent = label;
+    }
+
+    function closeOptionMenu() {
+      if (!activeOptionMenu) return;
+      const { panel, anchor, cleanup } = activeOptionMenu;
+      if (anchor) anchor.classList.remove('ui-select-open');
+      if (panel) {
+        hideFloatingPanel(panel);
+        if (panel.parentNode) panel.parentNode.removeChild(panel);
+      }
+      if (cleanup) cleanup();
+      activeOptionMenu = null;
+    }
+
+    function openOptionMenu(anchor, config) {
+      if (!anchor || !config?.options?.length) return false;
+      if (activeOptionMenu?.anchor === anchor) {
+        closeOptionMenu();
+        return false;
+      }
+      closeOptionMenu();
+
+      const panel = document.createElement('div');
+      panel.className = 'ui-menu-panel';
+      panel.addEventListener('pointerdown', (e) => e.stopPropagation());
+      panel.addEventListener('click', (e) => e.stopPropagation());
+
+      config.options.forEach(option => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = `ui-menu-item${config.compact ? ' ui-menu-item-compact' : ''}${option.value === config.value ? ' active' : ''}`;
+        item.textContent = option.label;
+        item.addEventListener('click', () => {
+          config.onSelect?.(option.value, option);
+          closeOptionMenu();
+        });
+        panel.appendChild(item);
+      });
+
+      document.body.appendChild(panel);
+      anchor.classList.add('ui-select-open');
+      showFloatingPanel(panel, anchor, {
+        align: config.align ?? 'left',
+        placement: config.placement ?? 'bottom',
+        gap: config.gap ?? 6,
+        matchWidth: config.matchWidth ?? true,
+        maxHeight: config.maxHeight ?? 320,
+        anchorOpenClass: 'ui-select-open'
+      });
+      setupMenuNavigation(panel, {
+        itemSelector: '.ui-menu-item',
+        onEscape: () => closeOptionMenu()
+      });
+      requestAnimationFrame(() => focusMenuNavigationDefault(panel));
+
+      const onDocClick = (e) => {
+        if (!eventIsInsidePanel(panel, anchor, e)) {
+          closeOptionMenu();
+        }
+      };
+      const onKeyDown = (e) => {
+        if (e.key === 'Escape' && activeOptionMenu?.panel === panel) {
+          e.preventDefault();
+          closeOptionMenu();
+        }
+      };
+      setTimeout(() => document.addEventListener('click', onDocClick), 0);
+      document.addEventListener('keydown', onKeyDown);
+      activeOptionMenu = {
+        panel,
+        anchor,
+        cleanup: () => {
+          document.removeEventListener('click', onDocClick);
+          document.removeEventListener('keydown', onKeyDown);
+        }
+      };
+      return true;
+    }
+
+    function labelForOption(options, value) {
+      return (options.find(option => option.value === value) || options[0] || { label: '' }).label;
+    }
+
+    function bindStaticPicker(button, input, options, onChange, config = {}) {
+      if (!button || !input) return;
+      setSelectButtonLabel(button, labelForOption(options, input.value));
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openOptionMenu(button, {
+          options,
+          value: input.value,
+          align: config.align ?? 'left',
+          placement: config.placement ?? 'bottom',
+          gap: config.gap ?? 6,
+          matchWidth: config.matchWidth ?? true,
+          maxHeight: config.maxHeight ?? 320,
+          compact: config.compact ?? false,
+          onSelect: (value, option) => {
+            input.value = value;
+            setSelectButtonLabel(button, option.label);
+            onChange?.(value, option);
+          }
+        });
+      });
+    }
+
+    function getTopFloatingPanelForEscape(target) {
+      const panels = Array.from(activeFloatingPanels.keys()).filter(panel => panel && !panel.classList.contains('hidden'));
+      if (!panels.length) return null;
+      const focused = document.activeElement;
+      for (let i = panels.length - 1; i >= 0; i--) {
+        const panel = panels[i];
+        if (panel === target || panel.contains(target) || panel.contains(focused)) {
+          return panel;
+        }
+      }
+      return panels[panels.length - 1];
+    }
+
+    function pointWithinPanelBounds(panel, clientX, clientY) {
+      if (!panel || !Number.isFinite(clientX) || !Number.isFinite(clientY)) return false;
+      const rect = panel.getBoundingClientRect();
+      return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+    }
+
+    function eventIsInsidePanel(panel, anchor, event) {
+      if (!panel || !event) return false;
+      const target = event.target;
+      if (target && (panel.contains(target) || target === anchor || anchor?.contains?.(target))) {
+        return true;
+      }
+      return pointWithinPanelBounds(panel, event.clientX, event.clientY);
+    }
+
+    function getTopFloatingPanelForPointer(clientX, clientY, target = null) {
+      const panels = Array.from(activeFloatingPanels.keys()).filter(panel => panel && !panel.classList.contains('hidden'));
+      for (let i = panels.length - 1; i >= 0; i--) {
+        const panel = panels[i];
+        if ((target && panel.contains(target)) || pointWithinPanelBounds(panel, clientX, clientY)) {
+          return panel;
+        }
+      }
+      return null;
+    }
+
+    document.addEventListener('wheel', (e) => {
+      const panel = getTopFloatingPanelForPointer(e.clientX, e.clientY, e.target);
+      if (!panel || panel.scrollHeight <= panel.clientHeight) return;
+      const delta = e.deltaMode === 1
+        ? e.deltaY * 16
+        : e.deltaMode === 2
+          ? e.deltaY * panel.clientHeight
+          : e.deltaY;
+      if (!delta) return;
+      e.preventDefault();
+      e.stopPropagation();
+      panel.scrollTop += delta;
+    }, { passive: false, capture: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (activeOptionMenu) {
+        e.preventDefault();
+        const anchor = activeOptionMenu.anchor;
+        closeOptionMenu();
+        anchor?.focus?.({ preventScroll: true });
+        return;
+      }
+      const panel = getTopFloatingPanelForEscape(e.target);
+      if (!panel) return;
+      e.preventDefault();
+      const config = activeFloatingPanels.get(panel);
+      hideFloatingPanel(panel);
+      if (panel.id === 'addEffectDropdown' && panel.parentNode) {
+        panel.parentNode.removeChild(panel);
+      }
+      config?.anchor?.focus?.({ preventScroll: true });
+    });
+
+    const menuNavigationConfigs = new WeakMap();
+    const menuPointerPositions = new WeakMap();
+
+    function getMenuNavigationItems(panel) {
+      const config = menuNavigationConfigs.get(panel) || {};
+      const selector = config.itemSelector || 'button';
+      return Array.from(panel.querySelectorAll(selector)).filter(item => {
+        if (!item || item.disabled) return false;
+        const style = window.getComputedStyle(item);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      });
+    }
+
+    function focusMenuNavigationItem(panel, item) {
+      if (!panel || !item) return;
+      const items = getMenuNavigationItems(panel);
+      items.forEach(entry => {
+        entry.tabIndex = entry === item ? 0 : -1;
+        entry.classList.toggle('menu-nav-active', entry === item);
+      });
+      panel.classList.add('keyboard-nav');
+      item.focus({ preventScroll: true });
+      item.scrollIntoView({ block: 'nearest' });
+    }
+
+    function focusMenuNavigationByIndex(panel, index) {
+      const items = getMenuNavigationItems(panel);
+      if (!items.length) return;
+      const clamped = clamp(index, 0, items.length - 1);
+      focusMenuNavigationItem(panel, items[clamped]);
+    }
+
+    function focusMenuNavigationDefault(panel, preferredSelector = '.active') {
+      const items = getMenuNavigationItems(panel);
+      if (!items.length) {
+        panel.focus({ preventScroll: true });
+        return;
+      }
+      const preferred = preferredSelector ? panel.querySelector(preferredSelector) : null;
+      focusMenuNavigationItem(panel, items.includes(preferred) ? preferred : items[0]);
+    }
+
+    function syncMenuNavigationFromPointer(panel, clientX, clientY) {
+      if (!panel || !Number.isFinite(clientX) || !Number.isFinite(clientY)) return;
+      if (!pointWithinPanelBounds(panel, clientX, clientY)) return;
+      const hovered = document.elementFromPoint(clientX, clientY);
+      const item = hovered instanceof HTMLElement ? hovered.closest('button') : null;
+      if (!item || !panel.contains(item)) return;
+      const items = getMenuNavigationItems(panel);
+      if (!items.includes(item) || item.classList.contains('menu-nav-active')) return;
+      focusMenuNavigationItem(panel, item);
+    }
+
+    function setupMenuNavigation(panel, config = {}) {
+      if (!panel) return;
+      const existing = menuNavigationConfigs.get(panel) || {};
+      menuNavigationConfigs.set(panel, { ...existing, ...config });
+      if (panel.dataset.menuNavReady === '1') return;
+      panel.dataset.menuNavReady = '1';
+      panel.tabIndex = -1;
+      panel.addEventListener('pointerdown', (e) => e.stopPropagation());
+      panel.addEventListener('wheel', (e) => {
+        if (panel.scrollHeight <= panel.clientHeight) return;
+        const delta = e.deltaMode === 1
+          ? e.deltaY * 16
+          : e.deltaMode === 2
+            ? e.deltaY * panel.clientHeight
+            : e.deltaY;
+        if (!delta) return;
+        e.preventDefault();
+        e.stopPropagation();
+        panel.scrollTop += delta;
+        requestAnimationFrame(() => syncMenuNavigationFromPointer(panel, e.clientX, e.clientY));
+      }, { passive: false, capture: true });
+      panel.addEventListener('focusin', (e) => {
+        const item = e.target instanceof HTMLElement ? e.target.closest('button') : null;
+        if (!item || !panel.contains(item)) return;
+        const items = getMenuNavigationItems(panel);
+        if (!items.includes(item)) return;
+        items.forEach(entry => {
+          entry.tabIndex = entry === item ? 0 : -1;
+          entry.classList.toggle('menu-nav-active', entry === item);
+        });
+        panel.classList.add('keyboard-nav');
+      });
+      panel.addEventListener('pointermove', (e) => {
+        menuPointerPositions.set(panel, { x: e.clientX, y: e.clientY });
+        const item = e.target instanceof HTMLElement ? e.target.closest('button') : null;
+        if (!item || !panel.contains(item)) return;
+        const items = getMenuNavigationItems(panel);
+        if (!items.includes(item) || item.classList.contains('menu-nav-active')) return;
+        focusMenuNavigationItem(panel, item);
+      });
+      panel.addEventListener('scroll', () => {
+        const point = menuPointerPositions.get(panel);
+        if (!point) return;
+        requestAnimationFrame(() => syncMenuNavigationFromPointer(panel, point.x, point.y));
+      });
+      panel.addEventListener('keydown', (e) => {
+        const menuConfig = menuNavigationConfigs.get(panel) || {};
+        const items = getMenuNavigationItems(panel);
+        if (!items.length && e.key !== 'Escape') return;
+        const currentIndex = items.indexOf(document.activeElement);
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          focusMenuNavigationByIndex(panel, currentIndex < 0 ? 0 : currentIndex + 1);
+          return;
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          focusMenuNavigationByIndex(panel, currentIndex < 0 ? items.length - 1 : currentIndex - 1);
+          return;
+        }
+        if (e.key === 'Home') {
+          e.preventDefault();
+          focusMenuNavigationByIndex(panel, 0);
+          return;
+        }
+        if (e.key === 'End') {
+          e.preventDefault();
+          focusMenuNavigationByIndex(panel, items.length - 1);
+          return;
+        }
+        if (e.key === 'PageDown') {
+          e.preventDefault();
+          panel.scrollTop += panel.clientHeight * 0.85;
+          focusMenuNavigationByIndex(panel, Math.min(items.length - 1, Math.max(0, currentIndex) + 5));
+          return;
+        }
+        if (e.key === 'PageUp') {
+          e.preventDefault();
+          panel.scrollTop -= panel.clientHeight * 0.85;
+          focusMenuNavigationByIndex(panel, Math.max(0, (currentIndex < 0 ? items.length : currentIndex) - 5));
+          return;
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (currentIndex >= 0) {
+            e.preventDefault();
+            items[currentIndex].click();
+          }
+          return;
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          menuConfig.onEscape?.();
+        }
+      });
     }
 
     function gapFontScale(gap) {
@@ -1021,6 +1810,19 @@
       // tapers to 1x by gap=0.4, no effect above that.
       if (gap >= 0.4) return 1;
       return 1 + 0.35 * (1 - gap / 0.4);
+    }
+
+    function replacementFontScale(layer) {
+      if (layer.variant === 'Braille') {
+        return 1.14 * gapFontScale(layer.gap);
+      }
+      if (layer.variant === 'Dense') {
+        return 1;
+      }
+      if (layer.variant === 'Blocks') {
+        return 1 + Math.min(0.08, layer.gap * 0.25);
+      }
+      return gapFontScale(layer.gap);
     }
 
     function getMask(layer) {
@@ -1123,6 +1925,14 @@
       return geometry;
     }
 
+    function getScreenEffectScale(geometry, forExport) {
+      if (!forExport) return 1;
+      const previewGeometry = getRenderGeometry();
+      if (!previewGeometry || !Number.isFinite(previewGeometry.scale) || previewGeometry.scale <= 0) return 1;
+      const scaled = geometry.scale / previewGeometry.scale;
+      return Number.isFinite(scaled) && scaled > 0 ? scaled : 1;
+    }
+
     function invalidateMaskPathCache(layerId) {
       if (layerId) maskPathCache.delete(layerId);
       else maskPathCache.clear();
@@ -1155,6 +1965,53 @@
       return ((h ^ (h >>> 13)) % 10000) / 10000;
     }
 
+    function midpoint2D(a, b) {
+      return [(a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5];
+    }
+
+    function traceSmoothPath(target, points, mapPoint = (point) => point, closed = true) {
+      if (!points || points.length === 0) return;
+      const pts = points.map(mapPoint);
+      if (pts.length === 1) {
+        target.moveTo(pts[0][0], pts[0][1]);
+        return;
+      }
+
+      if (closed) {
+        if (pts.length < 3) {
+          target.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length; i++) target.lineTo(pts[i][0], pts[i][1]);
+          target.closePath();
+          return;
+        }
+        const start = midpoint2D(pts[pts.length - 1], pts[0]);
+        target.moveTo(start[0], start[1]);
+        for (let i = 0; i < pts.length; i++) {
+          const curr = pts[i];
+          const next = pts[(i + 1) % pts.length];
+          const mid = midpoint2D(curr, next);
+          target.quadraticCurveTo(curr[0], curr[1], mid[0], mid[1]);
+        }
+        target.closePath();
+        return;
+      }
+
+      target.moveTo(pts[0][0], pts[0][1]);
+      if (pts.length === 2) {
+        target.lineTo(pts[1][0], pts[1][1]);
+        return;
+      }
+      for (let i = 1; i < pts.length - 1; i++) {
+        const curr = pts[i];
+        const next = pts[i + 1];
+        const mid = midpoint2D(curr, next);
+        target.quadraticCurveTo(curr[0], curr[1], mid[0], mid[1]);
+      }
+      const penultimate = pts[pts.length - 2];
+      const last = pts[pts.length - 1];
+      target.quadraticCurveTo(penultimate[0], penultimate[1], last[0], last[1]);
+    }
+
     function attenuateIndex(index, strength) {
       return Math.max(0, Math.floor(index * clamp(strength, 0, 1)));
     }
@@ -1176,13 +2033,7 @@
       for (const region of mask.regions) {
         if (region.points.length < 3) continue;
         const path = new Path2D();
-        for (let i = 0; i < region.points.length; i++) {
-          const x = region.points[i][0] * srcW;
-          const y = region.points[i][1] * srcH;
-          if (i === 0) path.moveTo(x, y);
-          else path.lineTo(x, y);
-        }
-        path.closePath();
+        traceSmoothPath(path, region.points, (pt) => [pt[0] * srcW, pt[1] * srcH], true);
 
         switch (region.op) {
           case 'new':
@@ -1448,11 +2299,74 @@
       return { canvas: padded, pad, pw, ph };
     }
 
-    function applyGaussianBlur(ctx, w, h, fx) {
-      const r = fx.params.amount;
+    function getImageBoundsRect(geometry) {
+      if (!geometry) return null;
+      const left = clamp(Math.floor(geometry.offsetX), 0, geometry.outW);
+      const top = clamp(Math.floor(geometry.offsetY), 0, geometry.outH);
+      const right = clamp(Math.ceil(geometry.offsetX + geometry.srcW * geometry.scale), 0, geometry.outW);
+      const bottom = clamp(Math.ceil(geometry.offsetY + geometry.srcH * geometry.scale), 0, geometry.outH);
+      const width = Math.max(0, right - left);
+      const height = Math.max(0, bottom - top);
+      if (!width || !height) return null;
+      return { left, top, right, bottom, width, height };
+    }
+
+    function getImageTransform(geometry) {
+      const rect = getImageBoundsRect(geometry);
+      if (!rect) return null;
+      return {
+        rect,
+        scaleX: rect.width / Math.max(1, geometry.srcW),
+        scaleY: rect.height / Math.max(1, geometry.srcH)
+      };
+    }
+
+    function extendCanvasToImageBounds(srcCanvas, geometry, fxId) {
+      if (!geometry) return srcCanvas;
+      const rect = getImageBoundsRect(geometry);
+      if (!rect) return srcCanvas;
+
+      const extended = getScratchCanvas('fx-bounds-' + fxId, geometry.outW, geometry.outH);
+      const ectx = extended.getContext('2d');
+      ectx.clearRect(0, 0, geometry.outW, geometry.outH);
+      ectx.drawImage(srcCanvas, 0, 0);
+
+      const { left, top, right, bottom, width, height } = rect;
+
+      if (top > 0) {
+        ectx.drawImage(srcCanvas, left, top, width, 1, left, 0, width, top);
+      }
+      if (bottom < geometry.outH) {
+        ectx.drawImage(srcCanvas, left, bottom - 1, width, 1, left, bottom, width, geometry.outH - bottom);
+      }
+      if (left > 0) {
+        ectx.drawImage(srcCanvas, left, top, 1, height, 0, top, left, height);
+      }
+      if (right < geometry.outW) {
+        ectx.drawImage(srcCanvas, right - 1, top, 1, height, right, top, geometry.outW - right, height);
+      }
+      if (left > 0 && top > 0) {
+        ectx.drawImage(srcCanvas, left, top, 1, 1, 0, 0, left, top);
+      }
+      if (right < geometry.outW && top > 0) {
+        ectx.drawImage(srcCanvas, right - 1, top, 1, 1, right, 0, geometry.outW - right, top);
+      }
+      if (left > 0 && bottom < geometry.outH) {
+        ectx.drawImage(srcCanvas, left, bottom - 1, 1, 1, 0, bottom, left, geometry.outH - bottom);
+      }
+      if (right < geometry.outW && bottom < geometry.outH) {
+        ectx.drawImage(srcCanvas, right - 1, bottom - 1, 1, 1, right, bottom, geometry.outW - right, geometry.outH - bottom);
+      }
+
+      return extended;
+    }
+
+    function applyGaussianBlur(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const r = fx.params.amount * effectScale;
       if (r <= 0.5) return;
       const pad = Math.ceil(r * 3);
-      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id);
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id);
+      const { canvas: padded, pw, ph } = padCanvasForBlur(effectInput, w, h, pad, fx.id);
       const blurred = getScratchCanvas('fx-gauss-' + fx.id, pw, ph);
       const bctx = blurred.getContext('2d');
       bctx.filter = `blur(${r}px)`;
@@ -1462,15 +2376,16 @@
       ctx.drawImage(blurred, pad, pad, w, h, 0, 0, w, h);
     }
 
-    function applyMotionBlur(ctx, w, h, fx) {
-      const dist = fx.params.amount;
+    function applyMotionBlur(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const dist = fx.params.amount * effectScale;
       if (dist <= 0) return;
       const angle = (fx.params.angle || 0) * Math.PI / 180;
       const dx = Math.cos(angle);
       const dy = Math.sin(angle);
       const steps = Math.min(24, Math.max(8, Math.round(dist)));
       const pad = Math.ceil(dist + 2);
-      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id + '-m');
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-m-src');
+      const { canvas: padded, pw, ph } = padCanvasForBlur(effectInput, w, h, pad, fx.id + '-m');
       const result = getScratchCanvas('fx-motion-' + fx.id, pw, ph);
       const rctx = result.getContext('2d');
       const total = 2 * steps + 1;
@@ -1483,12 +2398,13 @@
       ctx.drawImage(result, pad, pad, w, h, 0, 0, w, h);
     }
 
-    function applyRadialBlur(ctx, w, h, fx) {
-      const amount = fx.params.amount;
+    function applyRadialBlur(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const amount = fx.params.amount * effectScale;
       if (amount <= 0) return;
       const steps = Math.min(20, Math.max(8, Math.round(amount)));
       const pad = Math.ceil(amount * 1.5 + 2);
-      const { canvas: padded, pw, ph } = padCanvasForBlur(ctx.canvas, w, h, pad, fx.id + '-r');
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-r-src');
+      const { canvas: padded, pw, ph } = padCanvasForBlur(effectInput, w, h, pad, fx.id + '-r');
       const result = getScratchCanvas('fx-radial-' + fx.id, pw, ph);
       const rctx = result.getContext('2d');
       const pcx = (fx.params.centerX ?? 50) / 100 * w + pad;
@@ -1509,13 +2425,15 @@
       ctx.drawImage(result, pad, pad, w, h, 0, 0, w, h);
     }
 
-    function applyChromaticAberration(ctx, w, h, fx) {
-      const offset = fx.params.amount;
+    function applyChromaticAberration(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const offset = fx.params.amount * effectScale;
       if (offset <= 0) return;
       const angle = (fx.params.angle || 0) * Math.PI / 180;
       const dx = Math.cos(angle) * offset;
       const dy = Math.sin(angle) * offset;
-      const src = ctx.getImageData(0, 0, w, h);
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-c-src');
+      const srcX = effectInput.getContext('2d', { willReadFrequently: true });
+      const src = srcX.getImageData(0, 0, w, h);
       const dst = ctx.createImageData(w, h);
       const sd = src.data;
       const dd = dst.data;
@@ -1543,25 +2461,27 @@
       ctx.putImageData(dst, 0, 0);
     }
 
-    function applyPixelate(ctx, w, h, fx) {
-      const blockSize = Math.max(2, Math.round(fx.params.amount));
+    function applyPixelate(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const blockSize = Math.max(2, Math.round(fx.params.amount * effectScale));
       if (blockSize < 2) return;
       const sw = Math.max(1, Math.ceil(w / blockSize));
       const sh = Math.max(1, Math.ceil(h / blockSize));
       const small = getScratchCanvas('fx-pix-' + fx.id, sw, sh);
       const sctx = small.getContext('2d');
       sctx.imageSmoothingEnabled = true;
-      sctx.drawImage(ctx.canvas, 0, 0, sw, sh);
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-p-src');
+      sctx.drawImage(effectInput, 0, 0, sw, sh);
       ctx.clearRect(0, 0, w, h);
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(small, 0, 0, w, h);
       ctx.imageSmoothingEnabled = true;
     }
 
-    function applyBoxBlur(ctx, w, h, fx) {
-      const radius = Math.max(1, Math.round(fx.params.amount));
+    function applyBoxBlur(ctx, w, h, fx, effectScale = 1, geometry = null) {
+      const radius = Math.max(1, Math.round(fx.params.amount * effectScale));
       if (radius < 1) return;
-      const imageData = ctx.getImageData(0, 0, w, h);
+      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-b-src');
+      const imageData = effectInput.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h);
       const src = imageData.data;
       const dst = new Uint8ClampedArray(src.length);
       // Horizontal pass — clamp edges, preserve alpha
@@ -1596,38 +2516,38 @@
     }
 
     function applyBlurEffect(ctx, fx, context) {
-      const { outW, outH } = context;
+      const { outW, outH, effectScale, geometry } = context;
       switch (fx.subtype) {
-        case 'gaussian': applyGaussianBlur(ctx, outW, outH, fx); break;
-        case 'motion': applyMotionBlur(ctx, outW, outH, fx); break;
-        case 'radial': applyRadialBlur(ctx, outW, outH, fx); break;
-        case 'chromatic': applyChromaticAberration(ctx, outW, outH, fx); break;
-        case 'pixelate': applyPixelate(ctx, outW, outH, fx); break;
-        case 'box': applyBoxBlur(ctx, outW, outH, fx); break;
+        case 'gaussian': applyGaussianBlur(ctx, outW, outH, fx, effectScale, geometry); break;
+        case 'motion': applyMotionBlur(ctx, outW, outH, fx, effectScale, geometry); break;
+        case 'radial': applyRadialBlur(ctx, outW, outH, fx, effectScale, geometry); break;
+        case 'chromatic': applyChromaticAberration(ctx, outW, outH, fx, effectScale, geometry); break;
+        case 'pixelate': applyPixelate(ctx, outW, outH, fx, effectScale, geometry); break;
+        case 'box': applyBoxBlur(ctx, outW, outH, fx, effectScale, geometry); break;
       }
     }
 
     function applyBloomEffect(ctx, fx, context) {
-      const { asciiCanvas, outW, outH } = context;
+      const { asciiCanvas, outW, outH, effectScale } = context;
       // Create a temporary layer-like object for the existing applyBloomPost
       const pseudoLayer = {
         bloom: true,
         bloomStyle: fx.params.style || 'soft',
-        bloomRadius: fx.params.radius ?? 8,
+        bloomRadius: (fx.params.radius ?? 8) * effectScale,
         bloomIntensity: fx.params.intensity ?? 0.6
       };
       applyBloomPost(ctx, asciiCanvas, outW, outH, pseudoLayer);
     }
 
     function applyGrainEffect(ctx, fx, context) {
-      const { outW, outH } = context;
+      const { outW, outH, effectScale } = context;
       const pseudoLayer = {
         grain: true,
         grainAmount: fx.params.amount ?? 25,
         grainSize: fx.params.size ?? 25,
         grainRoughness: fx.params.roughness ?? 50
       };
-      applyGrain(ctx, outW, outH, pseudoLayer);
+      applyGrain(ctx, outW, outH, pseudoLayer, effectScale);
     }
 
     function applyInkBleedEffect(ctx, fx, context) {
@@ -1755,6 +2675,7 @@
         layer.outlineFill ? 1 : 0,
         layer.wordArtifactEnabled ? 1 : 0,
         layer.wordArtifact,
+        layer.wordArtifactDistribution,
         layer.wordArtifactDensity,
         layer.wordArtifactCoherence,
         chainKey,
@@ -2046,8 +2967,11 @@
     }
 
     function canvasToSourcePoint(canvasX, canvasY, geometry) {
-      const rawX = (canvasX - geometry.offsetX) / geometry.scale;
-      const rawY = (canvasY - geometry.offsetY) / geometry.scale;
+      const transform = getImageTransform(geometry);
+      if (!transform) return { x: 0, y: 0, inside: false };
+      const { rect, scaleX, scaleY } = transform;
+      const rawX = (canvasX - rect.left) / Math.max(1e-4, scaleX);
+      const rawY = (canvasY - rect.top) / Math.max(1e-4, scaleY);
       return {
         x: clamp(rawX, 0, geometry.srcW),
         y: clamp(rawY, 0, geometry.srcH),
@@ -2056,9 +2980,12 @@
     }
 
     function sourceToCanvasPoint(x, y, geometry) {
+      const transform = getImageTransform(geometry);
+      if (!transform) return { x: 0, y: 0 };
+      const { rect, scaleX, scaleY } = transform;
       return {
-        x: geometry.offsetX + x * geometry.scale,
-        y: geometry.offsetY + y * geometry.scale
+        x: rect.left + x * scaleX,
+        y: rect.top + y * scaleY
       };
     }
 
@@ -2084,7 +3011,6 @@
       const clearBtn = document.getElementById('selectionClearBtn');
       const invertBtn = document.getElementById('selectionInvertBtn');
       const doneBtn = document.getElementById('selectionDoneBtn');
-      const lassoBtn = document.getElementById('lassoToolBtn');
       const hasSource = !!state.sourceElement;
       const mask = getMask(activeLayer());
       const maskEditBtn = document.getElementById('maskEditBtn');
@@ -2092,7 +3018,6 @@
       maskEditBtn.disabled = !hasSource;
       selectionToolbar.classList.toggle('hidden', !selectionState.active);
       outputCanvas.classList.toggle('masking-active', selectionState.active);
-      lassoBtn.disabled = true;
       clearBtn.disabled = !mask;
       invertBtn.disabled = !mask;
       doneBtn.disabled = !selectionState.active;
@@ -2124,6 +3049,7 @@
         invalidatePostProcessCache();
         updateSelectionUI();
         renderLayerPanel();
+        syncUIToLayer(activeLayer());
         resizeCanvas();
         video.play();
         animFrameId = requestAnimationFrame(renderLoop);
@@ -2179,18 +3105,41 @@
     }
 
     const VARIANTS = {
-      Standard:  { mode: 'replacement', chars: ' ·:¤▫═▣◫▦█' },
-      Dense:     { mode: 'replacement', chars: ' \u2596\u2597\u2598\u259D\u2591\u259E\u259A\u2584\u2580\u258C\u2590\u2592\u2599\u259B\u259C\u259F\u2593\u2588' },
-      Minimal:   { mode: 'replacement', chars: ' .:*#' },
-      Blocks:    { mode: 'replacement', chars: ' \u2591\u2592\u2593\u2588' },
-      Braille:   { mode: 'replacement', chars: generateBrailleChars() },
-      Technical: { mode: 'replacement', chars: ' .-+:;=!*#$@' },
+      Standard:  { mode: 'replacement', chars: ' .-:+*=%#@' },
+      Dense:     { mode: 'replacement', chars: ' ░▒▓█' },
+      Minimal:   { mode: 'replacement', chars: ' .#@' },
+      Blocks:    { mode: 'replacement', chars: ' ▁▂▃▄▅▆▇█' },
+      Braille:   { mode: 'replacement', chars: '⠀⠁⠃⠇⠏⠟⠿⡿⣿' },
+      Technical: { mode: 'replacement', chars: ' .-:,_;+*=/\\|%#@' },
       Matrix:    { mode: 'replacement', chars: ' 0123456789' },
       Hatching:  { mode: 'replacement', chars: ' .-/\\|+x%#@' },
       Contour:   { mode: 'overlay', chars: '.:oO' },
       Outline:   { mode: 'outline', chars: '' },
       Highlight: { mode: 'highlight', chars: '' }
     };
+
+    const FONT_OPTIONS = [
+      { value: 'monospace', label: 'Mono' },
+      { value: '\'IBM Plex Mono\', monospace', label: 'IBM Plex' },
+      { value: '\'Georgia\', serif', label: 'Georgia' },
+      { value: '\'Times New Roman\', serif', label: 'Times' },
+      { value: '\'Courier New\', monospace', label: 'Courier' },
+      { value: '\'Arial\', sans-serif', label: 'Arial' }
+    ];
+    const WORD_ARTIFACT_DISTRIBUTION_OPTIONS = [
+      { value: 'stream', label: 'Rows' },
+      { value: 'brick', label: 'Brick' },
+      { value: 'random', label: 'Random' },
+      { value: 'cluster', label: 'Cluster' }
+    ];
+    const RECORD_QUALITY_OPTIONS = [
+      { value: 'high', label: 'High' },
+      { value: 'max', label: 'Max' }
+    ];
+    const RECORD_FPS_OPTIONS = [
+      { value: '30', label: '30' },
+      { value: '60', label: '60' }
+    ];
 
     // ============ DRAWER TOGGLE ============
     function setDrawerOpen(open) {
@@ -2240,15 +3189,53 @@
     // Cell Size
     const cellSizeInput = document.getElementById('cellSize');
     const cellSizeValue = document.getElementById('cellSizeValue');
+    const CELL_SIZE_MIN = 4;
+    const CELL_SIZE_DEFAULT = 10;
+    const CELL_SIZE_BASE_MAX = 30;
+    const CELL_SIZE_EMPTY_MAX = 60;
+    const CELL_SIZE_ABS_MAX = 180;
+
+    function getSourceDimensions() {
+      const src = state.sourceElement;
+      if (src) {
+        const w = src.videoWidth || src.naturalWidth || src.width || sourceCanvas.width;
+        const h = src.videoHeight || src.naturalHeight || src.height || sourceCanvas.height;
+        if (w > 0 && h > 0) return { w, h };
+      }
+      if (sourceCanvas.width > 0 && sourceCanvas.height > 0) {
+        return { w: sourceCanvas.width, h: sourceCanvas.height };
+      }
+      return null;
+    }
+
+    function getAdaptiveCellSizeMax(layer = activeLayer()) {
+      const dims = getSourceDimensions();
+      const layerSize = layer && layer.kind !== 'source' ? layer.cellSize || CELL_SIZE_DEFAULT : CELL_SIZE_DEFAULT;
+      if (!dims) return Math.max(CELL_SIZE_EMPTY_MAX, layerSize);
+      const shorterEdge = Math.min(dims.w, dims.h);
+      const adaptiveMax = Math.round(shorterEdge / 12);
+      return clamp(Math.max(CELL_SIZE_BASE_MAX, adaptiveMax, layerSize), CELL_SIZE_BASE_MAX, CELL_SIZE_ABS_MAX);
+    }
+
+    function syncCellSizeControlRange(layer = activeLayer()) {
+      const max = getAdaptiveCellSizeMax(layer);
+      cellSizeInput.min = CELL_SIZE_MIN;
+      cellSizeInput.max = max;
+      return max;
+    }
+
     function formatAdj(v) { return v.toFixed(2).replace(/\.?0+$/, '') || '0'; }
     cellSizeInput.addEventListener('input', () => {
-      activeLayer().cellSize = parseInt(cellSizeInput.value);
+      activeLayer().cellSize = clamp(parseInt(cellSizeInput.value) || CELL_SIZE_DEFAULT, CELL_SIZE_MIN, getAdaptiveCellSizeMax());
+      syncCellSizeControlRange();
+      cellSizeInput.value = activeLayer().cellSize;
       cellSizeValue.value = activeLayer().cellSize;
       render();
     });
     cellSizeValue.addEventListener('change', () => {
-      const v = Math.min(30, Math.max(4, parseInt(cellSizeValue.value) || 10));
+      const v = clamp(parseInt(cellSizeValue.value) || CELL_SIZE_DEFAULT, CELL_SIZE_MIN, CELL_SIZE_ABS_MAX);
       activeLayer().cellSize = v;
+      syncCellSizeControlRange();
       cellSizeInput.value = v;
       cellSizeValue.value = v;
       render();
@@ -2272,8 +3259,9 @@
 
     // Font
     const fontSelect = document.getElementById('fontSelect');
-    fontSelect.addEventListener('change', () => {
-      activeLayer().font = fontSelect.value;
+    const fontBtn = document.getElementById('fontBtn');
+    bindStaticPicker(fontBtn, fontSelect, FONT_OPTIONS, (value) => {
+      activeLayer().font = value;
       render();
     });
 
@@ -2420,7 +3408,7 @@
     manualColorBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (manualColorBtn.disabled) return;
-      manualColorPopover.classList.toggle('hidden');
+      toggleFloatingPanel(manualColorPopover, manualColorBtn, { align: 'right', placement: 'bottom', gap: 8, maxHeight: 360 });
     });
     manualColorPopover.addEventListener('click', (e) => e.stopPropagation());
     manualColorHex.addEventListener('change', () => {
@@ -2487,7 +3475,7 @@
     outlineFillBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (outlineFillBtn.disabled) return;
-      outlineFillPopover.classList.toggle('hidden');
+      toggleFloatingPanel(outlineFillPopover, outlineFillBtn, { align: 'right', placement: 'bottom', gap: 8, maxHeight: 360 });
     });
     outlineFillPopover.addEventListener('click', (e) => e.stopPropagation());
     outlineFillHex.addEventListener('change', () => {
@@ -2531,10 +3519,10 @@
     });
     document.addEventListener('click', (e) => {
       if (!manualColorPopover.contains(e.target) && e.target !== manualColorBtn) {
-        manualColorPopover.classList.add('hidden');
+        hideFloatingPanel(manualColorPopover);
       }
       if (!outlineFillPopover.contains(e.target) && e.target !== outlineFillBtn) {
-        outlineFillPopover.classList.add('hidden');
+        hideFloatingPanel(outlineFillPopover);
       }
     });
 
@@ -2568,6 +3556,7 @@
     }
 
     function renderEffectChainUI() {
+      closeOptionMenu();
       const layer = activeLayer();
       if (!layer) return;
       const chain = getEffectChain(layer);
@@ -2587,8 +3576,8 @@
         header.innerHTML = `
           <span class="fx-drag text-[#444]">≡</span>
           <span class="text-[10px] text-[#888] uppercase tracking-wider flex-1 cursor-pointer fx-toggle-params" style="font-family:monospace">${getEffectLabel(fx)}</span>
-          <label class="toggle-switch" style="flex-shrink:0"><input type="checkbox" class="fx-enabled" ${fx.enabled ? 'checked' : ''}><span class="toggle-slider"></span></label>
           <button class="fx-del text-[10px] text-[#444] hover:text-red-400 cursor-pointer bg-transparent border-none" style="font-family:monospace">✕</button>
+          <label class="toggle-switch" style="flex-shrink:0"><input type="checkbox" class="fx-enabled" ${fx.enabled ? 'checked' : ''}><span class="toggle-slider"></span></label>
         `;
         card.appendChild(header);
 
@@ -2605,27 +3594,36 @@
           const stLabel = document.createElement('label');
           stLabel.className = 'text-[#666] text-[10px] uppercase tracking-wider';
           stLabel.textContent = 'Type';
-          const stSelect = document.createElement('select');
-          stSelect.className = 'bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider';
-          for (const [key, st] of Object.entries(reg.subtypes)) {
-            const opt = document.createElement('option');
-            opt.value = key;
-            opt.textContent = st.label;
-            if (fx.subtype === key) opt.selected = true;
-            stSelect.appendChild(opt);
-          }
-          stSelect.addEventListener('change', () => {
-            const newSub = stSelect.value;
-            const newDefs = reg.subtypes[newSub];
-            fx.subtype = newSub;
-            // Reset params to new subtype defaults, keeping any shared keys
-            fx.params = { ...newDefs.defaults };
-            invalidatePostProcessCache();
-            renderEffectChainUI();
-            render();
+          const subtypeOptions = Object.entries(reg.subtypes).map(([key, st]) => ({ value: key, label: st.label }));
+          const stButton = document.createElement('button');
+          stButton.type = 'button';
+          stButton.className = 'ui-select-btn ui-select-btn-sm w-[132px]';
+          stButton.innerHTML = '<span class="ui-select-value"></span><span class="ui-select-caret">▾</span>';
+          setSelectButtonLabel(stButton, labelForOption(subtypeOptions, fx.subtype));
+          stButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openOptionMenu(stButton, {
+              options: subtypeOptions,
+              value: fx.subtype,
+              align: 'right',
+              placement: 'bottom',
+              compact: true,
+              matchWidth: true,
+              maxHeight: 220,
+              gap: 4,
+              onSelect: (newSub, option) => {
+                setSelectButtonLabel(stButton, option.label);
+                fx.subtype = newSub;
+                const newDefs = reg.subtypes[newSub];
+                fx.params = { ...newDefs.defaults };
+                invalidatePostProcessCache();
+                renderEffectChainUI();
+                render();
+              }
+            });
           });
           stRow.appendChild(stLabel);
-          stRow.appendChild(stSelect);
+          stRow.appendChild(stButton);
           paramsDiv.appendChild(stRow);
         }
 
@@ -2680,21 +3678,35 @@
             const label = document.createElement('label');
             label.className = 'text-[#666] text-[10px] uppercase tracking-wider';
             label.textContent = pDef.label;
-            const select = document.createElement('select');
-            select.className = 'bg-[#0a0a0a] border border-[#333] text-white text-[11px] font-mono px-3 py-1.5 outline-none appearance-none cursor-pointer uppercase tracking-wider';
-            pDef.options.forEach(opt => {
-              const o = document.createElement('option');
-              o.value = opt;
-              o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
-              if (fx.params[pDef.key] === opt) o.selected = true;
-              select.appendChild(o);
-            });
-            select.addEventListener('change', () => {
-              fx.params[pDef.key] = select.value;
-              render();
+            const selectOptions = pDef.options.map(opt => ({
+              value: opt,
+              label: opt.charAt(0).toUpperCase() + opt.slice(1)
+            }));
+            const selectButton = document.createElement('button');
+            selectButton.type = 'button';
+            selectButton.className = 'ui-select-btn ui-select-btn-sm w-[132px]';
+            selectButton.innerHTML = '<span class="ui-select-value"></span><span class="ui-select-caret">▾</span>';
+            setSelectButtonLabel(selectButton, labelForOption(selectOptions, fx.params[pDef.key]));
+            selectButton.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openOptionMenu(selectButton, {
+                options: selectOptions,
+                value: fx.params[pDef.key],
+                align: 'right',
+                placement: 'bottom',
+                compact: true,
+                matchWidth: true,
+                maxHeight: 220,
+                gap: 4,
+                onSelect: (value, option) => {
+                  fx.params[pDef.key] = value;
+                  setSelectButtonLabel(selectButton, option.label);
+                  render();
+                }
+              });
             });
             labelRow.appendChild(label);
-            labelRow.appendChild(select);
+            labelRow.appendChild(selectButton);
             row.appendChild(labelRow);
           }
           paramsDiv.appendChild(row);
@@ -2785,13 +3797,19 @@
     document.getElementById('addEffectBtn').addEventListener('click', (e) => {
       e.stopPropagation();
       let dropdown = document.getElementById('addEffectDropdown');
-      if (dropdown) { dropdown.remove(); return; }
+      if (dropdown) {
+        hideFloatingPanel(dropdown);
+        dropdown.remove();
+        return;
+      }
 
       dropdown = document.createElement('div');
       dropdown.id = 'addEffectDropdown';
+      dropdown.classList.add('ui-menu-panel');
 
       function addItem(label, type, subtype) {
-        const item = document.createElement('div');
+        const item = document.createElement('button');
+        item.type = 'button';
         item.className = 'fx-menu-item';
         item.textContent = label;
         item.addEventListener('click', () => {
@@ -2800,6 +3818,7 @@
           const chain = getEffectChain(layer);
           const fx = createEffect(type, subtype);
           if (fx) chain.push(fx);
+          hideFloatingPanel(dropdown);
           dropdown.remove();
           invalidatePostProcessCache();
           renderEffectChainUI();
@@ -2825,14 +3844,21 @@
       }
 
       const btn = document.getElementById('addEffectBtn');
-      const rect = btn.getBoundingClientRect();
-      dropdown.style.position = 'fixed';
-      dropdown.style.top = (rect.bottom + 4) + 'px';
-      dropdown.style.right = (window.innerWidth - rect.right) + 'px';
       document.body.appendChild(dropdown);
+      showFloatingPanel(dropdown, btn, { align: 'right', placement: 'bottom', gap: 4, maxHeight: 320 });
+      setupMenuNavigation(dropdown, {
+        itemSelector: '.fx-menu-item',
+        onEscape: () => {
+          hideFloatingPanel(dropdown);
+          dropdown.remove();
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+      requestAnimationFrame(() => focusMenuNavigationDefault(dropdown, '.fx-menu-item'));
 
       const closeDropdown = (ev) => {
-        if (!dropdown.contains(ev.target) && ev.target !== btn) {
+        if (!eventIsInsidePanel(dropdown, btn, ev)) {
+          hideFloatingPanel(dropdown);
           dropdown.remove();
           document.removeEventListener('click', closeDropdown);
         }
@@ -2843,6 +3869,8 @@
     // Word artifact controls
     const wordArtifactToggle = document.getElementById('wordArtifactToggle');
     const wordArtifactInput = document.getElementById('wordArtifactInput');
+    const wordArtifactDistributionBtn = document.getElementById('wordArtifactDistributionBtn');
+    const wordArtifactDistributionSelect = document.getElementById('wordArtifactDistribution');
     const wordArtifactDensitySlider = document.getElementById('wordArtifactDensity');
     const wordArtifactDensityValue = document.getElementById('wordArtifactDensityValue');
     const wordArtifactCoherenceSlider = document.getElementById('wordArtifactCoherence');
@@ -2858,6 +3886,10 @@
       activeLayer().wordArtifact = wordArtifactInput.value;
       render();
     });
+    bindStaticPicker(wordArtifactDistributionBtn, wordArtifactDistributionSelect, WORD_ARTIFACT_DISTRIBUTION_OPTIONS, (value) => {
+      activeLayer().wordArtifactDistribution = value;
+      render();
+    }, { align: 'right', placement: 'bottom', compact: false, matchWidth: true, maxHeight: 220 });
     wordArtifactDensitySlider.addEventListener('input', () => {
       activeLayer().wordArtifactDensity = parseInt(wordArtifactDensitySlider.value) / 100;
       wordArtifactDensityValue.value = wordArtifactDensitySlider.value;
@@ -2865,7 +3897,7 @@
     });
     wordArtifactDensityValue.addEventListener('change', () => {
       const parsed = parseInt(wordArtifactDensityValue.value);
-      const v = Math.min(30, Math.max(1, isNaN(parsed) ? 5 : parsed));
+      const v = Math.min(100, Math.max(0, isNaN(parsed) ? 5 : parsed));
       activeLayer().wordArtifactDensity = v / 100;
       wordArtifactDensitySlider.value = v;
       wordArtifactDensityValue.value = v;
@@ -2889,8 +3921,8 @@
     document.getElementById('resetSettings').addEventListener('click', () => {
       const layer = activeLayer();
       applyLayerDefaults(layer);
-      manualColorPopover.classList.add('hidden');
-      outlineFillPopover.classList.add('hidden');
+      hideFloatingPanel(manualColorPopover);
+      hideFloatingPanel(outlineFillPopover);
       syncUIToLayer(layer);
       renderLayerPanel();
       render();
@@ -2927,18 +3959,21 @@
       variantDropdown.innerHTML = '';
       const current = activeLayer().variant;
       variantOptions.forEach(name => {
-        const item = document.createElement('div');
-        item.className = `px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider cursor-pointer ${name === current ? 'text-white bg-[#222]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'}`;
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = `ui-menu-item${name === current ? ' active' : ''}`;
         item.textContent = name;
-        item.addEventListener('mouseenter', () => {
+        const preview = () => {
           if (_variantBeforePreview === null) _variantBeforePreview = activeLayer().variant;
           setVariant(name);
           render();
-        });
+        };
+        item.addEventListener('mouseenter', preview);
+        item.addEventListener('focus', preview);
         item.addEventListener('click', () => {
           _variantBeforePreview = null;
           setVariant(name);
-          variantDropdown.classList.add('hidden');
+          hideFloatingPanel(variantDropdown);
           render();
         });
         variantDropdown.appendChild(item);
@@ -2948,10 +3983,28 @@
     variantBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const wasOpen = !variantDropdown.classList.contains('hidden');
-      variantDropdown.classList.toggle('hidden');
+      if (wasOpen) {
+        hideFloatingPanel(variantDropdown);
+      } else {
+        showFloatingPanel(variantDropdown, variantBtn, { align: 'left', placement: 'bottom', gap: 6, matchWidth: true, maxHeight: 320 });
+      }
       if (!wasOpen) {
         _variantBeforePreview = activeLayer().variant;
         buildVariantDropdown();
+        setupMenuNavigation(variantDropdown, {
+          itemSelector: '.ui-menu-item',
+          onEscape: () => {
+            if (_variantBeforePreview !== null) {
+              setVariant(_variantBeforePreview);
+              _variantBeforePreview = null;
+              render();
+            }
+            hideFloatingPanel(variantDropdown);
+            variantBtn.focus({ preventScroll: true });
+          }
+        });
+        positionFloatingPanel(variantDropdown, variantBtn, { align: 'left', placement: 'bottom', gap: 6, matchWidth: true, maxHeight: 320 });
+        requestAnimationFrame(() => focusMenuNavigationDefault(variantDropdown));
       }
     });
 
@@ -2963,13 +4016,13 @@
     });
 
     document.addEventListener('click', (e) => {
-      if (!variantDropdown.contains(e.target) && e.target !== variantBtn) {
+      if (!eventIsInsidePanel(variantDropdown, variantBtn, e)) {
         if (_variantBeforePreview !== null) {
           setVariant(_variantBeforePreview);
           _variantBeforePreview = null;
           render();
         }
-        variantDropdown.classList.add('hidden');
+        hideFloatingPanel(variantDropdown);
       }
     });
 
@@ -3005,6 +4058,7 @@
         invalidatePostProcessCache();
         updateSelectionUI();
         renderLayerPanel();
+        syncUIToLayer(activeLayer());
         // Use rAF to ensure layout is computed before measuring canvas area
         const url = img.src;
         requestAnimationFrame(() => {
@@ -3076,14 +4130,17 @@
 
     function renderSourceLayer(layerCtx, layer, geometry) {
       const filter = `brightness(${layer.brightness ?? 1}) contrast(${layer.contrast ?? 1}) saturate(${layer.saturation ?? 1})`;
+      const transform = getImageTransform(geometry);
+      if (!transform) return;
+      const { rect } = transform;
       layerCtx.save();
       layerCtx.filter = filter;
       layerCtx.drawImage(
         state.sourceElement,
-        geometry.offsetX,
-        geometry.offsetY,
-        geometry.srcW * geometry.scale,
-        geometry.srcH * geometry.scale
+        rect.left,
+        rect.top,
+        rect.width,
+        rect.height
       );
       layerCtx.restore();
     }
@@ -3093,19 +4150,18 @@
       if (!mask || !maskHasRegions(mask)) return null;
       const entry = maskPathCache.get(layer.id);
       if (entry && entry.key === geometry.key) return entry.paths;
+      const transform = getImageTransform(geometry);
+      if (!transform) return null;
+      const { rect, scaleX, scaleY } = transform;
 
       const paths = [];
       for (const region of mask.regions) {
         if (region.points.length < 3) continue;
         const path = new Path2D();
-        for (let i = 0; i < region.points.length; i++) {
-          const pt = region.points[i];
-          const x = geometry.offsetX + clamp(pt[0], 0, 1) * geometry.srcW * geometry.scale;
-          const y = geometry.offsetY + clamp(pt[1], 0, 1) * geometry.srcH * geometry.scale;
-          if (i === 0) path.moveTo(x, y);
-          else path.lineTo(x, y);
-        }
-        path.closePath();
+        traceSmoothPath(path, region.points, (pt) => [
+          rect.left + clamp(pt[0], 0, 1) * geometry.srcW * scaleX,
+          rect.top + clamp(pt[1], 0, 1) * geometry.srcH * scaleY
+        ], true);
         paths.push({ path, op: region.op });
       }
       maskPathCache.set(layer.id, { key: geometry.key, paths });
@@ -3150,20 +4206,21 @@
     }
 
     function clipToImageBounds(ctx, geometry) {
-      const { offsetX, offsetY, srcW, srcH, scale, outW, outH } = geometry;
-      const imgW = srcW * scale;
-      const imgH = srcH * scale;
+      const transform = getImageTransform(geometry);
+      if (!transform) return;
+      const { rect } = transform;
       // Use destination-in to erase everything outside the image rect
       ctx.save();
       ctx.globalCompositeOperation = 'destination-in';
       ctx.fillStyle = '#fff';
-      ctx.fillRect(offsetX, offsetY, imgW, imgH);
+      ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
       ctx.restore();
     }
 
     // ============ RENDER LAYER ============
     function renderLayer(layer, pixels, geometry, forExport = false) {
       const { srcW, srcH, scale, offsetX, offsetY, outW, outH } = geometry;
+      const effectScale = getScreenEffectScale(geometry, forExport);
       const layerCanvas = getLayerCanvas(layer.id, outW, outH);
       const layerCtx = layerCanvas.getContext('2d');
       layerCtx.clearRect(0, 0, outW, outH);
@@ -3175,7 +4232,7 @@
         if (srcChain.length > 0) {
           for (const fx of srcChain) {
             if (!fx.enabled) continue;
-            applyEffect(layerCtx, fx, { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport });
+            applyEffect(layerCtx, fx, { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale });
           }
           // Clip to image bounds
           clipToImageBounds(layerCtx, geometry);
@@ -3183,11 +4240,13 @@
         return layerCanvas;
       }
 
-      const cellSize = layer.cellSize;
-      const stride = Math.round(cellSize * (1 + layer.gap));
-      const cols = Math.floor(srcW / stride);
-      const rows = Math.floor(srcH / stride);
       const variant = VARIANTS[layer.variant];
+      const cellHeight = layer.cellSize;
+      const cellWidth = layer.variant === 'Dense' ? getDenseCellWidth(cellHeight) : cellHeight;
+      const strideX = Math.round(cellWidth * (1 + layer.gap));
+      const strideY = Math.round(cellHeight * (1 + layer.gap));
+      const cols = Math.ceil(srcW / strideX);
+      const rows = Math.ceil(srcH / strideY);
       const maskMetrics = prepareMaskMetrics(layer, srcW, srcH);
 
       // Swap outputCtx to layer canvas
@@ -3199,16 +4258,14 @@
         outputCtx = offscreen.ctx;
 
         if (variant.mode === 'outline') {
-          renderOutline(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
+          renderOutline(pixels, srcW, srcH, cols, rows, cellHeight, scale, offsetX, offsetY, layer, maskMetrics);
         } else if (variant.mode === 'highlight') {
-          renderHighlight(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
-        } else if (layer.variant === 'Dense') {
-          renderDense(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
+          renderHighlight(pixels, srcW, srcH, cols, rows, cellHeight, scale, offsetX, offsetY, layer, maskMetrics);
         } else if (variant.mode === 'replacement') {
-          renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY, layer, maskMetrics);
+          renderReplacement(pixels, srcW, srcH, cols, rows, cellWidth, cellHeight, variant.chars, scale, offsetX, offsetY, layer, maskMetrics);
         }
         if (variant.mode === 'overlay') {
-          renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, variant.chars, scale, offsetX, offsetY, layer, maskMetrics);
+          renderOverlay(pixels, srcW, srcH, cols, rows, cellHeight, variant.chars, scale, offsetX, offsetY, layer, maskMetrics);
         }
 
         // Copy ASCII result to layer canvas
@@ -3219,13 +4276,12 @@
         const chain = getEffectChain(layer);
         for (const fx of chain) {
           if (!fx.enabled) continue;
-          applyEffect(layerCtx, fx, { asciiCanvas, outW, outH, layer, geometry, forExport });
+          applyEffect(layerCtx, fx, { asciiCanvas, outW, outH, layer, geometry, forExport, effectScale });
         }
 
-        // Clip to image bounds so effects don't bleed outside the frame
-        if (chain.some(fx => fx.enabled)) {
-          clipToImageBounds(layerCtx, geometry);
-        }
+        // Always clip ASCII layers to the image frame so partial edge cells
+        // can render and then be cleanly cut off at the bounds.
+        clipToImageBounds(layerCtx, geometry);
 
         applyLayerMask(layerCtx, layer, geometry, forExport);
       } finally {
@@ -3284,12 +4340,10 @@
       outputCtx.strokeStyle = color;
       outputCtx.lineWidth = lineWidth;
       outputCtx.beginPath();
-      for (let i = 0; i < points.length; i++) {
-        const pt = sourceToCanvasPoint(points[i][0], points[i][1], geometry);
-        if (i === 0) outputCtx.moveTo(pt.x, pt.y);
-        else outputCtx.lineTo(pt.x, pt.y);
-      }
-      if (closePath && points.length > 2) outputCtx.closePath();
+      traceSmoothPath(outputCtx, points, (pt) => {
+        const mapped = sourceToCanvasPoint(pt[0], pt[1], geometry);
+        return [mapped.x, mapped.y];
+      }, closePath);
       outputCtx.stroke();
       outputCtx.restore();
     }
@@ -3368,6 +4422,31 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
+    function appendSelectionStrokePoint(point, spacing, force = false) {
+      if (!point) return false;
+      const points = selectionState.rawPoints;
+      if (!points.length) {
+        points.push([point[0], point[1]]);
+        return true;
+      }
+
+      const prev = points[points.length - 1];
+      const distance = distance2D(prev, point);
+      if (!distance) return false;
+      if (!force && distance < spacing) return false;
+
+      const safeSpacing = Math.max(0.0001, spacing);
+      const steps = Math.max(1, Math.ceil(distance / safeSpacing));
+      for (let step = 1; step <= steps; step++) {
+        const t = step / steps;
+        points.push([
+          prev[0] + (point[0] - prev[0]) * t,
+          prev[1] + (point[1] - prev[1]) * t
+        ]);
+      }
+      return true;
+    }
+
     function resampleClosedPath(points, spacing) {
       if (points.length < 2) return points.slice();
       const segments = [];
@@ -3397,6 +4476,31 @@
       return samples.length >= 3 ? samples : points.slice();
     }
 
+    function smoothClosedPath(points, iterations = 1) {
+      let current = points.slice();
+      if (current.length < 3) return current;
+
+      const passes = Math.max(0, Math.min(3, Math.round(iterations)));
+      for (let pass = 0; pass < passes; pass++) {
+        const next = [];
+        for (let i = 0; i < current.length; i++) {
+          const a = current[i];
+          const b = current[(i + 1) % current.length];
+          next.push([
+            a[0] * 0.75 + b[0] * 0.25,
+            a[1] * 0.75 + b[1] * 0.25
+          ]);
+          next.push([
+            a[0] * 0.25 + b[0] * 0.75,
+            a[1] * 0.25 + b[1] * 0.75
+          ]);
+        }
+        current = next;
+      }
+
+      return current;
+    }
+
     function finalizeSelectionStroke() {
       if (!selectionState.drawing) return;
       selectionState.drawing = false;
@@ -3421,10 +4525,13 @@
       }
 
       const savedRawPoints = [...selectionState.rawPoints];
-      const sampleSpacing = Math.max(2, 5 / geometry.scale);
+      const sampleSpacing = Math.max(1.25, 3.5 / geometry.scale);
       const sampled = resampleClosedPath(savedRawPoints, sampleSpacing);
-      const previewPts = sampled;
-      const normalized = sampled.map(([x, y]) => [
+      const smoothPasses = sampled.length > 420 ? 2 : sampled.length > 180 ? 3 : 4;
+      const smoothed = smoothClosedPath(sampled, smoothPasses);
+      const finalPath = resampleClosedPath(smoothed, Math.max(1, sampleSpacing * 0.6));
+      const previewPts = finalPath;
+      const normalized = finalPath.map(([x, y]) => [
         clamp(x / geometry.srcW, 0, 1),
         clamp(y / geometry.srcH, 0, 1)
       ]);
@@ -3465,6 +4572,12 @@
         magnitude: Math.sqrt(gx * gx + gy * gy),
         angle: Math.atan2(gy, gx)
       };
+    }
+
+    function sourcePixelOffset(srcW, srcH, x, y) {
+      const px = Math.max(0, Math.min(srcW - 1, x));
+      const py = Math.max(0, Math.min(srcH - 1, y));
+      return (py * srcW + px) * 4;
     }
 
     function renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
@@ -3632,7 +4745,7 @@
           if (!shouldRenderByStrength(strength, row, col)) continue;
           char = attenuateCharFromPalette(char, ' .:oO', strength);
           if (char === ' ') continue;
-          const pi = (cy * srcW + cx) * 4;
+          const pi = sourcePixelOffset(srcW, srcH, cx, cy);
 
           const baseFill = layer.colorMode ? `rgb(${pixels[pi]},${pixels[pi+1]},${pixels[pi+2]})` : '#ffffff';
           outputCtx.fillStyle = getLayerDrawColor(layer, baseFill);
@@ -3680,7 +4793,7 @@
             for (let dx = 0; dx < cellSize; dx += sampleStep) {
               const px = col * stride + dx;
               const py = row * stride + dy;
-              const i = (py * srcW + px) * 4;
+              const i = sourcePixelOffset(srcW, srcH, px, py);
               r += pixels[i]; g += pixels[i + 1]; b += pixels[i + 2]; count++;
             }
           }
@@ -3836,31 +4949,52 @@
       return { canvas: _bloomAsciiCanvas, ctx: _bloomAsciiCtx };
     }
 
+    function grainSizeToPixels(sizeControl) {
+      const t = clamp((sizeControl - 1) / 99, 0, 1);
+      return 1 + Math.pow(t, 2.35) * 23;
+    }
+
     let _grainSeed = 0;
-    function applyGrain(ctx, w, h, layer) {
+    function applyGrain(ctx, w, h, layer, effectScale = 1) {
       const amount = layer.grainAmount / 100;
       if (amount <= 0) return;
-      const size = Math.max(1, layer.grainSize);
+      const size = Math.max(1, grainSizeToPixels(layer.grainSize) * effectScale);
       const roughness = layer.grainRoughness / 100;
       const strength = amount * 80; // max ±80 levels at full amount
       const seed = _grainSeed++;
+      const roughCurve = Math.pow(roughness, 1.35);
+      const fineCell = Math.max(1, size * (1 - roughCurve * 0.94));
+      const mediumScale = Math.max(1, size * (0.9 - roughCurve * 0.55));
+      const coarseScale = Math.max(1, size * 1.35);
 
       const imageData = ctx.getImageData(0, 0, w, h);
       const data = imageData.data;
-      const invSize = 1 / size;
 
       for (let i = 0; i < data.length; i += 4) {
         if (data[i + 3] === 0) continue; // skip transparent pixels
         const px = (i >> 2) % w;
         const py = ((i >> 2) / w) | 0;
 
-        const nx = px * invSize;
-        const ny = py * invSize;
+        const coarse = valueNoise2D(px / coarseScale, py / coarseScale, seed) * 2 - 1;
+        const medium = valueNoise2D(px / mediumScale, py / mediumScale, seed + 101) * 2 - 1;
+        const cellNoise = hashNoise2D(Math.floor(px / fineCell), Math.floor(py / fineCell), seed + 211) * 2 - 1;
+        const speckle = hashNoise2D(px, py, seed + 307) * 2 - 1;
 
-        const smooth = valueNoise2D(nx, ny, seed) * 2 - 1;
-        const harsh = hashNoise2D(px, py, seed) * 2 - 1;
-        const noise = smooth + roughness * (harsh - smooth);
-        const offset = noise * strength;
+        const coarseWeight = 1 - roughCurve;
+        const mediumWeight = 0.35 + roughCurve * 0.35;
+        const cellWeight = roughCurve * 0.95;
+        const speckleWeight = roughCurve * roughCurve * 0.55;
+        const totalWeight = coarseWeight + mediumWeight + cellWeight + speckleWeight;
+        const noise = totalWeight > 0
+          ? (
+            coarse * coarseWeight +
+            medium * mediumWeight +
+            cellNoise * cellWeight +
+            speckle * speckleWeight
+          ) / totalWeight
+          : coarse;
+        const contrastBoost = 0.85 + roughCurve * 0.75;
+        const offset = noise * strength * contrastBoost;
 
         data[i]     = Math.max(0, Math.min(255, data[i]     + offset));
         data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + offset));
@@ -3869,37 +5003,246 @@
       ctx.putImageData(imageData, 0, 0);
     }
 
-    function wordArtifactChar(row, col, layer) {
-      if (!layer.wordArtifactEnabled || !layer.wordArtifact) return null;
-      const word = layer.wordArtifact;
-      const t = Math.floor(Date.now() / 2000);
-      const hash = ((row * 2654435761) ^ ((col + t) * 2246822519)) >>> 0;
-      const rand = (hash % 10000) / 10000;
-      if (rand > layer.wordArtifactDensity) return null;
-      const cHash = ((row * 1597334677) ^ (col * 3812015801)) >>> 0;
-      if ((cHash % 10000) / 10000 < layer.wordArtifactCoherence) {
-        return word[(col + t) % word.length];
-      }
-      return word[hash % word.length];
+    function mod(n, m) {
+      return ((n % m) + m) % m;
     }
 
-    function renderReplacement(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
-      const stride = Math.round(cellSize * (1 + layer.gap));
+    function normalizeWordArtifactDistribution(mode) {
+      if (mode === 'brick' || mode === 'random' || mode === 'cluster') return mode;
+      return 'stream';
+    }
+
+    function wordArtifactChar(row, col, layer) {
+      if (!layer.wordArtifactEnabled || !layer.wordArtifact) return null;
+      const word = layer.wordArtifact.trim();
+      if (!word) return null;
+      const density = clamp(layer.wordArtifactDensity ?? 0, 0, 1);
+      const coherence = clamp(layer.wordArtifactCoherence ?? 0, 0, 1);
+      if (density <= 0) return null;
+
+      const glyphs = Array.from(word);
+      const wordLen = glyphs.length;
+      if (!wordLen) return null;
+      const mode = normalizeWordArtifactDistribution(layer.wordArtifactDistribution);
+      const seed = hashString(`${layer.id}:${word}`);
+      const basePhase = seed % Math.max(1, wordLen);
+
+      let coherentIndex = 0;
+      let occupied = false;
+
+      if (mode === 'random') {
+        occupied = density >= 0.995 || hashNoise2D(col, row, seed + 17) <= density;
+        coherentIndex = mod(col + row * 2 + basePhase, wordLen);
+      } else if (mode === 'cluster') {
+        const field = fbmNoise2D(col * 0.18, row * 0.18, seed + 71) * 0.82 + hashNoise2D(col, row, seed + 131) * 0.18;
+        occupied = density >= 0.995 || field >= (1 - density);
+        coherentIndex = mod(Math.floor(col * 0.75 + row * 1.35) + basePhase, wordLen);
+      } else {
+        // Rows and Brick both keep word streams intact; Brick simply staggers alternating rows.
+        const rowHash = ((row * 1103515245) ^ (wordLen * 2654435761) ^ seed) >>> 0;
+        const rowRand = (rowHash % 10000) / 10000;
+        const rowCoverage = Math.min(1, density * 1.35);
+        if (rowRand > rowCoverage) return null;
+
+        const gapCells = density >= 0.995 ? 0 : Math.round(Math.pow(1 - density, 1.15) * wordLen * 4);
+        const period = wordLen + gapCells;
+        const rowPhase = Math.round((((rowHash >>> 8) % Math.max(1, wordLen * 2)) - wordLen) * (1 - coherence));
+        const brickShift = mode === 'brick' ? Math.floor(period * 0.5) * (row & 1) : 0;
+        const streamIndex = mod(col + basePhase + rowPhase + brickShift, period);
+        if (streamIndex >= wordLen) return null;
+        occupied = true;
+        coherentIndex = streamIndex;
+      }
+
+      if (!occupied) return null;
+
+      const coherentChar = glyphs[coherentIndex];
+      if (coherence >= 0.995) return coherentChar;
+
+      const seqRand = hashNoise2D(col, row, seed + 211);
+      if (seqRand < coherence) {
+        return coherentChar;
+      }
+
+      const randomIndex = Math.floor(hashNoise2D(col + basePhase, row - basePhase, seed + 307) * wordLen) % wordLen;
+      return glyphs[randomIndex];
+    }
+
+    function drawBlockGlyph(ctx, char, x, y, cellW, cellH, rotation = 0) {
+      const metrics = ctx.measureText(char);
+      const inkWidth = Math.max(1, (metrics.actualBoundingBoxLeft || 0) + (metrics.actualBoundingBoxRight || 0) || metrics.width || 1);
+      const inkCenter = ((metrics.actualBoundingBoxRight || 0) - (metrics.actualBoundingBoxLeft || 0)) * 0.5;
+      const scaleX = cellW / inkWidth;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x - cellW * 0.5, y - cellH * 0.5, cellW, cellH);
+      ctx.clip();
+      ctx.translate(x, y);
+      if (rotation) ctx.rotate(rotation);
+      ctx.scale(scaleX, 1);
+      ctx.fillText(char, -inkCenter, 0);
+      ctx.restore();
+    }
+
+    function measureGlyphInk(ctx, char) {
+      const metrics = ctx.measureText(char);
+      const inkLeft = metrics.actualBoundingBoxLeft || 0;
+      const inkRight = metrics.actualBoundingBoxRight || metrics.width || 1;
+      const inkAscent = metrics.actualBoundingBoxAscent || parseFloat(ctx.font) || 1;
+      const inkDescent = metrics.actualBoundingBoxDescent || 0;
+      return {
+        inkLeft,
+        inkRight,
+        inkAscent,
+        inkDescent,
+        inkWidth: Math.max(1, inkLeft + inkRight),
+        inkHeight: Math.max(1, inkAscent + inkDescent)
+      };
+    }
+
+    function measureCharsetInk(ctx, chars) {
+      const glyphs = Array.from(chars).filter(char => char.trim() !== '');
+      const summary = { maxWidth: 1, maxHeight: 1 };
+      for (const char of glyphs) {
+        const metrics = measureGlyphInk(ctx, char);
+        summary.maxWidth = Math.max(summary.maxWidth, metrics.inkWidth);
+        summary.maxHeight = Math.max(summary.maxHeight, metrics.inkHeight);
+      }
+      return summary;
+    }
+
+    const denseGlyphPathCache = new Map();
+    const denseOutlineMetrics = (() => {
+      const outlines = window.DENSE_GLYPH_OUTLINES || {};
+      let maxWidth = 1;
+      let maxHeight = 1;
+      for (const char of ['░', '▒', '▓', '█']) {
+        const glyph = outlines[char];
+        if (!glyph) continue;
+        maxWidth = Math.max(maxWidth, Math.max(1, glyph.xMax - glyph.xMin));
+        maxHeight = Math.max(maxHeight, Math.max(1, glyph.yMax - glyph.yMin));
+      }
+      return {
+        maxWidth,
+        maxHeight,
+        aspect: maxWidth / maxHeight
+      };
+    })();
+
+    function getDenseCellWidth(cellHeight) {
+      return Math.max(1, Math.round(cellHeight * denseOutlineMetrics.aspect));
+    }
+
+    function getDenseGlyphOutline(char) {
+      const data = (window.DENSE_GLYPH_OUTLINES || {})[char];
+      if (!data) return null;
+      if (!denseGlyphPathCache.has(char)) {
+        denseGlyphPathCache.set(char, { ...data, path2d: new Path2D(data.path) });
+      }
+      return denseGlyphPathCache.get(char);
+    }
+
+    function drawDenseGlyphOutline(ctx, char, left, top, width, height) {
+      const glyph = getDenseGlyphOutline(char);
+      if (!glyph) return false;
+
+      const glyphWidth = Math.max(1, glyph.xMax - glyph.xMin);
+      const glyphHeight = Math.max(1, glyph.yMax - glyph.yMin);
+      const drawScale = Math.min(width / glyphWidth, height / glyphHeight);
+      const drawWidth = glyphWidth * drawScale;
+      const drawHeight = glyphHeight * drawScale;
+      const drawLeft = left + (width - drawWidth) * 0.5;
+      const drawTop = top + (height - drawHeight) * 0.5;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(left, top, width, height);
+      ctx.clip();
+      ctx.translate(drawLeft, drawTop + drawHeight);
+      ctx.scale(drawScale, -drawScale);
+      ctx.translate(-glyph.xMin, -glyph.yMin);
+      ctx.fill(glyph.path2d);
+      ctx.restore();
+      return true;
+    }
+
+    function drawFittedGlyph(ctx, char, left, top, width, height) {
+      ctx.save();
+      const prevAlign = ctx.textAlign;
+      const prevBaseline = ctx.textBaseline;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      const metrics = ctx.measureText(char);
+      const inkLeft = metrics.actualBoundingBoxLeft || 0;
+      const inkRight = metrics.actualBoundingBoxRight || metrics.width || 1;
+      const inkAscent = metrics.actualBoundingBoxAscent || parseFloat(ctx.font) || 1;
+      const inkDescent = metrics.actualBoundingBoxDescent || 0;
+      const inkWidth = Math.max(1, inkLeft + inkRight);
+      const inkHeight = Math.max(1, inkAscent + inkDescent);
+      const scaleX = width / inkWidth;
+      const scaleY = height / inkHeight;
+      ctx.beginPath();
+      ctx.rect(left, top, width, height);
+      ctx.clip();
+      ctx.translate(left, top);
+      ctx.scale(scaleX, scaleY);
+      ctx.fillText(char, -inkLeft, inkAscent);
+      ctx.textAlign = prevAlign;
+      ctx.textBaseline = prevBaseline;
+      ctx.restore();
+    }
+
+    const BLOCK_HEIGHT_MAP = Object.freeze({
+      '▁': 1 / 8,
+      '▂': 2 / 8,
+      '▃': 3 / 8,
+      '▄': 4 / 8,
+      '▅': 5 / 8,
+      '▆': 6 / 8,
+      '▇': 7 / 8,
+      '█': 1
+    });
+
+    function drawBlockVector(ctx, char, left, top, width, height) {
+      const fillRatio = BLOCK_HEIGHT_MAP[char];
+      if (!fillRatio) return false;
+      const fillHeight = Math.max(1, Math.round(height * fillRatio));
+      const fillTop = top + height - fillHeight;
+      ctx.fillRect(left, fillTop, width, fillHeight);
+      return true;
+    }
+
+    function renderReplacement(pixels, srcW, srcH, cols, rows, cellWidth, cellHeight, chars, scale, offsetX, offsetY, layer, maskMetrics) {
+      const strideX = Math.round(cellWidth * (1 + layer.gap));
+      const strideY = Math.round(cellHeight * (1 + layer.gap));
       const isBraille = layer.variant === 'Braille';
-      const fontSize = cellSize * scale * (isBraille ? 1.14 : 1) * gapFontScale(layer.gap);
+      const isBlocks = layer.variant === 'Blocks';
+      const isDense = layer.variant === 'Dense';
+      let fontSize = cellHeight * scale * replacementFontScale(layer);
+      if (isDense) {
+        outputCtx.font = `${fontSize}px ${layer.font}`;
+        const charsetMetrics = measureCharsetInk(outputCtx, chars);
+        const fitScale = Math.min(
+          (cellWidth * scale) / Math.max(1, charsetMetrics.maxWidth),
+          (cellHeight * scale) / Math.max(1, charsetMetrics.maxHeight)
+        );
+        fontSize *= fitScale;
+      }
       outputCtx.font = `${fontSize}px ${layer.font}`;
       outputCtx.textBaseline = 'middle';
       outputCtx.textAlign = 'center';
 
-      const sampleStep = Math.max(1, Math.floor(cellSize / 4));
+      const sampleStepX = Math.max(1, Math.floor(cellWidth / 4));
+      const sampleStepY = Math.max(1, Math.floor(cellHeight / 4));
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           let r = 0, g = 0, b = 0, count = 0;
-          for (let dy = 0; dy < cellSize; dy += sampleStep) {
-            for (let dx = 0; dx < cellSize; dx += sampleStep) {
-              const px = col * stride + dx;
-              const py = row * stride + dy;
-              const i = (py * srcW + px) * 4;
+          for (let dy = 0; dy < cellHeight; dy += sampleStepY) {
+            for (let dx = 0; dx < cellWidth; dx += sampleStepX) {
+              const px = col * strideX + dx;
+              const py = row * strideY + dy;
+              const i = sourcePixelOffset(srcW, srcH, px, py);
               r += pixels[i];
               g += pixels[i + 1];
               b += pixels[i + 2];
@@ -3913,8 +5256,8 @@
           let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
           if (layer.invert) lum = 1 - lum;
 
-          const cx = col * stride + Math.floor(cellSize / 2);
-          const cy = row * stride + Math.floor(cellSize / 2);
+          const cx = col * strideX + Math.floor(cellWidth / 2);
+          const cy = row * strideY + Math.floor(cellHeight / 2);
           const strength = sampleMaskStrength(maskMetrics, cx, cy);
           if (!shouldRenderByStrength(strength, row, col)) continue;
 
@@ -3932,12 +5275,29 @@
             }
           }
 
-          const x = offsetX + (col + 0.5) * stride * scale;
-          const y = offsetY + (row + 0.5) * stride * scale;
+          const x = offsetX + (col * strideX + cellWidth * 0.5) * scale;
+          const y = offsetY + (row * strideY + cellHeight * 0.5) * scale;
+          const cellW = Math.max(1, cellWidth * scale);
+          const cellH = Math.max(1, cellHeight * scale);
+          const left = Math.round(offsetX + col * strideX * scale);
+          const top = Math.round(offsetY + row * strideY * scale);
+          const right = Math.round(offsetX + (col * strideX + cellWidth) * scale);
+          const bottom = Math.round(offsetY + (row * strideY + cellHeight) * scale);
+          const drawW = Math.max(1, right - left);
+          const drawH = Math.max(1, bottom - top);
 
           const baseFill = layer.colorMode ? `rgb(${r},${g},${b})` : '#ffffff';
           outputCtx.fillStyle = getLayerDrawColor(layer, baseFill);
-          if (layer.charRotation) {
+          if (isDense) {
+            if (!drawDenseGlyphOutline(outputCtx, char, left, top, drawW, drawH)) {
+              outputCtx.fillText(char, x, y);
+            }
+          } else if (isBlocks) {
+            if (!drawBlockVector(outputCtx, char, left, top, drawW, drawH)) {
+              const angle = layer.charRotation ? sobelAt(pixels, srcW, srcH, cx, cy).angle : 0;
+              drawBlockGlyph(outputCtx, char, x, y, cellW, cellH, angle);
+            }
+          } else if (layer.charRotation) {
             const { angle } = sobelAt(pixels, srcW, srcH, cx, cy);
             outputCtx.save();
             outputCtx.translate(x, y);
@@ -3975,7 +5335,7 @@
             for (let dx = 0; dx < cellSize; dx += sampleStep) {
               const px = col * stride + dx;
               const py = row * stride + dy;
-              const i = (py * srcW + px) * 4;
+              const i = sourcePixelOffset(srcW, srcH, px, py);
               r += pixels[i]; g += pixels[i + 1]; b += pixels[i + 2]; count++;
             }
           }
@@ -4311,7 +5671,7 @@
 
           let fill = '#ffffff';
           if (layer.colorMode) {
-            const pi = (cy * srcW + cx) * 4;
+            const pi = sourcePixelOffset(srcW, srcH, cx, cy);
             fill = `rgb(${pixels[pi]},${pixels[pi+1]},${pixels[pi+2]})`;
           }
 
@@ -4407,13 +5767,17 @@
       if (!selectionState.active || !selectionState.drawing || e.pointerId !== selectionState.pointerId) return;
       const geometry = getRenderGeometry();
       if (!geometry) return;
-      const canvasPoint = clientToCanvasPoint(e.clientX, e.clientY);
-      const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
-      const nextPoint = [sourcePoint.x, sourcePoint.y];
-      const prevPoint = selectionState.rawPoints[selectionState.rawPoints.length - 1];
-      const minSpacing = Math.max(1, 5 / geometry.scale);
-      if (!prevPoint || distance2D(prevPoint, nextPoint) >= minSpacing) {
-        selectionState.rawPoints.push(nextPoint);
+      const events = typeof e.getCoalescedEvents === 'function'
+        ? e.getCoalescedEvents()
+        : [e];
+      const captureSpacing = Math.max(0.75, 2.5 / geometry.scale);
+      let changed = false;
+      for (const sampleEvent of events) {
+        const canvasPoint = clientToCanvasPoint(sampleEvent.clientX, sampleEvent.clientY);
+        const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
+        changed = appendSelectionStrokePoint([sourcePoint.x, sourcePoint.y], captureSpacing) || changed;
+      }
+      if (changed) {
         render();
       }
       e.preventDefault();
@@ -4423,12 +5787,14 @@
       if (!selectionState.drawing || e.pointerId !== selectionState.pointerId) return;
       const geometry = getRenderGeometry();
       if (geometry) {
-        const canvasPoint = clientToCanvasPoint(e.clientX, e.clientY);
-        const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
-        const nextPoint = [sourcePoint.x, sourcePoint.y];
-        const prevPoint = selectionState.rawPoints[selectionState.rawPoints.length - 1];
-        if (!prevPoint || distance2D(prevPoint, nextPoint) >= Math.max(1, 3 / geometry.scale)) {
-          selectionState.rawPoints.push(nextPoint);
+        const events = typeof e.getCoalescedEvents === 'function'
+          ? e.getCoalescedEvents()
+          : [e];
+        const captureSpacing = Math.max(0.75, 2.5 / geometry.scale);
+        for (const sampleEvent of events) {
+          const canvasPoint = clientToCanvasPoint(sampleEvent.clientX, sampleEvent.clientY);
+          const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
+          appendSelectionStrokePoint([sourcePoint.x, sourcePoint.y], captureSpacing, sampleEvent === events[events.length - 1]);
         }
       }
       if (outputCanvas.hasPointerCapture(e.pointerId)) outputCanvas.releasePointerCapture(e.pointerId);
@@ -4563,35 +5929,113 @@
 
     // Export menu toggle
     const exportMenu = document.getElementById('exportMenu');
+    const exportPngBtn = document.getElementById('exportPngBtn');
+    const recordQualityBtn = document.getElementById('recordQualityBtn');
+    const recordQualitySelect = document.getElementById('recordQualitySelect');
+    const recordFpsBtn = document.getElementById('recordFpsBtn');
+    const recordFpsSelect = document.getElementById('recordFpsSelect');
+    setupMenuNavigation(exportMenu, {
+      itemSelector: 'button',
+      onEscape: () => {
+        hideFloatingPanel(exportMenu);
+        exportPngBtn.focus({ preventScroll: true });
+      }
+    });
     document.getElementById('exportPngBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      exportMenu.classList.toggle('hidden');
+      const opened = toggleFloatingPanel(exportMenu, e.currentTarget, { align: 'right', placement: 'bottom', gap: 4, maxHeight: 340 });
+      if (opened) requestAnimationFrame(() => focusMenuNavigationDefault(exportMenu, 'button'));
     });
     document.getElementById('exportNormal').addEventListener('click', () => {
-      exportMenu.classList.add('hidden');
+      hideFloatingPanel(exportMenu);
       exportPNG();
     });
     document.getElementById('exportTransparent').addEventListener('click', () => {
-      exportMenu.classList.add('hidden');
+      hideFloatingPanel(exportMenu);
       exportTransparentPNG();
     });
+    exportMenu.addEventListener('click', (e) => e.stopPropagation());
     // Close menu on outside click
-    document.addEventListener('click', () => exportMenu.classList.add('hidden'));
+    document.addEventListener('click', (e) => {
+      if (!eventIsInsidePanel(exportMenu, exportPngBtn, e)) {
+        hideFloatingPanel(exportMenu);
+      }
+    });
 
     // ============ VIDEO RECORDING ============
     let mediaRecorder = null;
     let recordedChunks = [];
+    const RECORDING_PRESETS = {
+      high: { label: 'High', baseBitrate: 18000000 },
+      max: { label: 'Max', baseBitrate: 32000000 }
+    };
+
+    function pickRecordingMimeType() {
+      const candidates = [
+        'video/webm;codecs=vp9',
+        'video/webm;codecs=vp8',
+        'video/webm'
+      ];
+      for (const candidate of candidates) {
+        if (window.MediaRecorder?.isTypeSupported?.(candidate)) return candidate;
+      }
+      return '';
+    }
+
+    function getRecordingSettings() {
+      const quality = recordQualitySelect?.value || 'high';
+      const fps = parseInt(recordFpsSelect?.value || '60', 10);
+      return {
+        quality: RECORDING_PRESETS[quality] ? quality : 'high',
+        fps: fps === 30 ? 30 : 60
+      };
+    }
+
+    function estimateRecordingBitrate(width, height, fps, quality) {
+      const preset = RECORDING_PRESETS[quality] || RECORDING_PRESETS.high;
+      const pixelScale = Math.max(0.55, (width * height) / (1920 * 1080));
+      const fpsScale = Math.pow(Math.max(1, fps) / 30, 0.9);
+      return Math.round(clamp(preset.baseBitrate * pixelScale * fpsScale, 12000000, 80000000));
+    }
+
+    function updateRecordingCodecHint() {
+      const hint = document.getElementById('recordCodecHint');
+      if (!hint) return;
+      const mimeType = pickRecordingMimeType();
+      let label = 'Auto';
+      if (mimeType.includes('vp9')) label = 'VP9';
+      else if (mimeType.includes('vp8')) label = 'VP8';
+      else if (mimeType.includes('webm')) label = 'WebM';
+      hint.textContent = `Codec: ${label}`;
+    }
+
+    recordQualitySelect.value = 'high';
+    recordFpsSelect.value = '60';
+    bindStaticPicker(recordQualityBtn, recordQualitySelect, RECORD_QUALITY_OPTIONS, () => {
+      updateRecordingCodecHint();
+    }, { align: 'right', placement: 'bottom', compact: true, matchWidth: true, maxHeight: 160, gap: 4 });
+    bindStaticPicker(recordFpsBtn, recordFpsSelect, RECORD_FPS_OPTIONS, () => {
+      updateRecordingCodecHint();
+    }, { align: 'right', placement: 'bottom', compact: true, matchWidth: true, maxHeight: 160, gap: 4 });
+    updateRecordingCodecHint();
 
     function startRecording() {
       if (!state.sourceElement) return;
-      const stream = outputCanvas.captureStream(30);
-      mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      const { quality, fps } = getRecordingSettings();
+      const stream = outputCanvas.captureStream(fps);
+      const mimeType = pickRecordingMimeType();
+      const recorderOptions = {
+        videoBitsPerSecond: estimateRecordingBitrate(outputCanvas.width, outputCanvas.height, fps, quality)
+      };
+      if (mimeType) recorderOptions.mimeType = mimeType;
+      mediaRecorder = new MediaRecorder(stream, recorderOptions);
       recordedChunks = [];
       mediaRecorder.ondataavailable = e => {
         if (e.data.size > 0) recordedChunks.push(e.data);
       };
       mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const blobType = mediaRecorder?.mimeType || mimeType || 'video/webm';
+        const blob = new Blob(recordedChunks, { type: blobType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -4681,7 +6125,7 @@
       document.getElementById('outlineFillGValue').value = rgb.g;
       document.getElementById('outlineFillBValue').value = rgb.b;
       if (!isOutline || !layer.outlineFill) {
-        document.getElementById('outlineFillPopover').classList.add('hidden');
+        hideFloatingPanel(document.getElementById('outlineFillPopover'));
       }
     }
 
@@ -4710,7 +6154,7 @@
       manualColorGValue.value = rgb.g;
       manualColorBValue.value = rgb.b;
       if (!layer.manualColorEnabled) {
-        manualColorPopover.classList.add('hidden');
+        hideFloatingPanel(manualColorPopover);
       }
     }
 
@@ -4759,13 +6203,17 @@
       variantSelect.value = layer.variant;
       document.getElementById('variantBtn').textContent = layer.variant;
       // Cell size
-      cellSizeInput.value = layer.cellSize;
-      cellSizeValue.value = layer.cellSize;
+      const cellSizeMax = syncCellSizeControlRange(layer);
+      const clampedCellSize = clamp(layer.cellSize || CELL_SIZE_DEFAULT, CELL_SIZE_MIN, cellSizeMax);
+      if (clampedCellSize !== layer.cellSize) layer.cellSize = clampedCellSize;
+      cellSizeInput.value = clampedCellSize;
+      cellSizeValue.value = clampedCellSize;
       // Gap
       gapInput.value = layer.gap;
       gapValue.value = layer.gap;
       // Font
       fontSelect.value = layer.font;
+      setSelectButtonLabel(fontBtn, labelForOption(FONT_OPTIONS, layer.font));
       // Toggles
       document.getElementById('invertToggle').checked = layer.invert;
       document.getElementById('colorModeToggle').checked = layer.colorMode;
@@ -4787,6 +6235,8 @@
       const wordArtifactsEnabled = !!layer.wordArtifactEnabled;
       wordArtifactToggle.checked = wordArtifactsEnabled;
       wordArtifactInput.value = layer.wordArtifact;
+      wordArtifactDistributionSelect.value = normalizeWordArtifactDistribution(layer.wordArtifactDistribution);
+      setSelectButtonLabel(wordArtifactDistributionBtn, labelForOption(WORD_ARTIFACT_DISTRIBUTION_OPTIONS, wordArtifactDistributionSelect.value));
       wordArtifactDensitySlider.value = Math.round(layer.wordArtifactDensity * 100);
       wordArtifactDensityValue.value = Math.round(layer.wordArtifactDensity * 100);
       wordArtifactCoherenceSlider.value = Math.round(layer.wordArtifactCoherence * 100);
@@ -4818,18 +6268,22 @@
       list.innerHTML = '';
       state.layers.slice().reverse().forEach((layer) => {
         const row = document.createElement('div');
-        row.className = `layer-row flex items-center gap-2 px-3 py-2 cursor-pointer border-b border-[#222] transition-[background,box-shadow,transform,opacity] duration-100 ${layer.id === state.activeLayerId ? 'bg-[#1a1a1a] border-l-2 border-l-white' : 'hover:bg-[#1a1a1a]'}`;
+        row.className = `layer-row flex items-center gap-2 px-3 py-3 cursor-pointer border-b border-[#222] transition-[background,box-shadow,transform,opacity] duration-100 ${layer.id === state.activeLayerId ? 'bg-[#1a1a1a] border-l-2 border-l-[#e2ff3a]' : 'hover:bg-[#1a1a1a]'}`;
         row.dataset.layerId = layer.id;
         const variantLabel = layer.kind === 'source' ? (state.source === 'video' ? 'VIDEO' : 'IMAGE') : layer.variant;
         const opacityLabel = `${Math.round(layer.opacity * 100)}%`;
+        const duplicateHidden = layer.kind === 'source' ? 'invisible' : '';
         const deleteHidden = layer.kind === 'source' || asciiLayerCount() <= 1 ? 'invisible' : '';
         row.innerHTML = `
           <button class="layer-vis text-[10px] font-mono ${layer.visible ? 'text-white' : 'text-[#333]'}" data-id="${layer.id}" title="${layer.visible ? 'Hide layer' : 'Show layer'}">${layerVisibilityIcon(layer.visible)}</button>
-          <div class="flex-1 min-w-0">
-            <div class="text-[10px] font-mono text-white truncate">${layer.name}</div>
-            <div class="text-[9px] font-mono text-[#555]">${variantLabel} · ${opacityLabel}</div>
+          <div class="flex-1 min-w-0 flex flex-col gap-1">
+            <div class="text-[10px] font-mono text-white truncate uppercase tracking-wider">${layer.name}</div>
+            <div class="text-[10px] font-mono text-[#666] uppercase tracking-wider">${variantLabel} · ${opacityLabel}</div>
           </div>
-          <button class="layer-del text-[10px] font-mono text-[#444] hover:text-red-400 ${deleteHidden}" data-id="${layer.id}">\u2715</button>
+          <div class="flex flex-col items-end justify-center gap-1 w-[34px]">
+            <button class="layer-dup text-[8px] font-mono uppercase tracking-wider text-[#444] hover:text-white text-right ${duplicateHidden}" data-id="${layer.id}">DUP</button>
+            <button class="layer-del text-[10px] font-mono text-[#444] hover:text-red-400 text-right ${deleteHidden}" data-id="${layer.id}">\u2715</button>
+          </div>
         `;
         // Drag-and-drop reordering
         row.draggable = true;
@@ -4873,7 +6327,7 @@
           layerDragState.placement = null;
         });
         row.addEventListener('click', (e) => {
-          if (e.target.closest('.layer-vis') || e.target.closest('.layer-del')) return;
+          if (e.target.closest('.layer-vis') || e.target.closest('.layer-dup') || e.target.closest('.layer-del')) return;
           if (selectionState.active) cancelSelectionStroke();
           state.activeLayerId = layer.id;
           syncUIToLayer(layer);
@@ -4886,6 +6340,10 @@
           layer.visible = !layer.visible;
           renderLayerPanel();
           render();
+        });
+        row.querySelector('.layer-dup').addEventListener('click', (e) => {
+          e.stopPropagation();
+          duplicateLayer(layer.id);
         });
         // Delete button
         row.querySelector('.layer-del').addEventListener('click', (e) => {
@@ -4904,12 +6362,54 @@
       updateMaskControls();
     }
 
+    function cloneLayerData(layer, overrides = {}) {
+      const duplicate = {
+        ...layer,
+        ...overrides,
+        id: crypto.randomUUID()
+      };
+      if (layer.postProcess) duplicate.postProcess = { ...layer.postProcess };
+      if (layer.effectChain) {
+        duplicate.effectChain = layer.effectChain.map(fx => ({
+          ...fx,
+          id: newFxId(),
+          params: { ...fx.params }
+        }));
+      }
+      if (layer.mask) {
+        duplicate.mask = { ...layer.mask };
+        if (layer.mask.regions) {
+          duplicate.mask.regions = layer.mask.regions.map(region => ({
+            ...region,
+            points: region.points.map(point => [...point])
+          }));
+        }
+        if (layer.mask.points) {
+          duplicate.mask.points = layer.mask.points.map(point => [...point]);
+        }
+      }
+      return duplicate;
+    }
+
     function addLayer() {
       if (selectionState.active) cancelSelectionStroke();
       const layer = createLayer();
       state.layers.push(layer);
       state.activeLayerId = layer.id;
       syncUIToLayer(layer);
+      renderLayerPanel();
+      render();
+    }
+
+    function duplicateLayer(id) {
+      const source = state.layers.find(layer => layer.id === id);
+      if (!source || source.kind === 'source') return;
+      if (selectionState.active) cancelSelectionStroke();
+      const idx = state.layers.findIndex(layer => layer.id === id);
+      const duplicate = cloneLayerData(source, { name: `${source.name} Copy` });
+      state.layers.splice(idx + 1, 0, duplicate);
+      state.activeLayerId = duplicate.id;
+      syncUIToLayer(duplicate);
       renderLayerPanel();
       render();
     }
@@ -5021,19 +6521,22 @@
       blendModeDropdown.innerHTML = '';
       const current = activeLayer().blendMode;
       BLEND_MODES.forEach(([value, label]) => {
-        const item = document.createElement('div');
-        item.className = `px-3 py-1.5 text-[10px] font-mono cursor-pointer ${value === current ? 'text-white bg-[#222]' : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'}`;
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = `ui-menu-item${value === current ? ' active' : ''}`;
         item.textContent = label;
-        item.addEventListener('mouseenter', () => {
+        const preview = () => {
           if (_blendBeforePreview === null) _blendBeforePreview = activeLayer().blendMode;
           activeLayer().blendMode = value;
           render();
-        });
+        };
+        item.addEventListener('mouseenter', preview);
+        item.addEventListener('focus', preview);
         item.addEventListener('click', () => {
           _blendBeforePreview = null;
           activeLayer().blendMode = value;
           blendModeBtn.textContent = label;
-          blendModeDropdown.classList.add('hidden');
+          hideFloatingPanel(blendModeDropdown);
           render();
         });
         blendModeDropdown.appendChild(item);
@@ -5043,10 +6546,28 @@
     blendModeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const wasOpen = !blendModeDropdown.classList.contains('hidden');
-      blendModeDropdown.classList.toggle('hidden');
+      if (wasOpen) {
+        hideFloatingPanel(blendModeDropdown);
+      } else {
+        showFloatingPanel(blendModeDropdown, blendModeBtn, { align: 'right', placement: 'top', gap: 6, maxHeight: 320 });
+      }
       if (!wasOpen) {
         _blendBeforePreview = activeLayer().blendMode;
         buildBlendDropdown();
+        setupMenuNavigation(blendModeDropdown, {
+          itemSelector: '.ui-menu-item',
+          onEscape: () => {
+            if (_blendBeforePreview !== null) {
+              activeLayer().blendMode = _blendBeforePreview;
+              _blendBeforePreview = null;
+              render();
+            }
+            hideFloatingPanel(blendModeDropdown);
+            blendModeBtn.focus({ preventScroll: true });
+          }
+        });
+        positionFloatingPanel(blendModeDropdown, blendModeBtn, { align: 'right', placement: 'top', gap: 6, maxHeight: 320 });
+        requestAnimationFrame(() => focusMenuNavigationDefault(blendModeDropdown));
       }
     });
 
@@ -5059,13 +6580,13 @@
     blendModeDropdown.addEventListener('mouseenter', () => {});
 
     document.addEventListener('click', (e) => {
-      if (!blendModeDropdown.contains(e.target) && e.target !== blendModeBtn) {
+      if (!eventIsInsidePanel(blendModeDropdown, blendModeBtn, e)) {
         if (_blendBeforePreview !== null) {
           activeLayer().blendMode = _blendBeforePreview;
           _blendBeforePreview = null;
           render();
         }
-        blendModeDropdown.classList.add('hidden');
+        hideFloatingPanel(blendModeDropdown);
       }
     });
 
@@ -5088,38 +6609,50 @@
     // ============ PROJECT MENU EVENTS ============
     const projectBtn = document.getElementById('projectBtn');
     const projectMenu = document.getElementById('projectMenu');
+    setupMenuNavigation(projectMenu, {
+      itemSelector: 'button',
+      onEscape: () => {
+        hideFloatingPanel(projectMenu);
+        projectBtn.focus({ preventScroll: true });
+      }
+    });
 
     projectBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const wasHidden = projectMenu.classList.contains('hidden');
-      projectMenu.classList.toggle('hidden');
-      if (wasHidden) renderProjectList();
+      if (wasHidden) {
+        renderProjectList();
+        showFloatingPanel(projectMenu, projectBtn, { align: 'left', placement: 'bottom', gap: 4, maxHeight: 360 });
+        requestAnimationFrame(() => focusMenuNavigationDefault(projectMenu, 'button'));
+      } else {
+        hideFloatingPanel(projectMenu);
+      }
     });
 
     document.getElementById('projectSave').addEventListener('click', () => {
       doSaveProject();
-      projectMenu.classList.add('hidden');
+      hideFloatingPanel(projectMenu);
     });
     document.getElementById('projectSaveAs').addEventListener('click', () => {
       doSaveAsProject();
-      projectMenu.classList.add('hidden');
+      hideFloatingPanel(projectMenu);
     });
     document.getElementById('projectRename').addEventListener('click', () => {
       doRenameProject();
-      projectMenu.classList.add('hidden');
+      hideFloatingPanel(projectMenu);
     });
     document.getElementById('projectDelete').addEventListener('click', () => {
       doDeleteProject();
-      projectMenu.classList.add('hidden');
+      hideFloatingPanel(projectMenu);
     });
     document.getElementById('projectClose').addEventListener('click', () => {
       doCloseProject();
-      projectMenu.classList.add('hidden');
+      hideFloatingPanel(projectMenu);
     });
 
     document.addEventListener('click', (e) => {
-      if (!projectMenu.contains(e.target) && e.target !== projectBtn) {
-        projectMenu.classList.add('hidden');
+      if (!eventIsInsidePanel(projectMenu, projectBtn, e)) {
+        hideFloatingPanel(projectMenu);
       }
     });
 

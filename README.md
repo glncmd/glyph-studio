@@ -1,40 +1,46 @@
-# Glyph Studio
+# ASCII_FX
 
-Real-time ASCII art renderer with layers, masks, and compositing effects.
+`ASCII_FX` is a browser-based ASCII art playground for turning images, video, and live camera input into layered, stylized output. The app ships as a tiny static project: one HTML app file plus a generated dense-glyph data file used for high-density character rendering.
 
-## Features
+## What It Does
 
-- **Layer system** — multiple independent ASCII layers with opacity and blend mode control
-- **Mask editing** — lasso tool with composition modes (add, subtract, intersect via Shift/Alt modifiers), feathering, and invert
-- **Character variants** — swap between ASCII character sets (Standard, Blocks, Braille, Kanji, and more)
-- **Contour mode** — Sobel edge detection overlay with spread and sensitivity controls
-- **Bloom & glow** — post-processing bloom with multiple styles (soft, sharp, anamorphic) and tunable radius/intensity
-- **Post-processing** — per-layer paint-spread, organic edges, splatter, and softness effects
-- **Video & webcam** — upload video files or use your webcam as a live ASCII source with full playback controls
-- **Export** — PNG (with optional transparency) and WebM video recording
-- **Projects** — save and restore layer configurations to local storage
+- Renders uploaded images, video files, and live webcam input as ASCII.
+- Stacks multiple ASCII layers with per-layer visibility, opacity, and blend modes.
+- Switches between variants including Standard, Dense, Minimal, Blocks, Braille, Technical, Matrix, Hatching, Contour, Outline, and Highlight.
+- Adds lasso masks with replace, add, subtract, and intersect behavior plus invert and feather controls.
+- Applies layer effects including bloom, grain, ink bleed, chromatic aberration, pixelate, and multiple blur types.
+- Embeds word artifacts with adjustable distribution, density, and coherence.
+- Saves projects to local storage and exports PNG, transparent PNG, and WebM recordings.
 
-## Mask Composition
+## Project Structure
 
-Hold modifier keys when starting a lasso stroke to combine with the existing mask:
+- `index.html` - main application UI and rendering pipeline
+- `dense-glyph-paths.js` - generated outline data for dense glyph rendering
 
-| Modifier | Mode |
-|----------|------|
-| None | New (replace) |
-| Shift | Add (union) |
-| Alt/Option | Subtract (cut hole) |
-| Shift+Alt | Intersect |
+## Running Locally
 
-The toolbar shows the active mode and a GUIDES toggle to show/hide selection outlines.
+Open `index.html` in a modern desktop browser.
 
-## Usage
+For image and video uploads, opening the file directly is enough. Webcam access may require serving the folder from `localhost` because browsers often restrict camera APIs to secure contexts.
 
-Open `index.html` in a modern browser. No build step or server required.
+## Mask Shortcuts
 
-Upload an image or video, or start your webcam, and adjust settings in the sidebar.
+When starting a lasso stroke:
 
-## Tech Stack
+- No modifier: replace the current mask
+- `Shift`: add to the current mask
+- `Alt` / `Option`: subtract from the current mask
+- `Shift` + `Alt` / `Option`: intersect with the current mask
 
-- Vanilla JavaScript (single `index.html`)
+## Notes For GitHub
+
+- `dense-glyph-paths.js` is a required runtime asset and should be committed.
+- `.dense-glyph-paths.json` and `.ibmplexmono-glyphs.ttx` are local generation artifacts and are ignored.
+- There is no build step or package manager setup in this repo right now.
+
+## Stack
+
+- Vanilla JavaScript
+- HTML canvas
 - [Tailwind CSS](https://tailwindcss.com/) via CDN
-- IBM Plex Mono typeface
+- IBM Plex Mono via Google Fonts
