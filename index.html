@@ -405,20 +405,25 @@
 <body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col font-mono text-white">
 
   <!-- Top Bar -->
-  <div class="flex items-center px-3 py-1.5 border-b border-[#1a1a1a] bg-[#0a0a0a] gap-2">
-    <!-- Brand -->
-    <div class="text-[11px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mx-2 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
+  <div id="topBar" class="relative flex items-center px-3 py-1.5 border-b border-[#1a1a1a] bg-[#0a0a0a] gap-2">
+    <div class="flex w-[220px] flex-shrink-0 items-center justify-between">
+      <!-- Brand -->
+      <div class="text-[13px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mx-2 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
 
-    <!-- Source -->
-    <div class="flex items-center gap-1">
-      <button id="imageBtn" class="tb" title="Upload Image (drag & drop supported)">IMG</button>
-      <button id="videoBtn" class="tb" title="Upload Video">VID</button>
+      <div class="flex items-center">
+        <!-- Source -->
+        <div class="flex items-center gap-1 mr-3">
+          <button id="imageBtn" class="tb" title="Upload Image (drag & drop supported)">IMG</button>
+          <button id="videoBtn" class="tb" title="Upload Video">VID</button>
+        </div>
+      </div>
     </div>
-    <div class="w-px h-5 bg-[#222]"></div>
 
     <!-- Project -->
-    <div class="relative">
-      <button id="projectBtn" class="tb" title="Project" style="max-width:160px;overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
+    <div id="projectAnchor" class="absolute top-1/2 z-10">
+      <div class="relative -translate-x-1/2 -translate-y-1/2">
+        <button id="projectBtn" class="tb" title="Project" style="max-width:min(42vw,220px);overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
+      </div>
       <div id="projectMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap min-w-[180px] overflow-y-auto">
         <button id="projectSave" class="ui-menu-item ui-menu-item-compact">Save<span class="float-right text-[#444] normal-case tracking-normal ml-4">&#8984;S</span></button>
         <button id="projectSaveAs" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Save As…</button>
@@ -1341,7 +1346,9 @@
     const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
     const outputCanvas = document.getElementById('outputCanvas');
     let outputCtx = outputCanvas.getContext('2d');
+    const topBar = document.getElementById('topBar');
     const canvasArea = document.getElementById('canvasArea');
+    const projectAnchor = document.getElementById('projectAnchor');
     const drawer = document.getElementById('settingsDrawer');
     const settingsBtn = document.getElementById('settingsBtn');
 
@@ -1413,6 +1420,14 @@
 
       panel.style.left = `${Math.round(left)}px`;
       panel.style.top = `${Math.round(top)}px`;
+    }
+
+    function updateProjectButtonPosition() {
+      if (!topBar || !canvasArea || !projectAnchor) return;
+      const topBarRect = topBar.getBoundingClientRect();
+      const canvasRect = canvasArea.getBoundingClientRect();
+      const centerX = canvasRect.left - topBarRect.left + canvasRect.width / 2;
+      projectAnchor.style.left = `${Math.round(centerX)}px`;
     }
 
     function showFloatingPanel(panel, anchor, options = {}) {
@@ -3151,6 +3166,7 @@
         drawer.classList.remove('w-[280px]');
         drawer.classList.add('w-0');
       }
+      updateProjectButtonPosition();
     }
     settingsBtn.addEventListener('click', () => {
       setDrawerOpen(!state.drawerOpen);
@@ -4099,6 +4115,7 @@
       const area = canvasArea.getBoundingClientRect();
       const w = Math.round(area.width);
       const h = Math.round(area.height);
+      updateProjectButtonPosition();
       if (outputCanvas.width === w && outputCanvas.height === h) return;
       outputCanvas.width = w;
       outputCanvas.height = h;
@@ -4112,8 +4129,12 @@
       sourceCanvas.height = srcH;
       if (state.source === 'image' || (state.source === 'video' && state.sourceElement.paused)) render();
     }
-    new ResizeObserver(resizeCanvas).observe(canvasArea);
+    new ResizeObserver(() => {
+      resizeCanvas();
+      updateProjectButtonPosition();
+    }).observe(canvasArea);
     window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', updateProjectButtonPosition);
 
     // ============ OFFSCREEN CANVAS POOL ============
     const layerCanvasPool = new Map();
@@ -6281,8 +6302,8 @@
             <div class="text-[10px] font-mono text-[#666] uppercase tracking-wider">${variantLabel} · ${opacityLabel}</div>
           </div>
           <div class="flex flex-col items-end justify-center gap-1 w-[34px]">
-            <button class="layer-dup text-[8px] font-mono uppercase tracking-wider text-[#444] hover:text-white text-right ${duplicateHidden}" data-id="${layer.id}">DUP</button>
             <button class="layer-del text-[10px] font-mono text-[#444] hover:text-red-400 text-right ${deleteHidden}" data-id="${layer.id}">\u2715</button>
+            <button class="layer-dup text-[8px] font-mono uppercase tracking-wider text-[#444] hover:text-white text-right ${duplicateHidden}" data-id="${layer.id}">DUP</button>
           </div>
         `;
         // Drag-and-drop reordering
@@ -6441,6 +6462,7 @@
         panel.classList.remove('w-[220px]');
         panel.classList.add('w-0');
       }
+      updateProjectButtonPosition();
     }
 
     // Layer panel event listeners
@@ -6622,7 +6644,7 @@
       const wasHidden = projectMenu.classList.contains('hidden');
       if (wasHidden) {
         renderProjectList();
-        showFloatingPanel(projectMenu, projectBtn, { align: 'left', placement: 'bottom', gap: 4, maxHeight: 360 });
+        showFloatingPanel(projectMenu, projectBtn, { align: 'center', placement: 'bottom', gap: 4, maxHeight: 360 });
         requestAnimationFrame(() => focusMenuNavigationDefault(projectMenu, 'button'));
       } else {
         hideFloatingPanel(projectMenu);
@@ -6668,6 +6690,7 @@
     syncUIToLayer(activeLayer());
     renderLayerPanel();
     resizeCanvas();
+    updateProjectButtonPosition();
   </script>
 </body>
 </html>
