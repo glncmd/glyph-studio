@@ -3,54 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASCII_FX</title>
+  <title>GLYPH_STUDIO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="./dense-glyph-paths.js"></script>
   <script>
     tailwind.config = {
       theme: {
-        fontFamily: {
-          mono: ['IBM Plex Mono', 'monospace'],
-        },
+        extend: {
+          colors: {
+            'primary': '#fb460d',
+            'primary-container': '#ff5627',
+            'surface': '#131313',
+            'surface-low': '#1b1b1b',
+            'surface-container': '#1f1f1f',
+            'surface-high': '#2a2a2a',
+            'surface-highest': '#353535',
+            'on-surface': '#e2e2e2',
+            'on-surface-variant': '#e6bdb3',
+            'outline-variant': '#5d4038',
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace'],
+            headline: ['Space Grotesk', 'sans-serif'],
+            label: ['Space Grotesk', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        }
       }
     }
   </script>
   <style>
-    *, *::before, *::after { font-family: 'IBM Plex Mono', monospace; }
+    *, *::before, *::after { font-family: 'JetBrains Mono', monospace; }
 
-    /* Brutalist range slider — flat bar, square thumb */
+    /* Scrollbar — technical feel */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #0e0e0e; }
+    ::-webkit-scrollbar-thumb { background: #1f1f1f; }
+    ::-webkit-scrollbar-thumb:hover { background: #fb460d; }
+
+    /* Brutalist range slider — filled track + square notched thumb */
     input[type="range"] {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 2px;
-      background: #333;
+      height: 1px;
+      background: linear-gradient(to right, #fb460d var(--range-fill, 0%), #2a2a2a var(--range-fill, 0%));
       border-radius: 0;
       outline: none;
       cursor: pointer;
+      margin-bottom: 4px;
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 8px;
-      height: 10px;
-      background: #fff;
+      width: 12px;
+      height: 14px;
+      background: #fb460d;
+      background-image: linear-gradient(to bottom, #fb460d 3px, transparent 3px, transparent calc(100% - 3px), #fb460d calc(100% - 3px)),
+                        linear-gradient(to right, #fb460d calc(50% - 0.5px), #000 calc(50% - 0.5px), #000 calc(50% + 0.5px), #fb460d calc(50% + 0.5px));
       border-radius: 0;
       cursor: pointer;
       border: none;
     }
+    input[type="range"]::-moz-range-track {
+      height: 1px;
+      background: #2a2a2a;
+      border: none;
+    }
+    input[type="range"]::-moz-range-progress {
+      height: 1px;
+      background: #fb460d;
+    }
     input[type="range"]::-moz-range-thumb {
-      width: 8px;
-      height: 10px;
-      background: #fff;
+      width: 12px;
+      height: 14px;
+      background: #fb460d;
+      background-image: linear-gradient(to bottom, #fb460d 3px, transparent 3px, transparent calc(100% - 3px), #fb460d calc(100% - 3px)),
+                        linear-gradient(to right, #fb460d calc(50% - 0.5px), #000 calc(50% - 0.5px), #000 calc(50% + 0.5px), #fb460d calc(50% + 0.5px));
       border-radius: 0;
       cursor: pointer;
       border: none;
     }
 
-    /* Toggle — brutalist square */
+    /* Toggle — brutalist square, orange accent */
     .toggle-switch {
       position: relative;
       width: 32px;
@@ -62,8 +99,7 @@
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #1a1a1a;
-      border: 1px solid #333;
+      background-color: #1b1b1b;
       transition: background-color 0.15s;
     }
     .toggle-slider::before {
@@ -72,16 +108,16 @@
       height: 10px;
       width: 10px;
       left: 2px;
-      bottom: 2px;
-      background-color: #555;
+      bottom: 3px;
+      background-color: #353535;
       transition: transform 0.15s, background-color 0.15s;
     }
     .toggle-switch input:checked + .toggle-slider {
-      border-color: #fff;
+      background-color: rgba(251,70,13,0.15);
     }
     .toggle-switch input:checked + .toggle-slider::before {
       transform: translateX(16px);
-      background-color: #fff;
+      background-color: #fb460d;
     }
 
     /* Drawer min-width */
@@ -89,12 +125,12 @@
 
     /* Recording pulse */
     @keyframes pulse-red {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.6); }
-      50% { box-shadow: 0 0 0 6px rgba(255, 0, 0, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 70, 13, 0.6); }
+      50% { box-shadow: 0 0 0 6px rgba(251, 70, 13, 0); }
     }
     .recording {
-      background: #ff0000 !important;
-      border-color: #ff0000 !important;
+      background: #fb460d !important;
+      border-color: #fb460d !important;
       color: #000 !important;
       animation: pulse-red 1.2s infinite;
     }
@@ -102,37 +138,64 @@
     /* Select arrow override */
     select { background-image: none; }
 
-    /* Toolbar button base */
-    .tb {
-      border: 1px solid #333;
-      background: transparent;
-      color: #666;
-      padding: 6px 10px;
+    /* Nav tab — top bar navigation */
+    .nav-tab {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
+      color: #52525b;
+      background: transparent;
+      border: none;
+      padding: 0;
+      padding-top: 2px;
       cursor: pointer;
-      transition: color 0.1s, border-color 0.1s;
+      transition: color 0.12s;
+      border-bottom: 2px solid transparent;
       white-space: nowrap;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
     }
-    .tb:hover { color: #fff; border-color: #666; }
+    .nav-tab:hover { color: #fb460d; }
+    .nav-tab-active {
+      color: #fb460d;
+      border-bottom-color: #fb460d;
+    }
+
+    /* Toolbar button base — ghost border style */
+    .tb {
+      background: transparent;
+      color: #52525b;
+      padding: 6px 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: color 0.1s, background-color 0.1s;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+    .tb:hover { color: #fb460d; background: rgba(251,70,13,0.06); }
     .tb:disabled,
     .tb[disabled] {
-      color: #333;
-      border-color: #222;
+      color: #2a2a2a;
       cursor: not-allowed;
     }
     .tb-active {
-      color: #fff;
-      border-color: #e2ff3a;
+      color: #fb460d;
+      border-color: #fb460d;
     }
-    .variant-arrow { border-color: #333; position: relative; }
-    .variant-arrow:hover { color: #fff; border-color: #666; z-index: 1; }
+    .variant-arrow { position: relative; border-color: #2a2a2a; }
+    .variant-arrow:hover { color: #fb460d; border-color: #5d4038; z-index: 1; }
     .panel-trigger-open {
       position: relative;
       z-index: 2;
-      border-color: #e2ff3a !important;
-      box-shadow: inset 0 0 0 1px rgba(226,255,58,0.12);
+      border-color: #fb460d !important;
+      color: #fb460d !important;
+      background: rgba(251,70,13,0.06);
     }
     #variantBtn { position: relative; }
     #variantBtn:hover,
@@ -143,65 +206,67 @@
       width: 116px;
       min-height: 26px;
       padding: 5px 10px;
-      border: 1px solid #333;
-      background: #0a0a0a;
-      color: #9b9b9b;
-      font-family: monospace;
+      border: none;
+      border-left: 2px solid transparent;
+      background: #1f1f1f;
+      color: #e2e2e2;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.05em;
       outline: none;
       transition: border-color 0.12s, color 0.12s;
     }
     .artifact-word-input::placeholder {
-      color: #4f4f4f;
+      color: #52525b;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
     .artifact-word-input:focus {
-      border-color: #666;
-      color: #c2c2c2;
+      border-left-color: #fb460d;
+      color: #e2e2e2;
     }
 
-    /* Section divider */
+    /* Section divider — Space Grotesk label style */
     .section-label {
-      font-size: 9px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: #444;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #1a1a1a;
-      margin-bottom: 10px;
+      letter-spacing: 0.2em;
+      color: #52525b;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #1f1f1f;
     }
 
-    /* Scrollbar */
+    /* Scrollbar overrides */
     #settingsDrawer::-webkit-scrollbar { width: 4px; }
     #settingsDrawer::-webkit-scrollbar-track { background: transparent; }
-    #settingsDrawer::-webkit-scrollbar-thumb { background: #222; }
+    #settingsDrawer::-webkit-scrollbar-thumb { background: #1f1f1f; }
     #layerList::-webkit-scrollbar { width: 4px; }
     #layerList::-webkit-scrollbar-track { background: transparent; }
-    #layerList::-webkit-scrollbar-thumb { background: #222; }
+    #layerList::-webkit-scrollbar-thumb { background: #1f1f1f; }
     .layer-row.dragging {
       opacity: 0.35;
       transform: scale(0.985);
     }
     .layer-row.drop-before {
-      box-shadow: inset 0 2px 0 0 rgba(255,255,255,0.95);
-      background: #171717;
+      box-shadow: inset 0 2px 0 0 #fb460d;
+      background: #1b1b1b;
     }
     .layer-row.drop-after {
-      box-shadow: inset 0 -2px 0 0 rgba(255,255,255,0.95);
-      background: #171717;
+      box-shadow: inset 0 -2px 0 0 #fb460d;
+      background: #1b1b1b;
     }
-    .fx-card { border: 1px solid #222; border-radius: 4px; background: #111; margin-bottom: 2px; }
+    .fx-card { background: #1b1b1b; margin-bottom: 2px; border: none; border-radius: 0; }
     .fx-card.dragging { opacity: 0.35; transform: scale(0.985); }
-    .fx-card.drop-before { box-shadow: inset 0 2px 0 0 rgba(255,255,255,0.95); background: #171717; }
-    .fx-card.drop-after { box-shadow: inset 0 -2px 0 0 rgba(255,255,255,0.95); background: #171717; }
+    .fx-card.drop-before { box-shadow: inset 0 2px 0 0 #fb460d; background: #1f1f1f; }
+    .fx-card.drop-after { box-shadow: inset 0 -2px 0 0 #fb460d; background: #1f1f1f; }
     .fx-drag { cursor: grab; user-select: none; font-size: 14px; line-height: 1; }
     .fx-card[draggable="true"]:active .fx-drag { cursor: grabbing; }
-    #addEffectDropdown { position: absolute; z-index: 50; background: #111; border: 1px solid #333; border-radius: 4px; min-width: 180px; max-height: 300px; overflow-y: auto; }
-    #addEffectDropdown .fx-menu-item { display: block; width: 100%; padding: 6px 12px; border: 0; background: transparent; text-align: left; font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #888; cursor: pointer; white-space: nowrap; }
-    #addEffectDropdown .fx-menu-item:hover { background: #1a1a1a; color: #fff; }
-    #addEffectDropdown .fx-menu-header { padding: 6px 12px; font-size: 9px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; color: #444; pointer-events: none; }
+    #addEffectDropdown { position: absolute; z-index: 50; background: #2a2a2a; min-width: 180px; max-height: 300px; overflow-y: auto; }
+    #addEffectDropdown .fx-menu-item { display: block; width: 100%; padding: 6px 12px; border: 0; background: transparent; text-align: left; font-size: 10px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; cursor: pointer; white-space: nowrap; }
+    #addEffectDropdown .fx-menu-item:hover { background: #353535; color: #fb460d; }
+    #addEffectDropdown .fx-menu-header { padding: 6px 12px; font-size: 9px; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; letter-spacing: 0.15em; color: #52525b; pointer-events: none; }
     .ui-select-btn {
       display: flex;
       align-items: center;
@@ -210,22 +275,23 @@
       width: 100%;
       min-height: 31px;
       padding: 6px 12px;
-      border: 1px solid #333;
-      background: #0a0a0a;
-      color: #fff;
-      font-family: monospace;
+      border: none;
+      border-left: 2px solid transparent;
+      background: #1f1f1f;
+      color: #e2e2e2;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       cursor: pointer;
-      transition: border-color 0.12s, color 0.12s, box-shadow 0.12s;
+      transition: border-color 0.12s, color 0.12s, background-color 0.12s;
     }
     .ui-select-btn:hover {
-      border-color: #666;
+      background: #2a2a2a;
     }
     .ui-select-btn.ui-select-open {
-      border-color: #e2ff3a;
-      box-shadow: inset 0 0 0 1px rgba(226,255,58,0.12);
+      border-left-color: #fb460d;
+      background: #2a2a2a;
     }
     .ui-select-btn-sm {
       min-height: 26px;
@@ -241,66 +307,63 @@
       text-align: left;
     }
     .ui-select-caret {
-      color: #555;
+      color: #52525b;
       font-size: 10px;
       line-height: 1;
       flex-shrink: 0;
     }
     .ui-menu-panel {
       z-index: 80;
-      background: #111;
-      border: 1px solid #333;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+      background: #2a2a2a;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
       overflow-y: auto;
       overscroll-behavior: contain;
       scrollbar-width: thin;
-      scrollbar-color: #333 transparent;
+      scrollbar-color: #353535 transparent;
     }
     .ui-menu-panel::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     .ui-menu-panel::-webkit-scrollbar-track {
       background: transparent;
     }
     .ui-menu-panel::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 999px;
-      border: 2px solid #111;
+      background: #353535;
     }
     .ui-menu-panel::-webkit-scrollbar-thumb:hover {
-      background: #4a4a4a;
+      background: #fb460d;
     }
     .ui-menu-item {
       display: block;
       width: 100%;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border: 0;
       background: transparent;
-      color: #888;
+      color: #71717a;
       text-align: left;
-      font-family: monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       white-space: nowrap;
       cursor: pointer;
-      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+      transition: background 0.1s, color 0.1s, box-shadow 0.1s;
     }
     .ui-menu-item:hover,
     .fx-menu-item:hover {
-      background: #242424;
-      color: #fff;
-      box-shadow: inset 2px 0 0 #e2ff3a;
+      background: #353535;
+      color: #fb460d;
+      box-shadow: inset 3px 0 0 #fb460d;
     }
     .ui-menu-item.active {
-      background: #242424;
-      color: #fff;
-      box-shadow: inset 2px 0 0 #e2ff3a;
+      background: #353535;
+      color: #fb460d;
+      box-shadow: inset 3px 0 0 #fb460d;
     }
     .fx-menu-item.active {
-      background: #242424;
-      color: #fff;
-      box-shadow: inset 2px 0 0 #e2ff3a;
+      background: #353535;
+      color: #fb460d;
+      box-shadow: inset 3px 0 0 #fb460d;
     }
     .ui-menu-item-compact {
       padding: 9px 12px;
@@ -316,20 +379,20 @@
       outline: none;
     }
     .menu-nav-active {
-      background: #242424 !important;
-      color: #fff !important;
-      box-shadow: inset 2px 0 0 #e2ff3a;
+      background: #353535 !important;
+      color: #fb460d !important;
+      box-shadow: inset 3px 0 0 #fb460d;
     }
     .ui-menu-panel:hover .ui-menu-item.active:not(:hover):not(.menu-nav-active),
     .ui-menu-panel:hover .fx-menu-item.active:not(:hover):not(.menu-nav-active) {
       background: transparent;
-      color: #888;
+      color: #71717a;
       box-shadow: none;
     }
     .ui-menu-panel.keyboard-nav .ui-menu-item.active:not(.menu-nav-active),
     .ui-menu-panel.keyboard-nav .fx-menu-item.active:not(.menu-nav-active) {
       background: transparent;
-      color: #888;
+      color: #71717a;
       box-shadow: none;
     }
     .layer-vis svg {
@@ -337,10 +400,29 @@
       height: 16px;
       display: block;
     }
+    .layer-mask-btn {
+      background: none;
+      border: none;
+      padding: 3px;
+      cursor: pointer;
+      color: #fb460d;
+      transition: opacity 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .layer-mask-btn:hover { opacity: 0.7; }
+    .layer-mask-btn svg {
+      width: 12px;
+      height: 12px;
+      display: block;
+    }
+    .layer-vis {
+      padding: 3px;
+    }
     .mini-swatch {
       width: 18px;
       height: 18px;
-      border: 1px solid #444;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,0.55);
     }
 
@@ -351,111 +433,81 @@
 
     .app-modal-backdrop {
       background:
-        radial-gradient(circle at top, rgba(226,255,58,0.08), transparent 38%),
-        rgba(5,5,5,0.78);
-      backdrop-filter: blur(3px);
+        radial-gradient(circle at top, rgba(251,70,13,0.06), transparent 38%),
+        rgba(5,5,5,0.82);
+      backdrop-filter: blur(8px);
     }
     .app-modal-card {
-      border: 1px solid #333;
-      background:
-        linear-gradient(180deg, rgba(20,20,20,0.98), rgba(10,10,10,0.98));
+      background: #1f1f1f;
       box-shadow: 0 28px 80px rgba(0,0,0,0.55);
     }
     .app-modal-field {
       appearance: none;
       -webkit-appearance: none;
-      border: 1px solid #333;
-      background: #090909;
-      color: #fff;
+      border: none;
+      border-left: 2px solid transparent;
+      background: #131313;
+      color: #e2e2e2;
       outline: none !important;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
     .app-modal-field:focus {
       outline: none !important;
-      border-color: #e2ff3a;
-      box-shadow: 0 0 0 1px rgba(226,255,58,0.18);
+      border-left-color: #fb460d;
     }
     .app-modal-field:focus-visible {
       outline: none !important;
-      border-color: #e2ff3a;
-      box-shadow: 0 0 0 1px rgba(226,255,58,0.18);
+      border-left-color: #fb460d;
     }
     .app-modal-btn {
-      border: 1px solid #333;
-      background: #111;
-      color: #888;
+      border: 1px solid rgba(93,64,56,0.3);
+      background: #1b1b1b;
+      color: #71717a;
       transition: border-color 0.12s, color 0.12s, background 0.12s;
     }
     .app-modal-btn:hover {
-      border-color: #666;
-      color: #fff;
+      color: #e2e2e2;
+      background: #2a2a2a;
     }
     .app-modal-btn-primary {
-      border-color: #e2ff3a;
-      background: #e2ff3a;
-      color: #080808;
+      border-color: #fb460d;
+      background: #fb460d;
+      color: #000;
     }
     .app-modal-btn-primary:hover {
-      border-color: #f2ff8a;
-      background: #f2ff8a;
+      border-color: #ff5627;
+      background: #ff5627;
       color: #000;
     }
   </style>
 </head>
-<body class="bg-[#0a0a0a] h-screen overflow-hidden flex flex-col font-mono text-white">
+<body class="bg-[#0e0e0e] h-screen overflow-hidden flex flex-col font-mono text-on-surface">
 
   <!-- Top Bar -->
-  <div id="topBar" class="relative flex items-center px-3 py-1.5 border-b border-[#1a1a1a] bg-[#0a0a0a] gap-2">
-    <div class="flex w-[220px] flex-shrink-0 items-center justify-between">
+  <div id="topBar" class="relative flex items-center px-4 h-12 bg-[#0e0e0e] gap-2 border-b border-[#232323]">
+    <div class="flex flex-shrink-0 items-center">
       <!-- Brand -->
-      <div class="text-[13px] tracking-[0.25em] text-[#e2ff3a] uppercase select-none font-semibold mx-2 hidden sm:block">ASCII<span class="text-[#c8e030]">_FX</span></div>
+      <div class="text-[15px] tracking-tight text-primary font-bold font-headline mx-1 hidden sm:block">GLYPH_STUDIO</div>
+    </div>
 
-      <div class="flex items-center">
-        <!-- Source -->
-        <div class="flex items-center gap-1 mr-3">
-          <button id="imageBtn" class="tb" title="Upload Image (drag & drop supported)">IMG</button>
-          <button id="videoBtn" class="tb" title="Upload Video">VID</button>
+    <!-- Action Tabs (left) -->
+    <nav class="hidden md:flex items-center gap-5 ml-6 h-full">
+      <div class="relative flex items-center h-full">
+        <button id="sourceBtn" class="nav-tab" title="Import source">SOURCE</button>
+        <div id="sourceMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
+          <button id="imageBtn" class="ui-menu-item ui-menu-item-compact">Image</button>
+          <button id="videoBtn" class="ui-menu-item ui-menu-item-compact">Video</button>
         </div>
       </div>
-    </div>
-
-    <!-- Project -->
-    <div id="projectAnchor" class="absolute top-1/2 z-10">
-      <div class="relative -translate-x-1/2 -translate-y-1/2">
-        <button id="projectBtn" class="tb" title="Project" style="max-width:min(42vw,220px);overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
-      </div>
-      <div id="projectMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap min-w-[180px] overflow-y-auto">
-        <button id="projectSave" class="ui-menu-item ui-menu-item-compact">Save<span class="float-right text-[#444] normal-case tracking-normal ml-4">&#8984;S</span></button>
-        <button id="projectSaveAs" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Save As…</button>
-        <button id="projectRename" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Rename</button>
-        <button id="projectDelete" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Delete</button>
-        <button id="projectClose" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">Close</button>
-        <div id="projectListDivider" class="border-t border-[#333] mt-1 pt-1 hidden"></div>
-        <div id="projectList"></div>
-      </div>
-    </div>
-
-    <!-- Spacer -->
-    <div class="flex-1"></div>
-
-    <!-- Workspace -->
-      <div class="flex items-center gap-1">
-        <button id="layerPanelToggle" class="tb" title="Toggle Layers">LAYERS</button>
-        <button id="settingsBtn" class="tb" title="Settings">CFG</button>
-      </div>
-      <div class="w-px h-5 bg-[#222]"></div>
-
-    <!-- Export -->
-    <div class="flex items-center gap-1">
-      <div class="relative">
-        <button id="exportPngBtn" class="tb" title="Export PNG">EXPORT</button>
-        <div id="exportMenu" class="ui-menu-panel hidden absolute right-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
+      <div class="relative flex items-center h-full">
+        <button id="exportPngBtn" class="nav-tab" title="Export">EXPORT</button>
+        <div id="exportMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
           <button id="exportNormal" class="ui-menu-item ui-menu-item-compact">PNG</button>
-          <button id="exportTransparent" class="ui-menu-item ui-menu-item-compact border-t border-[#222]">PNG TRANSPARENT</button>
-          <div class="border-t border-[#222] px-3 py-2 flex flex-col gap-2">
-            <div class="text-[9px] uppercase tracking-[0.18em] text-[#555]">Rec WebM</div>
+          <button id="exportTransparent" class="ui-menu-item ui-menu-item-compact">PNG Transparent</button>
+          <div class="border-t border-[#353535] my-1"></div>
+          <div class="px-3 py-2 flex flex-col gap-2">
+            <div class="text-[9px] uppercase tracking-[0.2em] text-[#52525b] font-label">Rec WebM</div>
             <div class="flex items-center justify-between gap-3">
-              <label for="recordQualitySelect" class="text-[10px] uppercase tracking-wider text-[#666]">Quality</label>
+              <label for="recordQualitySelect" class="text-[10px] uppercase tracking-wider text-[#52525b] font-label">Quality</label>
               <div class="relative w-[92px]">
                 <button id="recordQualityBtn" type="button" class="ui-select-btn ui-select-btn-sm">
                   <span class="ui-select-value">High</span>
@@ -465,7 +517,7 @@
               </div>
             </div>
             <div class="flex items-center justify-between gap-3">
-              <label for="recordFpsSelect" class="text-[10px] uppercase tracking-wider text-[#666]">FPS</label>
+              <label for="recordFpsSelect" class="text-[10px] uppercase tracking-wider text-[#52525b] font-label">FPS</label>
               <div class="relative w-[92px]">
                 <button id="recordFpsBtn" type="button" class="ui-select-btn ui-select-btn-sm">
                   <span class="ui-select-value">60</span>
@@ -474,81 +526,140 @@
                 <input id="recordFpsSelect" type="hidden" value="60">
               </div>
             </div>
-            <div id="recordCodecHint" class="text-[9px] uppercase tracking-[0.14em] text-[#444]">Codec: Auto</div>
+            <div id="recordCodecHint" class="text-[9px] uppercase tracking-[0.14em] text-[#52525b] font-mono">Codec: Auto</div>
           </div>
         </div>
       </div>
-      <button id="recordBtn" class="tb" title="Record Video">REC</button>
+      <button id="recordBtn" class="nav-tab" title="Record Video">REC</button>
+    </nav>
+
+    <!-- Spacer -->
+    <div class="flex-1"></div>
+
+    <!-- Workspace Toggles (right) -->
+    <div class="hidden md:flex items-center gap-5 h-full mr-4">
+      <button id="layerPanelToggle" class="nav-tab nav-tab-active" title="Toggle Layers">LAYERS</button>
+      <button id="settingsBtn" class="nav-tab" title="Settings">CONFIG</button>
+    </div>
+
+    <!-- Separator -->
+    <div class="w-px h-5 bg-[#2a2a2a] hidden md:block"></div>
+
+    <!-- Project -->
+    <div id="projectAnchor" class="relative z-[60] h-full flex items-center ml-4">
+      <button id="projectBtn" title="Project" class="font-label text-[11px] uppercase tracking-[0.1em] text-on-surface bg-transparent border-none cursor-pointer hover:text-primary transition-colors whitespace-nowrap" style="max-width:min(42vw,220px);overflow:hidden;text-overflow:ellipsis">Untitled ▾</button>
+      <div id="projectMenu" class="ui-menu-panel hidden absolute right-0 top-full mt-px z-[60] whitespace-nowrap min-w-[180px] overflow-y-auto">
+        <button id="projectSave" class="ui-menu-item ui-menu-item-compact">Save<span class="float-right text-[#52525b] normal-case tracking-normal ml-4">&#8984;S</span></button>
+        <button id="projectSaveAs" class="ui-menu-item ui-menu-item-compact">Save As…</button>
+        <button id="projectRename" class="ui-menu-item ui-menu-item-compact">Rename</button>
+        <button id="projectDelete" class="ui-menu-item ui-menu-item-compact">Delete</button>
+        <button id="projectClose" class="ui-menu-item ui-menu-item-compact">Close</button>
+        <div id="projectListDivider" class="border-t border-[#353535] mt-1 pt-1 hidden"></div>
+        <div id="projectList"></div>
+      </div>
     </div>
   </div>
 
   <!-- Main area -->
   <div class="flex flex-1 overflow-hidden relative">
     <!-- Layer Panel -->
-      <div id="layerPanel" class="w-[220px] flex-shrink-0 bg-[#111] border-r border-[#333] flex flex-col transition-all duration-200 overflow-hidden">
-      <div class="flex items-center justify-between px-3 py-2 border-b border-[#333]">
-        <span class="text-[#888] text-[10px] uppercase tracking-wider font-mono">Layers</span>
-        <button id="addLayerBtn" class="text-[#888] hover:text-white text-[11px] font-mono px-2 py-0.5 border border-[#333] hover:border-[#666]">+ ADD</button>
+      <div id="layerPanel" class="w-[220px] flex-shrink-0 bg-surface flex flex-col transition-all duration-200 overflow-hidden">
+      <div class="flex items-center justify-between px-3 py-2.5">
+        <span class="text-[#52525b] text-[10px] uppercase tracking-[0.2em] font-label">Layers</span>
+        <button id="addLayerBtn" class="text-primary hover:text-[#ff5627] text-[10px] font-label uppercase tracking-[0.1em] px-2 py-0.5 border border-primary hover:border-[#ff5627] transition-colors">+ ADD</button>
       </div>
       <div id="layerList" class="flex-1 overflow-y-auto flex flex-col">
         <!-- Layer rows inserted here dynamically -->
       </div>
-      <div id="layerProperties" class="border-t border-[#333] px-3 py-2 pb-4 flex flex-col gap-2">
+      <div id="layerProperties" class="bg-surface px-3 py-3 pb-4 flex flex-col gap-2">
         <div class="flex items-center justify-between relative">
-          <label class="text-[#666] text-[10px] uppercase tracking-wider">Blend</label>
-          <button id="blendModeBtn" class="w-[132px] bg-[#0a0a0a] border border-[#333] text-white text-[10px] font-mono px-3 py-1 outline-none cursor-pointer hover:border-[#666] text-center uppercase tracking-wider">Normal</button>
-          <div id="blendModeDropdown" class="ui-menu-panel hidden absolute right-0 bottom-full mb-1 z-50 min-w-[156px] max-h-[260px]" style="scrollbar-width:thin;scrollbar-color:#333 transparent">
+          <label class="text-[#52525b] text-[10px] uppercase tracking-[0.15em] font-label">Blend</label>
+          <button id="blendModeBtn" class="w-[132px] bg-surface-container text-on-surface text-[10px] font-mono px-3 py-1.5 outline-none cursor-pointer hover:bg-surface-high text-center uppercase tracking-wider transition-colors">Normal</button>
+          <div id="blendModeDropdown" class="ui-menu-panel hidden min-w-[156px]" style="scrollbar-width:thin;scrollbar-color:#353535 transparent">
           </div>
         </div>
         <div class="flex items-center justify-between">
-          <label class="text-[#666] text-[10px] uppercase tracking-wider">Opacity</label>
-          <input id="layerOpacityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="100">
+          <label class="text-[#52525b] text-[10px] uppercase tracking-[0.15em] font-label">Opacity</label>
+          <input id="layerOpacityValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none" value="100">
         </div>
         <input type="range" id="layerOpacity" min="0" max="100" value="100" step="1">
-        <div class="border-t border-[#222] pt-3 mt-1 flex flex-col gap-2">
+        <div class="pt-3 mt-1 flex flex-col gap-2">
           <div class="flex items-center justify-between">
-            <label class="text-[#666] text-[10px] uppercase tracking-wider">Mask</label>
-            <span id="maskStatus" class="text-[10px] font-mono text-[#888]">NONE</span>
+            <label class="text-[#52525b] text-[10px] uppercase tracking-[0.15em] font-label">Mask</label>
+            <span id="maskStatus" class="text-[10px] font-mono text-[#71717a]">NONE</span>
           </div>
           <div class="flex items-center gap-1">
             <button id="maskEditBtn" class="tb flex-1 px-2 py-1 text-[10px]">EDIT</button>
             <button id="maskClearBtn" class="tb flex-1 px-2 py-1 text-[10px]">CLEAR</button>
+            <button id="maskInvertBtn" class="tb flex-1 px-2 py-1 text-[10px]">INVERT</button>
           </div>
-          <button id="maskInvertBtn" class="tb w-full px-2 py-1 text-[10px]">INVERT</button>
           <div class="flex items-center justify-between">
-            <label class="text-[#666] text-[10px] uppercase tracking-wider">Feather</label>
-            <input id="maskFeatherValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="0">
+            <label class="text-[#52525b] text-[10px] uppercase tracking-[0.15em] font-label">Feather</label>
+            <input id="maskFeatherValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none" value="0">
           </div>
           <input type="range" id="maskFeather" min="0" max="200" value="0" step="1">
         </div>
       </div>
     </div>
 
-    <div id="canvasArea" class="flex-1 relative">
+    <div id="canvasArea" class="flex-1 relative bg-[#0e0e0e] flex flex-col">
+      <div id="canvasViewport" class="flex-1 relative overflow-hidden">
       <canvas id="outputCanvas" class="absolute inset-0 w-full h-full"></canvas>
-      <div id="selectionToolbar" class="hidden absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[rgba(10,10,10,0.92)] border border-[#333] px-2 py-2 backdrop-blur-sm">
-        <span id="selectionModeLabel" class="text-[10px] text-[#666] font-mono px-1 select-none">NEW</span>
-        <button id="selectionClearBtn" class="tb px-2 py-1 text-[10px]">CLEAR</button>
-        <button id="selectionInvertBtn" class="tb px-2 py-1 text-[10px]">INVERT</button>
-        <button id="selectionGuidesBtn" class="tb tb-active px-2 py-1 text-[10px]">GUIDES</button>
-        <button id="selectionDoneBtn" class="tb px-2 py-1 text-[10px]">DONE</button>
+      <div id="selectionToolbar" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center bg-[rgba(27,27,27,0.92)] backdrop-blur-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-[#2a2a2a] overflow-hidden">
+        <div class="flex items-center gap-0.5 px-1.5 py-1.5">
+          <span class="text-[9px] uppercase tracking-[0.15em] font-label text-[#52525b] px-2 select-none">Mask</span>
+          <span id="selectionModeLabel" class="text-[9px] font-mono px-1.5 py-0.5 bg-[#1b1b1b] text-primary select-none min-w-[36px] text-center">NEW</span>
+        </div>
+        <div class="w-px h-5 bg-[#2a2a2a]"></div>
+        <div class="flex items-center gap-0.5 px-1.5 py-1.5">
+          <button id="selectionClearBtn" class="tb px-2.5 py-1 text-[10px]">CLEAR</button>
+          <button id="selectionInvertBtn" class="tb px-2.5 py-1 text-[10px]">INVERT</button>
+        </div>
+        <div class="w-px h-5 bg-[#2a2a2a]"></div>
+        <div class="flex items-center gap-0.5 px-1.5 py-1.5">
+          <button id="selectionGuidesBtn" class="tb tb-active px-2.5 py-1 text-[10px]">GUIDES</button>
+        </div>
+        <div class="w-px h-5 bg-[#2a2a2a]"></div>
+        <div class="flex items-center px-1.5 py-1.5">
+          <button id="selectionDoneBtn" class="text-[10px] font-label uppercase tracking-[0.1em] text-[#0e0e0e] bg-primary hover:bg-[#ff5627] px-3 py-1 transition-colors cursor-pointer border-none">DONE</button>
+        </div>
       </div>
       <!-- Empty state -->
-      <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none gap-3">
-        <div class="text-[#222] text-xs uppercase tracking-[0.2em]">NO SOURCE</div>
-        <div class="text-[#1a1a1a] text-[10px] tracking-wider">DROP FILE OR SELECT INPUT</div>
+      <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none gap-4">
+        <div class="text-[#2a2a2a] text-xs uppercase tracking-[0.25em] font-headline">NO SOURCE</div>
+        <div class="text-[#1f1f1f] text-[10px] tracking-[0.15em] font-label">DROP FILE OR SELECT INPUT</div>
+      </div>
+      </div>
+      <!-- Stats Bar -->
+      <div id="statsBar" class="h-8 flex items-center px-4 gap-6 bg-surface font-mono text-[9px] text-[#52525b] uppercase tracking-[0.15em] flex-shrink-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[#3f3f46]">Resolution:</span>
+          <span id="statResolution" class="text-primary">—</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[#3f3f46]">Layers:</span>
+          <span id="statLayers" class="text-primary">—</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[#3f3f46]">Variant:</span>
+          <span id="statVariant" class="text-primary">—</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[#3f3f46]">FPS:</span>
+          <span id="statFps" class="text-primary">—</span>
+        </div>
       </div>
     </div>
 
     <!-- Settings Drawer -->
-    <div id="settingsDrawer" class="w-0 overflow-hidden bg-[#0e0e0e] border-l border-[#1a1a1a] overflow-y-auto z-10 transition-all duration-200 ease-out">
+    <div id="settingsDrawer" class="w-0 overflow-hidden bg-surface overflow-y-auto z-10 transition-all duration-200 ease-out">
       <div class="p-4 flex flex-col gap-5">
         <!-- Header -->
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase tracking-[0.2em] text-[#666]">CONFIG</span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#52525b] font-label">CONFIG</span>
           <div class="flex items-center gap-3">
-            <button id="resetSettings" class="cursor-pointer text-[#333] hover:text-white text-[10px] font-mono uppercase tracking-wider">RST</button>
-            <button id="drawerClose" class="cursor-pointer text-[#333] hover:text-white text-xs font-mono">[X]</button>
+            <button id="resetSettings" class="cursor-pointer text-[#52525b] hover:text-primary text-[10px] font-label uppercase tracking-[0.1em] transition-colors">RST</button>
+            <button id="drawerClose" class="cursor-pointer text-[#52525b] hover:text-primary text-xs font-mono transition-colors">[X]</button>
           </div>
         </div>
 
@@ -557,10 +668,10 @@
           <div class="section-label">VARIANT</div>
           <div class="flex items-stretch relative">
             <button id="variantPrev" class="variant-arrow tb text-[10px] px-3 -mr-px flex items-center">&lt;</button>
-            <button id="variantBtn" class="flex-1 bg-[#0a0a0a] border border-[#333] text-white text-[11px] px-3 py-1.5 text-center cursor-pointer font-mono uppercase tracking-wider hover:border-[#666]">Standard</button>
+            <button id="variantBtn" class="flex-1 bg-surface-container text-on-surface text-[11px] px-3 py-1.5 text-center cursor-pointer font-mono uppercase tracking-wider hover:bg-surface-high transition-colors">Standard</button>
             <input type="hidden" id="variantSelect" value="Standard">
             <button id="variantNext" class="variant-arrow tb text-[10px] px-3 -ml-px flex items-center">&gt;</button>
-            <div id="variantDropdown" class="ui-menu-panel hidden absolute left-0 right-0 top-full mt-1 z-50 max-h-[300px]" style="scrollbar-width:thin;scrollbar-color:#333 transparent"></div>
+            <div id="variantDropdown" class="ui-menu-panel hidden absolute left-0 right-0 top-full mt-1 z-50 max-h-[300px]" style="scrollbar-width:thin;scrollbar-color:#353535 transparent"></div>
           </div>
         </div>
 
@@ -570,15 +681,15 @@
           <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Spread</label>
-                <input id="contourSpreadValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="2">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Spread</label>
+                <input id="contourSpreadValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="2">
               </div>
               <input type="range" id="contourSpread" min="0" max="6" value="2" step="1">
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Sensitivity</label>
-                <input id="contourSensValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="5">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Sensitivity</label>
+                <input id="contourSensValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="5">
               </div>
               <input type="range" id="contourSens" min="1" max="10" value="5" step="1">
             </div>
@@ -591,15 +702,15 @@
           <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Stroke</label>
-                <input id="outlineStrokeSizeValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="1.5">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Stroke</label>
+                <input id="outlineStrokeSizeValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none border-none" value="1.5">
               </div>
               <input type="range" id="outlineStrokeSize" min="0.5" max="8" value="1.5" step="0.5">
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Corner Radius</label>
-                <input id="outlineCornerRadiusValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]" value="0">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Corner Radius</label>
+                <input id="outlineCornerRadiusValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none border-none" value="0">
               </div>
               <input type="range" id="outlineCornerRadius" min="0" max="12" value="0" step="0.5">
             </div>
@@ -610,28 +721,10 @@
         <div id="settingsSection">
           <div class="section-label">SETTINGS</div>
           <div class="flex flex-col gap-3">
-            <!-- Cell Size -->
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Cell Size</label>
-                <input id="cellSizeValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="10">
-              </div>
-              <input type="range" id="cellSize" min="4" max="60" value="10" step="1">
-            </div>
-
-            <!-- Gap -->
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Gap</label>
-                <input id="gapValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="0">
-              </div>
-              <input type="range" id="gap" min="0" max="2" value="0" step="0.05">
-            </div>
-
             <!-- Font -->
             <div id="fontRow" class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Font</label>
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Font</label>
               </div>
               <div class="relative">
                 <button id="fontBtn" type="button" class="ui-select-btn">
@@ -642,104 +735,122 @@
               </div>
             </div>
 
-            <!-- Toggles -->
-            <div id="invertRow" class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Invert</label>
-              <label class="toggle-switch"><input type="checkbox" id="invertToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="colorModeRow" class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Color</label>
-              <label class="toggle-switch"><input type="checkbox" id="colorModeToggle"><span class="toggle-slider"></span></label>
-            </div>
-            <div id="manualColorSection" class="flex flex-col gap-3 border-t border-[#1a1a1a] pt-3">
+            <!-- Cell Size -->
+            <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label id="manualColorLabel" class="text-[#666] text-[10px] uppercase tracking-wider">ASCII Color</label>
-                <label class="toggle-switch"><input type="checkbox" id="manualColorToggle"><span class="toggle-slider"></span></label>
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Cell Size</label>
+                <input id="cellSizeValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="10">
               </div>
-              <div id="manualColorControls" class="hidden flex flex-col gap-2">
-                <div class="relative">
-                  <button id="manualColorBtn" class="w-full flex items-center justify-between bg-[#0a0a0a] border border-[#333] px-3 py-2 text-[10px] uppercase tracking-wider text-white hover:border-[#666]">
-                    <span id="manualColorBtnLabel">ASCII Tint</span>
-                    <span id="manualColorSwatch" class="mini-swatch"></span>
-                  </button>
-                  <div id="manualColorPopover" class="hidden absolute right-0 top-full mt-2 w-[220px] bg-[#111] border border-[#333] z-30 p-3 flex flex-col gap-3 shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-                    <div class="flex items-center justify-between">
-                      <span id="manualColorPopoverTitle" class="text-[10px] uppercase tracking-[0.15em] text-[#666]">Ascii Tint</span>
-                      <span id="manualColorPreview" class="mini-swatch"></span>
-                    </div>
-                    <div class="flex items-center justify-between gap-2">
-                      <label class="text-[#666] text-[10px] uppercase tracking-wider">Hex</label>
-                      <input id="manualColorHex" type="text" class="text-[#fff] text-[10px] border border-[#333] px-2 py-1 bg-transparent text-right w-24 font-mono outline-none focus:border-[#666]" value="#f2f0d8">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                      <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">R</label>
-                        <input id="manualColorRValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="242">
-                      </div>
-                      <input type="range" id="manualColorR" min="0" max="255" value="242" step="1">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                      <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">G</label>
-                        <input id="manualColorGValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="240">
-                      </div>
-                      <input type="range" id="manualColorG" min="0" max="255" value="240" step="1">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                      <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">B</label>
-                        <input id="manualColorBValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="216">
-                      </div>
-                      <input type="range" id="manualColorB" min="0" max="255" value="216" step="1">
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <input type="range" id="cellSize" min="4" max="60" value="10" step="1">
             </div>
+
+            <!-- Gap -->
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Gap</label>
+                <input id="gapValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="0">
+              </div>
+              <input type="range" id="gap" min="0" max="2" value="0" step="0.05">
+            </div>
+
+            <!-- Toggles -->
             <div id="charRotationRow" class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Rotation</label>
+              <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Rotation</label>
               <label class="toggle-switch"><input type="checkbox" id="charRotationToggle"><span class="toggle-slider"></span></label>
             </div>
-            <div id="outlineFillSection" class="hidden flex flex-col gap-3 border-t border-[#1a1a1a] pt-3">
+            <div id="outlineFillSection" class="hidden flex flex-col gap-3 pt-3">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Fill Shapes</label>
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Fill Shapes</label>
                 <label class="toggle-switch"><input type="checkbox" id="outlineFillToggle"><span class="toggle-slider"></span></label>
               </div>
               <div id="outlineFillControls" class="hidden flex flex-col gap-2">
                 <div class="relative">
-                  <button id="outlineFillBtn" class="w-full flex items-center justify-between bg-[#0a0a0a] border border-[#333] px-3 py-2 text-[10px] uppercase tracking-wider text-white hover:border-[#666]">
+                  <button id="outlineFillBtn" class="w-full flex items-center justify-between bg-surface-container px-3 py-2 text-[10px] uppercase tracking-wider text-on-surface hover:bg-surface-high transition-colors">
                     <span>Fill Color</span>
                     <span id="outlineFillSwatch" class="mini-swatch"></span>
                   </button>
-                  <div id="outlineFillPopover" class="hidden absolute right-0 top-full mt-2 w-[220px] bg-[#111] border border-[#333] z-30 p-3 flex flex-col gap-3 shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+                  <div id="outlineFillPopover" class="hidden absolute right-0 top-full mt-2 w-[220px] bg-surface-high z-30 p-3 flex flex-col gap-3 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
                     <div class="flex items-center justify-between">
-                      <span class="text-[10px] uppercase tracking-[0.15em] text-[#666]">Shape Fill</span>
+                      <span class="text-[10px] uppercase tracking-[0.15em] text-[#52525b] font-label">Shape Fill</span>
                       <span id="outlineFillPreview" class="mini-swatch"></span>
                     </div>
                     <div class="flex items-center justify-between gap-2">
-                      <label class="text-[#666] text-[10px] uppercase tracking-wider">Hex</label>
-                      <input id="outlineFillHex" type="text" class="text-[#fff] text-[10px] border border-[#333] px-2 py-1 bg-transparent text-right w-24 font-mono outline-none focus:border-[#666]" value="#1f7a4f">
+                      <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Hex</label>
+                      <input id="outlineFillHex" type="text" class="text-on-surface text-[10px] px-2 py-1 bg-surface-container text-right w-24 font-mono outline-none border-none" value="#1f7a4f">
                     </div>
                     <div class="flex flex-col gap-2">
                       <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">R</label>
-                        <input id="outlineFillRValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="31">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">R</label>
+                        <input id="outlineFillRValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="31">
                       </div>
                       <input type="range" id="outlineFillR" min="0" max="255" value="31" step="1">
                     </div>
                     <div class="flex flex-col gap-2">
                       <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">G</label>
-                        <input id="outlineFillGValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="122">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">G</label>
+                        <input id="outlineFillGValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="122">
                       </div>
                       <input type="range" id="outlineFillG" min="0" max="255" value="122" step="1">
                     </div>
                     <div class="flex flex-col gap-2">
                       <div class="flex items-center justify-between">
-                        <label class="text-[#666] text-[10px] uppercase tracking-wider">B</label>
-                        <input id="outlineFillBValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="79">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">B</label>
+                        <input id="outlineFillBValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="79">
                       </div>
                       <input type="range" id="outlineFillB" min="0" max="255" value="79" step="1">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="invertRow" class="flex items-center justify-between">
+              <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Invert</label>
+              <label class="toggle-switch"><input type="checkbox" id="invertToggle"><span class="toggle-slider"></span></label>
+            </div>
+            <div id="colorModeRow" class="flex items-center justify-between">
+              <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Color</label>
+              <label class="toggle-switch"><input type="checkbox" id="colorModeToggle"><span class="toggle-slider"></span></label>
+            </div>
+            <div id="manualColorSection" class="flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <label id="manualColorLabel" class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Tint</label>
+                <label class="toggle-switch"><input type="checkbox" id="manualColorToggle"><span class="toggle-slider"></span></label>
+              </div>
+              <div id="manualColorControls" class="hidden flex flex-col gap-2">
+                <div class="relative">
+                  <button id="manualColorBtn" class="w-full flex items-center justify-between bg-surface-container px-3 py-2 text-[10px] uppercase tracking-wider text-on-surface hover:bg-surface-high transition-colors">
+                    <span id="manualColorBtnLabel">Tint Color</span>
+                    <span id="manualColorSwatch" class="mini-swatch"></span>
+                  </button>
+                  <div id="manualColorPopover" class="hidden absolute right-0 top-full mt-2 w-[220px] bg-surface-high z-30 p-3 flex flex-col gap-3 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                    <div class="flex items-center justify-between">
+                      <span id="manualColorPopoverTitle" class="text-[10px] uppercase tracking-[0.15em] text-[#52525b] font-label">Tint Color</span>
+                      <span id="manualColorPreview" class="mini-swatch"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2">
+                      <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Hex</label>
+                      <input id="manualColorHex" type="text" class="text-on-surface text-[10px] px-2 py-1 bg-surface-container text-right w-24 font-mono outline-none border-none" value="#f2f0d8">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">R</label>
+                        <input id="manualColorRValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="242">
+                      </div>
+                      <input type="range" id="manualColorR" min="0" max="255" value="242" step="1">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">G</label>
+                        <input id="manualColorGValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="240">
+                      </div>
+                      <input type="range" id="manualColorG" min="0" max="255" value="240" step="1">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">B</label>
+                        <input id="manualColorBValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="216">
+                      </div>
+                      <input type="range" id="manualColorB" min="0" max="255" value="216" step="1">
                     </div>
                   </div>
                 </div>
@@ -753,16 +864,16 @@
           <div class="section-label">ARTIFACTS</div>
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
-              <label class="text-[#666] text-[10px] uppercase tracking-wider">Enable</label>
+              <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Enable</label>
               <label class="toggle-switch"><input type="checkbox" id="wordArtifactToggle"><span class="toggle-slider"></span></label>
             </div>
             <div id="wordArtifactControls" class="hidden flex flex-col gap-3">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Word</label>
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Word</label>
                 <input id="wordArtifactInput" type="text" class="artifact-word-input" placeholder="TYPE WORD...">
               </div>
               <div class="flex items-center justify-between gap-2">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Distribution</label>
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Distribution</label>
                 <div class="relative w-[116px]">
                   <button id="wordArtifactDistributionBtn" type="button" class="ui-select-btn ui-select-btn-sm">
                     <span class="ui-select-value">Rows</span>
@@ -773,15 +884,15 @@
               </div>
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Density</label>
-                  <input id="wordArtifactDensityValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="5">
+                  <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Density</label>
+                  <input id="wordArtifactDensityValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="5">
                 </div>
                 <input type="range" id="wordArtifactDensity" min="0" max="100" value="5" step="1">
               </div>
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
-                  <label class="text-[#666] text-[10px] uppercase tracking-wider">Coherence</label>
-                  <input id="wordArtifactCoherenceValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="30">
+                  <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Coherence</label>
+                  <input id="wordArtifactCoherenceValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="30">
                 </div>
                 <input type="range" id="wordArtifactCoherence" min="0" max="100" value="30" step="5">
               </div>
@@ -795,22 +906,22 @@
           <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Bright</label>
-                <input id="brightnessValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="1">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Bright</label>
+                <input id="brightnessValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="1">
               </div>
               <input type="range" id="brightness" min="0" max="2" step="0.05" value="1">
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Contrast</label>
-                <input id="contrastValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="1">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Contrast</label>
+                <input id="contrastValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="1">
               </div>
               <input type="range" id="contrast" min="0" max="2" step="0.05" value="1">
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#666] text-[10px] uppercase tracking-wider">Saturate</label>
-                <input id="saturationValue" type="text" class="text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none focus:border-[#666]" value="1">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Saturate</label>
+                <input id="saturationValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="1">
               </div>
               <input type="range" id="saturation" min="0" max="2" step="0.05" value="1">
             </div>
@@ -822,7 +933,7 @@
           <div class="section-label flex items-center justify-between">
             <span>EFFECTS</span>
             <div class="relative">
-              <button id="addEffectBtn" class="text-[10px] text-[#666] hover:text-white border border-[#333] px-2 py-0.5 font-mono uppercase tracking-wider cursor-pointer bg-transparent">+ Add</button>
+              <button id="addEffectBtn" class="text-[10px] text-primary hover:text-[#ff5627] border border-primary hover:border-[#ff5627] px-2 py-0.5 font-label uppercase tracking-[0.1em] cursor-pointer bg-transparent transition-colors">+ Add</button>
             </div>
           </div>
           <div id="effectChainList" class="flex flex-col gap-1"></div>
@@ -832,11 +943,11 @@
   </div>
 
   <!-- Video Controls -->
-  <div id="videoControls" class="hidden px-4 py-2 bg-[#0a0a0a] border-t border-[#1a1a1a] flex items-center gap-3">
-    <button id="playPauseBtn" class="text-white text-[10px] font-mono uppercase tracking-wider tb px-2 py-1">PLAY</button>
-    <button id="loopBtn" class="text-[10px] font-mono uppercase tracking-wider tb px-2 py-1 text-[#333]">LOOP</button>
+  <div id="videoControls" class="hidden px-4 py-2 bg-[#0e0e0e] flex items-center gap-3">
+    <button id="playPauseBtn" class="text-on-surface text-[10px] font-mono uppercase tracking-wider tb px-2 py-1">PLAY</button>
+    <button id="loopBtn" class="text-[10px] font-mono uppercase tracking-wider tb px-2 py-1 text-[#2a2a2a]">LOOP</button>
     <input type="range" id="seekBar" class="flex-1" min="0" max="100" step="0.1" value="0">
-    <span id="timeDisplay" class="text-[#444] text-[10px] font-mono tabular-nums">0:00 / 0:00</span>
+    <span id="timeDisplay" class="text-[#52525b] text-[10px] font-mono tabular-nums">0:00 / 0:00</span>
   </div>
 
   <!-- Hidden elements -->
@@ -850,15 +961,15 @@
     <form id="projectNameModalForm" class="app-modal-card relative w-full max-w-[440px] p-4 sm:p-5 flex flex-col gap-4">
       <div class="flex items-start justify-between gap-4">
         <div class="flex flex-col gap-1">
-          <div class="text-[9px] uppercase tracking-[0.25em] text-[#555]">Project</div>
-          <h2 id="projectNameModalTitle" class="text-[18px] leading-none tracking-[0.12em] uppercase text-white">Save Project</h2>
+          <div class="text-[9px] uppercase tracking-[0.25em] text-[#52525b] font-label">Project</div>
+          <h2 id="projectNameModalTitle" class="text-[18px] leading-none tracking-[0.12em] uppercase text-on-surface font-headline">Save Project</h2>
         </div>
         <button id="projectNameModalClose" type="button" class="tb px-2 py-1 text-[10px]">[X]</button>
       </div>
-      <label id="projectNameModalLabel" for="projectNameModalInput" class="text-[10px] uppercase tracking-[0.16em] text-[#666]">Project Name</label>
+      <label id="projectNameModalLabel" for="projectNameModalInput" class="text-[10px] uppercase tracking-[0.16em] text-[#52525b] font-label">Project Name</label>
       <input id="projectNameModalInput" type="text" autocomplete="off" spellcheck="false" class="app-modal-field w-full px-3 py-2.5 text-[14px] tracking-[0.05em]">
       <div class="flex items-center justify-between gap-3">
-        <div id="projectNameModalHint" class="text-[10px] uppercase tracking-[0.14em] text-[#444]">Names are saved locally</div>
+        <div id="projectNameModalHint" class="text-[10px] uppercase tracking-[0.14em] text-[#52525b] font-mono">Names are saved locally</div>
         <div class="flex items-center gap-2">
           <button id="projectNameModalCancel" type="button" class="app-modal-btn px-3 py-2 text-[10px] uppercase tracking-[0.14em]">Cancel</button>
           <button id="projectNameModalConfirm" type="submit" class="app-modal-btn app-modal-btn-primary px-3 py-2 text-[10px] uppercase tracking-[0.14em]">Save</button>
@@ -868,6 +979,22 @@
   </div>
 
   <script>
+    // ============ RANGE SLIDER FILL ============
+    function updateRangeFill(input) {
+      if (!input || input.type !== 'range') return;
+      const min = parseFloat(input.min) || 0;
+      const max = parseFloat(input.max) || 100;
+      const val = parseFloat(input.value) || 0;
+      const pct = ((val - min) / (max - min)) * 100;
+      input.style.setProperty('--range-fill', pct + '%');
+    }
+    function initAllRangeFills() {
+      document.querySelectorAll('input[type="range"]').forEach(updateRangeFill);
+    }
+    document.addEventListener('input', (e) => {
+      if (e.target.type === 'range') updateRangeFill(e.target);
+    });
+
     // ============ STATE ============
     let layerCounter = 1;
     /* ── Effect Registry ── */
@@ -1122,7 +1249,7 @@
         es.classList.remove('hidden');
         es.children[0].textContent = 'LAYERS RESTORED';
         es.children[1].textContent = 'UPLOAD AN IMAGE TO RENDER';
-        outputCtx.fillStyle = '#0a0a0a';
+        outputCtx.fillStyle = '#0e0e0e';
         outputCtx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
         // Auto-open file picker so user can quickly re-upload
         document.getElementById('imageInput').click();
@@ -1262,7 +1389,7 @@
       es.classList.remove('hidden');
       es.children[0].textContent = 'NO SOURCE';
       es.children[1].textContent = 'DROP FILE OR SELECT INPUT';
-      outputCtx.fillStyle = '#0a0a0a';
+      outputCtx.fillStyle = '#0e0e0e';
       outputCtx.fillRect(0, 0, outputCanvas.width, outputCanvas.height);
     }
 
@@ -1423,16 +1550,12 @@
     }
 
     function updateProjectButtonPosition() {
-      if (!topBar || !canvasArea || !projectAnchor) return;
-      const topBarRect = topBar.getBoundingClientRect();
-      const canvasRect = canvasArea.getBoundingClientRect();
-      const centerX = canvasRect.left - topBarRect.left + canvasRect.width / 2;
-      projectAnchor.style.left = `${Math.round(centerX)}px`;
+      // Project button is now in normal flow (right-aligned), no repositioning needed
     }
 
     function showFloatingPanel(panel, anchor, options = {}) {
       if (!panel || !anchor) return;
-      closeFloatingPanelsExcept(panel);
+      if (!options.preserveParentPanels) closeFloatingPanelsExcept(panel);
       panel.classList.remove('hidden');
       anchor.classList.add(options.anchorOpenClass || 'panel-trigger-open');
       activeFloatingPanels.set(panel, { anchor, options });
@@ -1532,13 +1655,15 @@
 
       document.body.appendChild(panel);
       anchor.classList.add('ui-select-open');
+      const anchorInsidePanel = Array.from(activeFloatingPanels.keys()).some(p => p && p.contains(anchor));
       showFloatingPanel(panel, anchor, {
         align: config.align ?? 'left',
         placement: config.placement ?? 'bottom',
         gap: config.gap ?? 6,
         matchWidth: config.matchWidth ?? true,
         maxHeight: config.maxHeight ?? 320,
-        anchorOpenClass: 'ui-select-open'
+        anchorOpenClass: 'ui-select-open',
+        preserveParentPanels: anchorInsidePanel
       });
       setupMenuNavigation(panel, {
         itemSelector: '.ui-menu-item',
@@ -2948,6 +3073,8 @@
       selectionState.rawPoints = [];
       selectionState.previewPoints = [];
       selectionState.pointerId = null;
+      selectionCapture.points = [];
+      selectionCapture.stabilized = null;
     }
 
     function exitSelectionMode() {
@@ -3166,6 +3293,7 @@
         drawer.classList.remove('w-[280px]');
         drawer.classList.add('w-0');
       }
+      settingsBtn.classList.toggle('nav-tab-active', open);
       updateProjectButtonPosition();
     }
     settingsBtn.addEventListener('click', () => {
@@ -3590,9 +3718,9 @@
         const header = document.createElement('div');
         header.className = 'flex items-center gap-2 px-2 py-1.5';
         header.innerHTML = `
-          <span class="fx-drag text-[#444]">≡</span>
-          <span class="text-[10px] text-[#888] uppercase tracking-wider flex-1 cursor-pointer fx-toggle-params" style="font-family:monospace">${getEffectLabel(fx)}</span>
-          <button class="fx-del text-[10px] text-[#444] hover:text-red-400 cursor-pointer bg-transparent border-none" style="font-family:monospace">✕</button>
+          <span class="fx-drag text-[#52525b]">≡</span>
+          <span class="text-[10px] text-[#71717a] uppercase tracking-wider flex-1 cursor-pointer fx-toggle-params" style="font-family:'JetBrains Mono',monospace">${getEffectLabel(fx)}</span>
+          <button class="fx-del text-[10px] text-[#52525b] hover:text-red-400 cursor-pointer bg-transparent border-none" style="font-family:'JetBrains Mono',monospace">✕</button>
           <label class="toggle-switch" style="flex-shrink:0"><input type="checkbox" class="fx-enabled" ${fx.enabled ? 'checked' : ''}><span class="toggle-slider"></span></label>
         `;
         card.appendChild(header);
@@ -3608,7 +3736,7 @@
           const stRow = document.createElement('div');
           stRow.className = 'flex items-center justify-between';
           const stLabel = document.createElement('label');
-          stLabel.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+          stLabel.className = 'text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label';
           stLabel.textContent = 'Type';
           const subtypeOptions = Object.entries(reg.subtypes).map(([key, st]) => ({ value: key, label: st.label }));
           const stButton = document.createElement('button');
@@ -3653,11 +3781,11 @@
             const labelRow = document.createElement('div');
             labelRow.className = 'flex items-center justify-between';
             const label = document.createElement('label');
-            label.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+            label.className = 'text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label';
             label.textContent = pDef.label;
             const valInput = document.createElement('input');
             valInput.type = 'text';
-            valInput.className = 'text-[#fff] text-[10px] tabular-nums border border-[#333] px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none focus:border-[#666]';
+            valInput.className = 'text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none border-none';
             valInput.value = fx.params[pDef.key] ?? pDef.min;
             labelRow.appendChild(label);
             labelRow.appendChild(valInput);
@@ -3692,7 +3820,7 @@
             const labelRow = document.createElement('div');
             labelRow.className = 'flex items-center justify-between';
             const label = document.createElement('label');
-            label.className = 'text-[#666] text-[10px] uppercase tracking-wider';
+            label.className = 'text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label';
             label.textContent = pDef.label;
             const selectOptions = pDef.options.map(opt => ({
               value: opt,
@@ -3807,6 +3935,7 @@
 
         list.appendChild(card);
       });
+      requestAnimationFrame(initAllRangeFills);
     }
 
     // Add effect dropdown
@@ -4002,11 +4131,9 @@
       if (wasOpen) {
         hideFloatingPanel(variantDropdown);
       } else {
-        showFloatingPanel(variantDropdown, variantBtn, { align: 'left', placement: 'bottom', gap: 6, matchWidth: true, maxHeight: 320 });
-      }
-      if (!wasOpen) {
         _variantBeforePreview = activeLayer().variant;
         buildVariantDropdown();
+        showFloatingPanel(variantDropdown, variantBtn, { align: 'left', placement: 'bottom', gap: 6, matchWidth: true, maxHeight: 320 });
         setupMenuNavigation(variantDropdown, {
           itemSelector: '.ui-menu-item',
           onEscape: () => {
@@ -4019,7 +4146,6 @@
             variantBtn.focus({ preventScroll: true });
           }
         });
-        positionFloatingPanel(variantDropdown, variantBtn, { align: 'left', placement: 'bottom', gap: 6, matchWidth: true, maxHeight: 320 });
         requestAnimationFrame(() => focusMenuNavigationDefault(variantDropdown));
       }
     });
@@ -4032,6 +4158,7 @@
     });
 
     document.addEventListener('click', (e) => {
+      if (variantDropdown.classList.contains('hidden')) return;
       if (!eventIsInsidePanel(variantDropdown, variantBtn, e)) {
         if (_variantBeforePreview !== null) {
           setVariant(_variantBeforePreview);
@@ -4092,11 +4219,13 @@
 
     // Image button triggers file input
     document.getElementById('imageBtn').addEventListener('click', () => {
+      hideFloatingPanel(sourceMenu);
       document.getElementById('imageInput').click();
     });
 
     // Video button triggers file input
     document.getElementById('videoBtn').addEventListener('click', () => {
+      hideFloatingPanel(sourceMenu);
       document.getElementById('videoInput').click();
     });
 
@@ -4112,7 +4241,7 @@
 
     // ============ RESIZE ============
     function resizeCanvas() {
-      const area = canvasArea.getBoundingClientRect();
+      const area = (document.getElementById('canvasViewport') || canvasArea).getBoundingClientRect();
       const w = Math.round(area.width);
       const h = Math.round(area.height);
       updateProjectButtonPosition();
@@ -4312,6 +4441,29 @@
     }
 
     // ============ RENDER ============
+    let _lastStatsFps = 0, _statsFrameCount = 0, _statsLastTime = performance.now();
+    function updateStatsBar() {
+      _statsFrameCount++;
+      const now = performance.now();
+      if (now - _statsLastTime >= 500) {
+        _lastStatsFps = (_statsFrameCount / ((now - _statsLastTime) / 1000)).toFixed(1);
+        _statsFrameCount = 0;
+        _statsLastTime = now;
+      }
+      const layer = activeLayer();
+      const src = state.sourceElement;
+      const resW = src ? (src.videoWidth || src.naturalWidth || src.width) : 0;
+      const resH = src ? (src.videoHeight || src.naturalHeight || src.height) : 0;
+      const resEl = document.getElementById('statResolution');
+      const lyEl = document.getElementById('statLayers');
+      const vrEl = document.getElementById('statVariant');
+      const fpEl = document.getElementById('statFps');
+      if (resEl) resEl.textContent = resW ? `${resW}x${resH}` : '—';
+      if (lyEl) lyEl.textContent = state.layers ? state.layers.length : '—';
+      if (vrEl) vrEl.textContent = layer?.variant ?? '—';
+      if (fpEl) fpEl.textContent = _lastStatsFps || '—';
+    }
+
     function render() {
       const geometry = getRenderGeometry();
       if (!geometry) return;
@@ -4319,7 +4471,7 @@
       const { srcW, srcH, outW, outH, scale, offsetX, offsetY } = geometry;
 
       // Clear output
-      outputCtx.fillStyle = '#0a0a0a';
+      outputCtx.fillStyle = '#0e0e0e';
       outputCtx.fillRect(0, 0, outW, outH);
 
       // Pixel data cache — reuse across layers with same brightness/contrast/saturation
@@ -4352,6 +4504,7 @@
       }
 
       if (!state.recording) drawSelectionOverlay(geometry);
+      updateStatsBar();
     }
 
     function drawPathOverlay(points, geometry, closePath, dashed, color, lineWidth) {
@@ -4400,7 +4553,7 @@
         }
       }
 
-      // In-progress stroke — always visible, colored by mode
+      // In-progress stroke — always visible, colored by mode, with real-time smoothing
       if (selectionState.drawing && selectionState.rawPoints.length > 1) {
         const modeColors = {
           'new': 'rgba(0,255,255,0.9)',
@@ -4409,7 +4562,29 @@
           'intersect': 'rgba(255,220,60,0.9)'
         };
         const color = modeColors[selectionState.compositionMode] || 'rgba(0,255,255,0.9)';
-        drawPathOverlay(selectionState.rawPoints, geometry, false, true, color, 1.25);
+        // Apply lightweight real-time smoothing for smooth preview while drawing
+        let displayPoints = selectionState.rawPoints;
+        if (displayPoints.length > 6) {
+          const stride = Math.max(1, Math.floor(displayPoints.length / 600));
+          if (stride > 1) {
+            const thinned = [];
+            for (let i = 0; i < displayPoints.length; i += stride) thinned.push(displayPoints[i]);
+            if ((displayPoints.length - 1) % stride !== 0) thinned.push(displayPoints[displayPoints.length - 1]);
+            displayPoints = thinned;
+          }
+          // 1-pass moving average smoothing for real-time display
+          const smoothed = [displayPoints[0]];
+          for (let i = 1; i < displayPoints.length - 1; i++) {
+            const prev = displayPoints[i - 1], curr = displayPoints[i], next = displayPoints[i + 1];
+            smoothed.push([
+              prev[0] * 0.2 + curr[0] * 0.6 + next[0] * 0.2,
+              prev[1] * 0.2 + curr[1] * 0.6 + next[1] * 0.2
+            ]);
+          }
+          smoothed.push(displayPoints[displayPoints.length - 1]);
+          displayPoints = smoothed;
+        }
+        drawPathOverlay(displayPoints, geometry, false, true, color, 1.25);
       }
 
       // Preview points after stroke finalized
@@ -4443,28 +4618,57 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
+    // Stroke stabilization state
+    const selectionCapture = {
+      points: [],       // raw input points (unsmoothed)
+      stabilized: null  // EMA-smoothed cursor position
+    };
+
+    // Stroke stabilization strength (0 = no smoothing, higher = smoother but more lag)
+    const STABILIZE_FACTOR = 0.35; // blend toward raw cursor each event
+
     function appendSelectionStrokePoint(point, spacing, force = false) {
       if (!point) return false;
-      const points = selectionState.rawPoints;
-      if (!points.length) {
-        points.push([point[0], point[1]]);
+      const output = selectionState.rawPoints;
+
+      // First point — no smoothing needed
+      if (!selectionCapture.stabilized) {
+        selectionCapture.stabilized = [point[0], point[1]];
+        selectionCapture.points.push([point[0], point[1]]);
+        output.push([point[0], point[1]]);
         return true;
       }
 
-      const prev = points[points.length - 1];
-      const distance = distance2D(prev, point);
-      if (!distance) return false;
-      if (!force && distance < spacing) return false;
+      // EMA stabilization: smoothed position chases the raw cursor
+      const prev = selectionCapture.stabilized;
+      const rawDist = distance2D(prev, point);
+      if (rawDist < 0.01) return false;
 
-      const safeSpacing = Math.max(0.0001, spacing);
-      const steps = Math.max(1, Math.ceil(distance / safeSpacing));
+      // Adaptive smoothing: less smoothing for slow/precise movement, more for fast
+      const speed = rawDist;
+      const adaptiveFactor = Math.min(1, STABILIZE_FACTOR + speed * 0.002);
+
+      const smoothed = [
+        prev[0] + (point[0] - prev[0]) * adaptiveFactor,
+        prev[1] + (point[1] - prev[1]) * adaptiveFactor
+      ];
+      selectionCapture.stabilized = smoothed;
+
+      // Only emit if moved enough from last emitted point
+      const lastOut = output[output.length - 1];
+      const emitDist = distance2D(lastOut, smoothed);
+      if (!force && emitDist < spacing * 0.5) return false;
+
+      // Interpolate between last output and new stabilized position
+      const steps = Math.max(1, Math.ceil(emitDist / Math.max(0.5, spacing * 0.5)));
       for (let step = 1; step <= steps; step++) {
         const t = step / steps;
-        points.push([
-          prev[0] + (point[0] - prev[0]) * t,
-          prev[1] + (point[1] - prev[1]) * t
+        output.push([
+          lastOut[0] + (smoothed[0] - lastOut[0]) * t,
+          lastOut[1] + (smoothed[1] - lastOut[1]) * t
         ]);
       }
+      selectionCapture.points.push([point[0], point[1]]);
       return true;
     }
 
@@ -4501,7 +4705,7 @@
       let current = points.slice();
       if (current.length < 3) return current;
 
-      const passes = Math.max(0, Math.min(3, Math.round(iterations)));
+      const passes = Math.max(0, Math.min(5, Math.round(iterations)));
       for (let pass = 0; pass < passes; pass++) {
         const next = [];
         for (let i = 0; i < current.length; i++) {
@@ -4548,7 +4752,7 @@
       const savedRawPoints = [...selectionState.rawPoints];
       const sampleSpacing = Math.max(1.25, 3.5 / geometry.scale);
       const sampled = resampleClosedPath(savedRawPoints, sampleSpacing);
-      const smoothPasses = sampled.length > 420 ? 2 : sampled.length > 180 ? 3 : 4;
+      const smoothPasses = sampled.length > 420 ? 3 : sampled.length > 180 ? 4 : 5;
       const smoothed = smoothClosedPath(sampled, smoothPasses);
       const finalPath = resampleClosedPath(smoothed, Math.max(1, sampleSpacing * 0.6));
       const previewPts = finalPath;
@@ -5728,8 +5932,8 @@
     const loopBtn = document.getElementById('loopBtn');
     loopBtn.addEventListener('click', () => {
       videoLoop = !videoLoop;
-      loopBtn.style.color = videoLoop ? '#fff' : '#333';
-      loopBtn.style.borderColor = videoLoop ? '#666' : '#333';
+      loopBtn.style.color = videoLoop ? '#fb460d' : '#2a2a2a';
+      loopBtn.style.borderColor = videoLoop ? '#fb460d' : 'transparent';
       const video = document.getElementById('videoSource');
       video.loop = videoLoop;
     });
@@ -5779,6 +5983,8 @@
       selectionState.pointerId = e.pointerId;
       selectionState.rawPoints = [[sourcePoint.x, sourcePoint.y]];
       selectionState.previewPoints = [];
+      selectionCapture.points = [[sourcePoint.x, sourcePoint.y]];
+      selectionCapture.stabilized = [sourcePoint.x, sourcePoint.y];
       outputCanvas.setPointerCapture(e.pointerId);
       e.preventDefault();
       render();
@@ -5791,7 +5997,7 @@
       const events = typeof e.getCoalescedEvents === 'function'
         ? e.getCoalescedEvents()
         : [e];
-      const captureSpacing = Math.max(0.75, 2.5 / geometry.scale);
+      const captureSpacing = Math.max(0.5, 1.5 / geometry.scale);
       let changed = false;
       for (const sampleEvent of events) {
         const canvasPoint = clientToCanvasPoint(sampleEvent.clientX, sampleEvent.clientY);
@@ -5811,7 +6017,7 @@
         const events = typeof e.getCoalescedEvents === 'function'
           ? e.getCoalescedEvents()
           : [e];
-        const captureSpacing = Math.max(0.75, 2.5 / geometry.scale);
+        const captureSpacing = Math.max(0.5, 1.5 / geometry.scale);
         for (const sampleEvent of events) {
           const canvasPoint = clientToCanvasPoint(sampleEvent.clientX, sampleEvent.clientY);
           const sourcePoint = canvasToSourcePoint(canvasPoint.x, canvasPoint.y, geometry);
@@ -5880,7 +6086,7 @@
       if (transparent) {
         tmpCtx.clearRect(0, 0, srcW, srcH);
       } else {
-        tmpCtx.fillStyle = '#0a0a0a';
+        tmpCtx.fillStyle = '#0e0e0e';
         tmpCtx.fillRect(0, 0, srcW, srcH);
       }
 
@@ -5948,6 +6154,22 @@
       }, 'image/png');
     }
 
+    // Source menu toggle
+    const sourceMenu = document.getElementById('sourceMenu');
+    const sourceBtn = document.getElementById('sourceBtn');
+    setupMenuNavigation(sourceMenu, {
+      itemSelector: 'button',
+      onEscape: () => {
+        hideFloatingPanel(sourceMenu);
+        sourceBtn.focus({ preventScroll: true });
+      }
+    });
+    sourceBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const opened = toggleFloatingPanel(sourceMenu, e.currentTarget, { align: 'left', placement: 'bottom', gap: 4 });
+      if (opened) requestAnimationFrame(() => focusMenuNavigationDefault(sourceMenu, 'button'));
+    });
+
     // Export menu toggle
     const exportMenu = document.getElementById('exportMenu');
     const exportPngBtn = document.getElementById('exportPngBtn');
@@ -5964,7 +6186,7 @@
     });
     document.getElementById('exportPngBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      const opened = toggleFloatingPanel(exportMenu, e.currentTarget, { align: 'right', placement: 'bottom', gap: 4, maxHeight: 340 });
+      const opened = toggleFloatingPanel(exportMenu, e.currentTarget, { align: 'left', placement: 'bottom', gap: 4, maxHeight: 340 });
       if (opened) requestAnimationFrame(() => focusMenuNavigationDefault(exportMenu, 'button'));
     });
     document.getElementById('exportNormal').addEventListener('click', () => {
@@ -5978,6 +6200,8 @@
     exportMenu.addEventListener('click', (e) => e.stopPropagation());
     // Close menu on outside click
     document.addEventListener('click', (e) => {
+      if (exportMenu.classList.contains('hidden')) return;
+      if (activeOptionMenu && activeOptionMenu.panel && (activeOptionMenu.panel.contains(e.target) || exportMenu.contains(activeOptionMenu.anchor))) return;
       if (!eventIsInsidePanel(exportMenu, exportPngBtn, e)) {
         hideFloatingPanel(exportMenu);
       }
@@ -6155,9 +6379,9 @@
       const isOutline = layer.variant === 'Outline';
       const color = layer.manualColor || '#f2f0d8';
       const rgb = hexToRgb(color) || { r: 242, g: 240, b: 216 };
-      const label = isOutline ? 'Outline Color' : 'ASCII Color';
-      const buttonLabel = isOutline ? 'Outline Stroke' : 'ASCII Tint';
-      const title = isOutline ? 'Outline Stroke' : 'Ascii Tint';
+      const label = isOutline ? 'Outline Color' : 'Tint';
+      const buttonLabel = isOutline ? 'Outline Stroke' : 'Tint Color';
+      const title = isOutline ? 'Outline Stroke' : 'Tint Color';
 
       document.getElementById('manualColorLabel').textContent = label;
       document.getElementById('manualColorBtnLabel').textContent = buttonLabel;
@@ -6275,35 +6499,44 @@
       updateManualColorUI();
       updateOutlineFillUI();
       updateMaskControls();
+      requestAnimationFrame(initAllRangeFills);
     }
 
-    const BLEND_MODES = [
-      ['source-over','Normal'],['multiply','Multiply'],['screen','Screen'],['overlay','Overlay'],
-      ['lighter','Add'],['difference','Difference'],['darken','Darken'],['lighten','Lighten'],
-      ['color-dodge','Color Dodge'],['color-burn','Color Burn'],['hard-light','Hard Light'],
-      ['soft-light','Soft Light'],['exclusion','Exclusion']
+    const BLEND_MODE_GROUPS = [
+      { modes: [['source-over','Normal']] },
+      { modes: [['darken','Darken'],['multiply','Multiply'],['color-burn','Color Burn']] },
+      { modes: [['lighten','Lighten'],['screen','Screen'],['color-dodge','Color Dodge'],['lighter','Add']] },
+      { modes: [['overlay','Overlay'],['soft-light','Soft Light'],['hard-light','Hard Light']] },
+      { modes: [['difference','Difference'],['exclusion','Exclusion']] },
     ];
+    const BLEND_MODES = BLEND_MODE_GROUPS.flatMap(g => g.modes);
 
     function renderLayerPanel() {
       const list = document.getElementById('layerList');
       list.innerHTML = '';
       state.layers.slice().reverse().forEach((layer) => {
         const row = document.createElement('div');
-        row.className = `layer-row flex items-center gap-2 px-3 py-3 cursor-pointer border-b border-[#222] transition-[background,box-shadow,transform,opacity] duration-100 ${layer.id === state.activeLayerId ? 'bg-[#1a1a1a] border-l-2 border-l-[#e2ff3a]' : 'hover:bg-[#1a1a1a]'}`;
+        row.className = `layer-row flex items-center gap-2 px-3 py-3 cursor-pointer transition-[background,box-shadow,transform,opacity] duration-100 ${layer.id === state.activeLayerId ? 'bg-surface-low border-l-4 border-l-primary' : 'hover:bg-surface-low border-l-4 border-l-transparent'}`;
         row.dataset.layerId = layer.id;
         const variantLabel = layer.kind === 'source' ? (state.source === 'video' ? 'VIDEO' : 'IMAGE') : layer.variant;
         const opacityLabel = `${Math.round(layer.opacity * 100)}%`;
+        const hasMask = !!(layer.mask && layer.mask.regions && layer.mask.regions.length);
         const duplicateHidden = layer.kind === 'source' ? 'invisible' : '';
         const deleteHidden = layer.kind === 'source' || asciiLayerCount() <= 1 ? 'invisible' : '';
         row.innerHTML = `
-          <button class="layer-vis text-[10px] font-mono ${layer.visible ? 'text-white' : 'text-[#333]'}" data-id="${layer.id}" title="${layer.visible ? 'Hide layer' : 'Show layer'}">${layerVisibilityIcon(layer.visible)}</button>
+          <div class="flex flex-col items-center gap-0.5">
+            <button class="layer-vis text-[10px] font-mono ${layer.visible ? 'text-primary' : 'text-[#2a2a2a]'}" data-id="${layer.id}" title="${layer.visible ? 'Hide layer' : 'Show layer'}">${layerVisibilityIcon(layer.visible)}</button>
+            ${hasMask ? `<button class="layer-mask-btn" data-id="${layer.id}" title="Edit mask"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 2.5A5.5 5.5 0 0 1 8 13.5Z" fill="currentColor"/></svg></button>` : ''}
+          </div>
           <div class="flex-1 min-w-0 flex flex-col gap-1">
-            <div class="text-[10px] font-mono text-white truncate uppercase tracking-wider">${layer.name}</div>
-            <div class="text-[10px] font-mono text-[#666] uppercase tracking-wider">${variantLabel} · ${opacityLabel}</div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-mono ${layer.id === state.activeLayerId ? 'text-primary' : 'text-on-surface'} truncate uppercase tracking-wider">${layer.name}</span>
+            </div>
+            <div class="text-[10px] font-mono text-[#52525b] uppercase tracking-wider">${variantLabel} · ${opacityLabel}</div>
           </div>
           <div class="flex flex-col items-end justify-center gap-1 w-[34px]">
-            <button class="layer-del text-[10px] font-mono text-[#444] hover:text-red-400 text-right ${deleteHidden}" data-id="${layer.id}">\u2715</button>
-            <button class="layer-dup text-[8px] font-mono uppercase tracking-wider text-[#444] hover:text-white text-right ${duplicateHidden}" data-id="${layer.id}">DUP</button>
+            <button class="layer-del text-[10px] font-mono text-[#52525b] hover:text-red-400 text-right ${deleteHidden}" data-id="${layer.id}">\u2715</button>
+            <button class="layer-dup text-[8px] font-mono uppercase tracking-wider text-[#52525b] hover:text-on-surface text-right ${duplicateHidden}" data-id="${layer.id}">DUP</button>
           </div>
         `;
         // Drag-and-drop reordering
@@ -6348,7 +6581,7 @@
           layerDragState.placement = null;
         });
         row.addEventListener('click', (e) => {
-          if (e.target.closest('.layer-vis') || e.target.closest('.layer-dup') || e.target.closest('.layer-del')) return;
+          if (e.target.closest('.layer-vis') || e.target.closest('.layer-mask-btn') || e.target.closest('.layer-dup') || e.target.closest('.layer-del')) return;
           if (selectionState.active) cancelSelectionStroke();
           state.activeLayerId = layer.id;
           syncUIToLayer(layer);
@@ -6362,6 +6595,22 @@
           renderLayerPanel();
           render();
         });
+        const maskBtn = row.querySelector('.layer-mask-btn');
+        if (maskBtn) {
+          maskBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Switch to this layer first if not active
+            if (state.activeLayerId !== layer.id) {
+              state.activeLayerId = layer.id;
+              syncUIToLayer(layer);
+              renderLayerPanel();
+            }
+            // Enter mask edit mode
+            if (!selectionState.active) activateSelectionMode();
+            else updateSelectionUI();
+            render();
+          });
+        }
         row.querySelector('.layer-dup').addEventListener('click', (e) => {
           e.stopPropagation();
           duplicateLayer(layer.id);
@@ -6462,6 +6711,7 @@
         panel.classList.remove('w-[220px]');
         panel.classList.add('w-0');
       }
+      document.getElementById('layerPanelToggle').classList.toggle('nav-tab-active', open);
       updateProjectButtonPosition();
     }
 
@@ -6526,7 +6776,7 @@
       selectionState.showGuides = !selectionState.showGuides;
       const btn = document.getElementById('selectionGuidesBtn');
       btn.classList.toggle('tb-active', selectionState.showGuides);
-      btn.style.color = selectionState.showGuides ? '' : '#333';
+      btn.style.color = selectionState.showGuides ? '' : '#2a2a2a';
       render();
     });
     document.getElementById('selectionDoneBtn').addEventListener('click', () => {
@@ -6542,26 +6792,33 @@
     function buildBlendDropdown() {
       blendModeDropdown.innerHTML = '';
       const current = activeLayer().blendMode;
-      BLEND_MODES.forEach(([value, label]) => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = `ui-menu-item${value === current ? ' active' : ''}`;
-        item.textContent = label;
-        const preview = () => {
-          if (_blendBeforePreview === null) _blendBeforePreview = activeLayer().blendMode;
-          activeLayer().blendMode = value;
-          render();
-        };
-        item.addEventListener('mouseenter', preview);
-        item.addEventListener('focus', preview);
-        item.addEventListener('click', () => {
-          _blendBeforePreview = null;
-          activeLayer().blendMode = value;
-          blendModeBtn.textContent = label;
-          hideFloatingPanel(blendModeDropdown);
-          render();
+      BLEND_MODE_GROUPS.forEach((group, gi) => {
+        if (gi > 0) {
+          const sep = document.createElement('div');
+          sep.className = 'border-t border-[#353535] my-1';
+          blendModeDropdown.appendChild(sep);
+        }
+        group.modes.forEach(([value, label]) => {
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = `ui-menu-item${value === current ? ' active' : ''}`;
+          item.textContent = label;
+          const preview = () => {
+            if (_blendBeforePreview === null) _blendBeforePreview = activeLayer().blendMode;
+            activeLayer().blendMode = value;
+            render();
+          };
+          item.addEventListener('mouseenter', preview);
+          item.addEventListener('focus', preview);
+          item.addEventListener('click', () => {
+            _blendBeforePreview = null;
+            activeLayer().blendMode = value;
+            blendModeBtn.textContent = label;
+            hideFloatingPanel(blendModeDropdown);
+            render();
+          });
+          blendModeDropdown.appendChild(item);
         });
-        blendModeDropdown.appendChild(item);
       });
     }
 
@@ -6571,11 +6828,9 @@
       if (wasOpen) {
         hideFloatingPanel(blendModeDropdown);
       } else {
-        showFloatingPanel(blendModeDropdown, blendModeBtn, { align: 'right', placement: 'top', gap: 6, maxHeight: 320 });
-      }
-      if (!wasOpen) {
         _blendBeforePreview = activeLayer().blendMode;
         buildBlendDropdown();
+        showFloatingPanel(blendModeDropdown, blendModeBtn, { align: 'right', placement: 'top', gap: 6, maxHeight: 320 });
         setupMenuNavigation(blendModeDropdown, {
           itemSelector: '.ui-menu-item',
           onEscape: () => {
@@ -6588,7 +6843,6 @@
             blendModeBtn.focus({ preventScroll: true });
           }
         });
-        positionFloatingPanel(blendModeDropdown, blendModeBtn, { align: 'right', placement: 'top', gap: 6, maxHeight: 320 });
         requestAnimationFrame(() => focusMenuNavigationDefault(blendModeDropdown));
       }
     });
@@ -6602,6 +6856,7 @@
     blendModeDropdown.addEventListener('mouseenter', () => {});
 
     document.addEventListener('click', (e) => {
+      if (blendModeDropdown.classList.contains('hidden')) return;
       if (!eventIsInsidePanel(blendModeDropdown, blendModeBtn, e)) {
         if (_blendBeforePreview !== null) {
           activeLayer().blendMode = _blendBeforePreview;
@@ -6673,6 +6928,7 @@
     });
 
     document.addEventListener('click', (e) => {
+      if (projectMenu.classList.contains('hidden')) return;
       if (!eventIsInsidePanel(projectMenu, projectBtn, e)) {
         hideFloatingPanel(projectMenu);
       }
@@ -6691,6 +6947,7 @@
     renderLayerPanel();
     resizeCanvas();
     updateProjectButtonPosition();
+    initAllRangeFills();
   </script>
 </body>
 </html>

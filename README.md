@@ -1,6 +1,6 @@
-# ASCII_FX
+# GLYPH_STUDIO
 
-`ASCII_FX` is a browser-based ASCII art playground for turning images, video, and live camera input into layered, stylized output. The app ships as a tiny static project: one HTML app file plus a generated dense-glyph data file used for high-density character rendering.
+`GLYPH_STUDIO` is a browser-based ASCII art playground for turning images, video, and live camera input into layered, stylized output. The app ships as a tiny static project: one HTML app file plus a generated dense-glyph data file used for high-density character rendering.
 
 ## What It Does
 
@@ -43,4 +43,4 @@ When starting a lasso stroke:
 - Vanilla JavaScript
 - HTML canvas
 - [Tailwind CSS](https://tailwindcss.com/) via CDN
-- IBM Plex Mono via Google Fonts
+- Space Grotesk, JetBrains Mono, Inter via Google Fonts
