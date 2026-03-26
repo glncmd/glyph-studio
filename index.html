@@ -131,16 +131,17 @@
     /* Drawer min-width */
     #settingsDrawer > div { min-width: 280px; }
 
-    /* Recording pulse */
-    @keyframes pulse-red {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 70, 13, 0.6); }
-      50% { box-shadow: 0 0 0 6px rgba(251, 70, 13, 0); }
+    /* Recording indicator */
+    @keyframes rec-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
     }
     .recording {
-      background: #fb460d !important;
-      border-color: #fb460d !important;
-      color: #000 !important;
-      animation: pulse-red 1.2s infinite;
+      color: #ff3b30 !important;
+      border-bottom-color: #ff3b30 !important;
+    }
+    .recording .rec-dot {
+      display: inline-block;
     }
 
     /* Select arrow override */
@@ -313,8 +314,8 @@
       padding: 6px 8px;
     }
     .mask-effect-card.mask-active {
-      background: rgba(0, 255, 255, 0.04);
-      border-left: 2px solid rgba(0, 255, 255, 0.35);
+      background: rgba(251, 70, 13, 0.04);
+      border-left: 2px solid rgba(251, 70, 13, 0.35);
     }
     #addLayerDropdown {
       z-index: 100;
@@ -576,13 +577,6 @@
     <!-- Action Tabs (left) -->
     <nav class="hidden md:flex items-center gap-5 ml-6 h-full">
       <div class="relative flex items-center h-full">
-        <button id="sourceBtn" class="nav-tab" title="Import source">SOURCE</button>
-        <div id="sourceMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
-          <button id="imageBtn" class="ui-menu-item ui-menu-item-compact">Image</button>
-          <button id="videoBtn" class="ui-menu-item ui-menu-item-compact">Video</button>
-        </div>
-      </div>
-      <div class="relative flex items-center h-full">
         <button id="exportPngBtn" class="nav-tab" title="Export">EXPORT</button>
         <div id="exportMenu" class="ui-menu-panel hidden absolute left-0 top-full mt-px z-50 whitespace-nowrap overflow-y-auto">
           <button id="exportNormal" class="ui-menu-item ui-menu-item-compact">PNG</button>
@@ -614,7 +608,7 @@
           </div>
         </div>
       </div>
-      <button id="recordBtn" class="nav-tab" title="Record Video">REC</button>
+      <button id="recordBtn" class="nav-tab" title="Record Video" style="gap:5px"><span class="rec-dot" style="display:none;width:6px;height:6px;background:#ff3b30;border-radius:50%;animation:rec-blink 1s ease-in-out infinite;flex-shrink:0"></span><span class="rec-label">REC</span></button>
     </nav>
 
     <!-- Spacer -->
@@ -697,8 +691,11 @@
           <span id="statLayers" class="text-primary">—</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <span class="text-[#3f3f46]">Variant:</span>
-          <span id="statVariant" class="text-primary">—</span>
+          <span class="text-[#3f3f46]">Preview:</span>
+          <button id="previewResBtn" type="button" class="flex items-center gap-1 bg-transparent border-none text-primary text-[9px] font-mono uppercase tracking-[0.15em] cursor-pointer hover:text-[#fb460d] transition-colors">
+            <span id="previewResLabel">AUTO</span>
+            <span class="text-[#52525b] text-[8px] leading-none">▾</span>
+          </button>
         </div>
         <div id="statFpsGroup" class="flex items-center gap-1.5 hidden">
           <span class="text-[#3f3f46]">FPS:</span>
@@ -751,8 +748,8 @@
           <div class="section-label">VARIANT</div>
           <div class="flex items-stretch relative">
             <button id="variantPrev" class="variant-arrow tb text-[10px] px-3 -mr-px flex items-center">&lt;</button>
-            <button id="variantBtn" class="flex-1 bg-surface-container text-on-surface text-[11px] px-3 py-1.5 text-center cursor-pointer font-mono uppercase tracking-wider hover:bg-surface-high transition-colors">Standard</button>
-            <input type="hidden" id="variantSelect" value="Standard">
+            <button id="variantBtn" class="flex-1 bg-surface-container text-on-surface text-[11px] px-3 py-1.5 text-center cursor-pointer font-mono uppercase tracking-wider hover:bg-surface-high transition-colors">None</button>
+            <input type="hidden" id="variantSelect" value="None">
             <button id="variantNext" class="variant-arrow tb text-[10px] px-3 -ml-px flex items-center">&gt;</button>
             <div id="variantDropdown" class="ui-menu-panel hidden absolute left-0 right-0 top-full mt-1 z-50 max-h-[300px]" style="scrollbar-width:thin;scrollbar-color:#353535 transparent"></div>
           </div>
@@ -1091,8 +1088,15 @@
           { key: 'roughness', type: 'range', min: 0, max: 100, step: 1, label: 'Roughness' }
         ]
       },
+      sepia: {
+        label: 'Sepia',
+        defaults: { intensity: 80 },
+        params: [
+          { key: 'intensity', type: 'range', min: 0, max: 100, step: 1, label: 'Intensity' }
+        ]
+      },
       inkBleed: {
-        label: 'Ink Bleed',
+        label: 'Bleed',
         defaults: { spread: 50, organic: 30, splatter: 0, roundness: 60, softness: 0 },
         params: [
           { key: 'spread', type: 'range', min: 0, max: 100, step: 1, label: 'Spread' },
@@ -1103,7 +1107,7 @@
         ]
       },
       chromatic: {
-        label: 'Chromatic Aberration',
+        label: 'Aberration',
         defaults: { amount: 5, angle: 0 },
         params: [
           { key: 'amount', type: 'range', min: 0, max: 30, step: 0.5, label: 'Offset' },
@@ -1118,7 +1122,7 @@
         ]
       },
       fractalGlass: {
-        label: 'Fractal Glass',
+        label: 'Fractal',
         defaults: { texture: 'reeded', distortion: 50, smoothness: 3, scale: 40, angle: 0 },
         params: [
           { key: 'texture',    type: 'select', options: ['reeded', 'tubes', 'frosted', 'blocks', 'tinyLens', 'diamond'], label: 'Texture' },
@@ -1138,13 +1142,15 @@
         }
       },
       halftone: {
-        label: 'CMYK Halftone',
-        defaults: { dotSize: 6, contrast: 50, bleed: 20, paper: 100 },
+        label: 'CMYK',
+        defaults: { dotSize: 6, shape: 'round', contrast: 50, bleed: 20, paper: 100, colorMix: 0 },
         params: [
           { key: 'dotSize', type: 'range', min: 2, max: 30, step: 1, label: 'Dot Size' },
+          { key: 'shape', type: 'select', options: ['round', 'diamond', 'line', 'square'], label: 'Dot Shape' },
           { key: 'contrast', type: 'range', min: 0, max: 100, step: 1, label: 'Contrast' },
           { key: 'bleed', type: 'range', min: 0, max: 100, step: 1, label: 'Bleed' },
-          { key: 'paper', type: 'range', min: 0, max: 100, step: 1, label: 'Paper' }
+          { key: 'paper', type: 'range', min: 0, max: 100, step: 1, label: 'Paper' },
+          { key: 'colorMix', type: 'range', min: 0, max: 100, step: 1, label: 'Color Mix' }
         ]
       },
       lens: {
@@ -1214,7 +1220,7 @@
       visible: true,
       opacity: 1.0,
       blendMode: 'source-over',
-      variant: 'Standard',
+      variant: 'None',
       cellSize: 10,
       gap: 0,
       font: 'monospace',
@@ -1292,7 +1298,7 @@
     function createAdjustmentLayer(overrides = {}) {
       return {
         id: crypto.randomUUID(),
-        name: `Adjustment ${layerCounter++}`,
+        name: `Adjustment ${state.layers.filter(l => l.kind === 'adjustment').length + 1}`,
         kind: 'adjustment',
         visible: true,
         opacity: 1,
@@ -1321,7 +1327,8 @@
       activeLayerId: null,
       forceGrid: false,
       forceGridSize: 10,
-      forceGridPadding: 0
+      forceGridPadding: 0,
+      previewResolution: 'full'  // 'full' | '1/2' | '1/4' | 'auto'
     };
     state.activeLayerId = state.layers[0].id;
 
@@ -1361,6 +1368,7 @@
         forceGrid: state.forceGrid,
         forceGridSize: state.forceGridSize,
         forceGridPadding: state.forceGridPadding,
+        previewResolution: state.previewResolution,
         layers: state.layers.map(l => {
           const clone = { ...l };
           if (l.postProcess) clone.postProcess = { ...l.postProcess };
@@ -1416,6 +1424,14 @@
       if (typeof data.forceGrid === 'boolean') state.forceGrid = data.forceGrid;
       if (typeof data.forceGridSize === 'number') state.forceGridSize = data.forceGridSize;
       if (typeof data.forceGridPadding === 'number') state.forceGridPadding = data.forceGridPadding;
+      if (typeof data.previewResolution === 'string') {
+        state.previewResolution = data.previewResolution;
+        const lbl = document.getElementById('previewResLabel');
+        if (lbl) {
+          const labels = { auto: 'AUTO', full: 'FULL', '1/2': '1/2', '1/4': '1/4' };
+          lbl.textContent = labels[state.previewResolution] || 'AUTO';
+        }
+      }
       invalidateMaskCaches();
       invalidatePostProcessCache();
       renderLayerPanel();
@@ -2250,13 +2266,13 @@
     }
 
     function getScreenEffectScale(geometry, forExport) {
-      if (!forExport) return 1;
-      // When rendering at native source resolution (scale ≈ 1), no effect scaling needed
+      // At source resolution (scale ≈ 1), no adjustment needed
       if (Math.abs(geometry.scale - 1) < 0.001) return 1;
-      const previewGeometry = getRenderGeometry();
-      if (!previewGeometry || !Number.isFinite(previewGeometry.scale) || previewGeometry.scale <= 0) return 1;
-      const scaled = geometry.scale / previewGeometry.scale;
-      return Number.isFinite(scaled) && scaled > 0 ? scaled : 1;
+      // For both preview and export: ratio of current render scale to full-source scale
+      const fullGeo = getRenderGeometry(geometry.srcW, geometry.srcH);
+      if (!fullGeo || fullGeo.scale <= 0) return 1;
+      const ratio = geometry.scale / fullGeo.scale;
+      return Number.isFinite(ratio) && ratio > 0 ? ratio : 1;
     }
 
     function invalidateMaskPathCache(layerId) {
@@ -2953,11 +2969,13 @@
       ctx.imageSmoothingEnabled = true;
     }
 
-    function applyCmykHalftone(ctx, w, h, fx, effectScale = 1, gridStep = 0) {
+    function applyCmykHalftone(ctx, w, h, fx, effectScale = 1, gridStep = 0, layer = null, geometry = null) {
       const cellSize = gridStep > 0 ? gridStep : Math.max(2, Math.round((fx.params.dotSize || 6) * effectScale));
       const contrastVal = (fx.params.contrast || 50) / 100;
       const bleedVal = (fx.params.bleed || 20) / 100;
       const paperVal = (fx.params.paper != null ? fx.params.paper : 100) / 100;
+      const colorMixVal = (fx.params.colorMix != null ? fx.params.colorMix : 0) / 100;
+      const shape = fx.params.shape || 'round';
 
       const srcData = ctx.getImageData(0, 0, w, h);
       const src = srcData.data;
@@ -2982,178 +3000,247 @@
         }
       }
 
-      // Build intensity lookup per grid cell: downsample CMYK into grid-cell averages
-      // For each channel, we work in rotated grid space
       const halfCell = cellSize * 0.5;
-      const maxDotR = halfCell; // max dot radius
-      const maxDotR2 = maxDotR * maxDotR;
-      const paperBright = paperVal * 255;
+      const halfCell2 = halfCell * halfCell;
+      const invCell = 1 / cellSize;
+
+      // Build per-pixel mask strength for feathered dot-size modulation.
+      // Strength goes from 0 (outside/edge) to 1 (deep inside mask).
+      // When no mask or no feather, maskStr stays null and is skipped.
+      let maskStr = null;
+      if (layer && geometry) {
+        const mask = getMask(layer);
+        if (mask && mask.enabled !== false && maskHasRegions(mask) && mask.feather > 0) {
+          const bitmapData = buildMaskAlphaBitmap(layer.id, mask, geometry.srcW, geometry.srcH);
+          const transform = getImageTransform(geometry);
+          if (bitmapData && transform) {
+            maskStr = new Float32Array(len);
+            const { rect } = transform;
+            const sxScale = geometry.srcW / rect.width;
+            const syScale = geometry.srcH / rect.height;
+            const feather = mask.feather;
+            const outer = feather * 0.75;
+            const totalRange = feather + outer;
+            const invRange = 1 / totalRange;
+            for (let py = 0; py < h; py++) {
+              for (let px = 0; px < w; px++) {
+                const sx = (px - rect.left) * sxScale;
+                const sy = (py - rect.top) * syScale;
+                const isx = Math.round(sx);
+                const isy = Math.round(sy);
+                if (isx < 0 || isx >= bitmapData.w || isy < 0 || isy >= bitmapData.h) {
+                  maskStr[py * w + px] = 0; continue;
+                }
+                const bidx = isy * bitmapData.w + isx;
+                const inside = bitmapData.bitmap[bidx] > 128;
+                const keep = mask.inverted ? !inside : inside;
+                const distIn = mask.inverted ? bitmapData.distOut[bidx] : bitmapData.distIn[bidx];
+                const distOut = mask.inverted ? bitmapData.distIn[bidx] : bitmapData.distOut[bidx];
+                const signedDist = keep ? distIn : -distOut;
+                if (signedDist < -outer) { maskStr[py * w + px] = 0; continue; }
+                if (signedDist >= feather) { maskStr[py * w + px] = 1; continue; }
+                const t = (signedDist + outer) * invRange;
+                maskStr[py * w + px] = t * t * (3 - 2 * t); // smoothstep
+              }
+            }
+          }
+        }
+      }
 
       // Contrast curve multiplier
       const contrastMul = 1 + contrastVal * 3;
+      const hasBleed = bleedVal >= 0.01;
+      const innerMul = 1 - bleedVal;
+      const outerMul = 1 + bleedVal * 0.5;
+      const innerMul2 = innerMul * innerMul;
+      const outerMul2 = outerMul * outerMul;
+      const bleedRange = outerMul - innerMul;
 
-      // Channel config: [cmykIndex, screenAngle, inkR, inkG, inkB]
-      const chConfigs = [
-        [3, 45, 0, 0, 0],       // K
-        [0, 15, 0, 255, 255],   // C
-        [1, 75, 255, 0, 255],   // M
-        [2, 0,  255, 255, 0]    // Y
-      ];
+      // Shape flags (avoid string comparison in hot loop)
+      const isRound = shape === 'round';
+      const isDiamond = shape === 'diamond';
+      const isLine = shape === 'line';
 
-      // Output buffer: start with paper color, will multiply each channel
-      const out = new Float32Array(len * 3); // R,G,B as floats 0-255
-      for (let i = 0; i < len; i++) {
-        const i3 = i * 3;
-        out[i3] = paperBright;
-        out[i3 + 1] = paperBright;
-        out[i3 + 2] = paperBright;
-      }
+      // Output buffer: start with white (255), will multiply each channel
+      const out = new Float32Array(len * 3).fill(255);
 
-      // Bleed: controls softness of dot edge
-      // innerR2 = (dotR * (1 - bleed))^2, outerR2 = (dotR * (1 + bleed*0.5))^2
-      // coverage = smoothstep from outer to inner
+      // Always track max dot coverage per pixel (needed for paper opacity)
+      const dotCoverage = new Float32Array(len);
 
-      for (const [chIdx, angle, inkR, inkG, inkB] of chConfigs) {
+      // Fast floor constant (offset trick avoids Math.floor call)
+      const FO = 1048576;
+      const wm1 = w - 1, hm1 = h - 1;
+
+      // Per-channel passes: trig constants in registers, cell caching,
+      // channel-specific blending (C/M/Y each touch only 1 RGB component)
+      // Channel config: [cmykIndex, angle, blendOffset (-1 = all three)]
+      const channels = [[3, 45, -1], [0, 15, 0], [1, 75, 1], [2, 0, 2]];
+
+      for (let pass = 0; pass < 4; pass++) {
+        const [chI, angle, blendOff] = channels[pass];
         const rad = angle * Math.PI / 180;
-        const cosA = Math.cos(rad);
-        const sinA = Math.sin(rad);
-        const invCell = 1 / cellSize;
+        const cosA = Math.cos(rad), sinA = Math.sin(rad);
 
-        // Build a grid of average intensities for this channel
-        // Find grid bounds
-        const c0u = 0, c0v = 0;
-        const c1u = w * cosA, c1v = -w * sinA;
-        const c2u = h * sinA, c2v = h * cosA;
-        const c3u = c1u + c2u, c3v = c1v + c2v;
-        const minU = Math.min(c0u, c1u, c2u, c3u);
-        const maxU = Math.max(c0u, c1u, c2u, c3u);
-        const minV = Math.min(c0v, c1v, c2v, c3v);
-        const maxV = Math.max(c0v, c1v, c2v, c3v);
-
-        const gStartU = Math.floor(minU * invCell) - 1;
-        const gEndU = Math.ceil(maxU * invCell) + 1;
-        const gStartV = Math.floor(minV * invCell) - 1;
-        const gEndV = Math.ceil(maxV * invCell) + 1;
-        const gW = gEndU - gStartU + 1;
-        const gH = gEndV - gStartV + 1;
-
-        // Accumulate channel intensity per grid cell
-        const gridSum = new Float32Array(gW * gH);
-        const gridCount = new Uint16Array(gW * gH);
+        // Cell cache: consecutive pixels in a row often share the same cell
+        // (~75-85% cache hit rate depending on angle), skipping un-rotation +
+        // sampling + contrast for the majority of pixels
+        let prevGu = -1e9, prevGv = -1e9;
+        let cIntensity = 0, cDotR2 = 0, cCu = 0, cCv = 0;
 
         for (let y = 0; y < h; y++) {
           const yRow = y * w;
-          const yCosA = y * sinA; // u component from y
-          const ySinA = y * cosA; // v component from y
+          const ysinA = y * sinA, ycosA = y * cosA;
+          prevGu = -1e9; // reset cache per row
+
           for (let x = 0; x < w; x++) {
-            const u = x * cosA + yCosA;
-            const v = -x * sinA + ySinA;
-            const gu = Math.floor(u * invCell) - gStartU;
-            const gv = Math.floor(v * invCell) - gStartV;
-            const gi = gv * gW + gu;
-            gridSum[gi] += cmyk[(yRow + x) * 4 + chIdx];
-            gridCount[gi]++;
-          }
-        }
+            // Rotate pixel to grid space
+            const u = x * cosA + ysinA;
+            const v = -x * sinA + ycosA;
 
-        // Compute per-cell intensity with contrast
-        const gridIntensity = new Float32Array(gW * gH);
-        for (let i = 0; i < gridSum.length; i++) {
-          if (gridCount[i] === 0) continue;
-          let val = gridSum[i] / gridCount[i];
-          if (contrastVal > 0) {
-            val = ((val - 0.5) * contrastMul) + 0.5;
-            if (val < 0) val = 0; else if (val > 1) val = 1;
-          }
-          gridIntensity[i] = val;
-        }
+            // Fast floor to find grid cell
+            const gu = ((u * invCell + FO) | 0) - FO;
+            const gv = ((v * invCell + FO) | 0) - FO;
 
-        // For each pixel, compute dot coverage and multiply-blend
-        // Ink color for multiply: pixel * (1 - coverage) + pixel * inkColor/255 * coverage
-        // But multiply blend means: out = out * layerColor/255
-        // Where layerColor = white * (1-coverage) + inkColor * coverage
-        const inkRn = inkR / 255, inkGn = inkG / 255, inkBn = inkB / 255;
+            // Cell cache: reuse intensity/dotR when pixel is in same cell
+            if (gu !== prevGu || gv !== prevGv) {
+              prevGu = gu; prevGv = gv;
+              cCu = (gu + 0.5) * cellSize;
+              cCv = (gv + 0.5) * cellSize;
+              // Un-rotate cell center to image space for sampling
+              const sx = cCu * cosA - cCv * sinA;
+              const sy = cCu * sinA + cCv * cosA;
+              const ix = sx < 0 ? 0 : sx > wm1 ? wm1 : (sx + 0.5) | 0;
+              const iy = sy < 0 ? 0 : sy > hm1 ? hm1 : (sy + 0.5) | 0;
+              let val = cmyk[(iy * w + ix) * 4 + chI];
+              if (contrastVal > 0) {
+                val = ((val - 0.5) * contrastMul) + 0.5;
+                if (val < 0) val = 0; else if (val > 1) val = 1;
+              }
+              cIntensity = val;
+              cDotR2 = halfCell2 * val;
+            }
 
-        for (let y = 0; y < h; y++) {
-          const yRow = y * w;
-          const yCosA = y * sinA;
-          const ySinA = y * cosA;
-          for (let x = 0; x < w; x++) {
-            // Rotated coords
-            const u = x * cosA + yCosA;
-            const v = -x * sinA + ySinA;
+            if (cIntensity < 0.01) continue;
 
-            // Grid cell
-            const guF = u * invCell;
-            const gvF = v * invCell;
-            const gu = Math.floor(guF) - gStartU;
-            const gv = Math.floor(gvF) - gStartV;
+            // Scale dot size by mask feather strength at this pixel
+            let dotR2 = cDotR2;
+            if (maskStr) {
+              const ms = maskStr[yRow + x];
+              if (ms <= 0) continue;
+              if (ms < 1) dotR2 = cDotR2 * ms;
+            }
 
-            // Cell center in rotated space
-            const cellCenterU = (gu + gStartU + 0.5) * cellSize;
-            const cellCenterV = (gv + gStartV + 0.5) * cellSize;
+            // Distance² from pixel to cell center (shape-dependent)
+            const du = u - cCu;
+            const dv = v - cCv;
+            let dist2;
+            if (isRound) {
+              dist2 = du * du + dv * dv;
+            } else if (isLine) {
+              dist2 = dv * dv;
+            } else if (isDiamond) {
+              const d = (du < 0 ? -du : du) + (dv < 0 ? -dv : dv);
+              dist2 = d * d;
+            } else {
+              const adu = du < 0 ? -du : du;
+              const adv = dv < 0 ? -dv : dv;
+              const d = adu > adv ? adu : adv;
+              dist2 = d * d;
+            }
 
-            // Distance squared from pixel to cell center (in rotated space)
-            const du = u - cellCenterU;
-            const dv = v - cellCenterV;
-            const dist2 = du * du + dv * dv;
-
-            // Get intensity for this cell
-            const gi = gv * gW + gu;
-            const intensity = gridIntensity[gi];
-            if (intensity < 0.01) continue;
-
-            // Dot radius based on intensity
-            const dotR = halfCell * intensity;
-            const dotR2 = dotR * dotR;
-
-            // Compute coverage
+            // Compute coverage using squared comparisons (avoids sqrt)
             let coverage;
-            if (bleedVal < 0.01) {
-              // Hard edge
+            if (!hasBleed) {
               coverage = dist2 <= dotR2 ? 1 : 0;
             } else {
-              // Soft edge
-              const innerR = dotR * (1 - bleedVal);
-              const outerR = dotR * (1 + bleedVal * 0.5);
-              const innerR2 = innerR * innerR;
-              const outerR2 = outerR * outerR;
+              const innerR2 = dotR2 * innerMul2;
+              const outerR2 = dotR2 * outerMul2;
               if (dist2 <= innerR2) {
                 coverage = 1;
               } else if (dist2 >= outerR2) {
                 coverage = 0;
               } else {
-                // Linear falloff between inner and outer
                 const d = Math.sqrt(dist2);
-                coverage = 1 - (d - innerR) / (outerR - innerR);
+                const dotR = Math.sqrt(dotR2);
+                const t = (d - dotR * innerMul) / (dotR * bleedRange);
+                coverage = 1 - t * t * (3 - 2 * t);
               }
             }
 
             if (coverage <= 0) continue;
 
-            // Multiply blend: out *= layerValue
-            // layerValue = lerp(1, inkColorNormalized, coverage)
-            const pi = (yRow + x) * 3;
-            const mR = 1 - coverage * (1 - inkRn);
-            const mG = 1 - coverage * (1 - inkGn);
-            const mB = 1 - coverage * (1 - inkBn);
-            out[pi]     *= mR;
-            out[pi + 1] *= mG;
-            out[pi + 2] *= mB;
+            const pixIdx = yRow + x;
+            if (coverage > dotCoverage[pixIdx]) dotCoverage[pixIdx] = coverage;
+
+            // Channel-specific multiply blend
+            // K(pass=0): all 3 RGB; C: R only; M: G only; Y: B only
+            const m = 1 - coverage;
+            const pi = pixIdx * 3;
+            if (blendOff < 0) {
+              out[pi] *= m; out[pi + 1] *= m; out[pi + 2] *= m;
+            } else {
+              out[pi + blendOff] *= m;
+            }
           }
         }
       }
 
-      // Write output, preserving original alpha
+      // Write output with paper opacity and color mix
       const dst = ctx.createImageData(w, h);
       const dd = dst.data;
-      for (let i = 0; i < len; i++) {
-        const i3 = i * 3, i4 = i * 4;
-        dd[i4]     = out[i3] + 0.5 | 0;
-        dd[i4 + 1] = out[i3 + 1] + 0.5 | 0;
-        dd[i4 + 2] = out[i3 + 2] + 0.5 | 0;
-        dd[i4 + 3] = src[i4 + 3];
+      if (paperVal >= 1 && colorMixVal <= 0) {
+        // Fast path: no blending needed (common case: paper=100, colorMix=0)
+        for (let i = 0; i < len; i++) {
+          const i3 = i * 3, i4 = i * 4;
+          dd[i4]     = (out[i3] + 0.5) | 0;
+          dd[i4 + 1] = (out[i3 + 1] + 0.5) | 0;
+          dd[i4 + 2] = (out[i3 + 2] + 0.5) | 0;
+          dd[i4 + 3] = src[i4 + 3];
+        }
+      } else {
+        for (let i = 0; i < len; i++) {
+          const i3 = i * 3, i4 = i * 4;
+          const maxCov = dotCoverage[i];
+
+          let r = out[i3], g = out[i3 + 1], b = out[i3 + 2];
+
+          // Paper opacity: blend between original (paper=0) and white (paper=1) for uncovered areas
+          if (paperVal < 1) {
+            const showThrough = (1 - maxCov) * (1 - paperVal);
+            r = r * (1 - showThrough) + src[i4]     * showThrough;
+            g = g * (1 - showThrough) + src[i4 + 1] * showThrough;
+            b = b * (1 - showThrough) + src[i4 + 2] * showThrough;
+          }
+
+          // Color mix: blend toward original colors
+          if (colorMixVal > 0) {
+            r = r * (1 - colorMixVal) + src[i4]     * colorMixVal;
+            g = g * (1 - colorMixVal) + src[i4 + 1] * colorMixVal;
+            b = b * (1 - colorMixVal) + src[i4 + 2] * colorMixVal;
+          }
+
+          dd[i4]     = (r + 0.5) | 0;
+          dd[i4 + 1] = (g + 0.5) | 0;
+          dd[i4 + 2] = (b + 0.5) | 0;
+          dd[i4 + 3] = src[i4 + 3];
+        }
       }
+
+      // Halftone feather: use the pre-computed maskStr to set pixel alpha.
+      // Dots were already shrunk during rendering via maskStr; now apply the
+      // same strength as alpha so paper between dots also fades smoothly.
+      // This replaces the normal applyLayerMask for this layer.
+      if (maskStr && layer) {
+        layer._maskHandledByEffect = true;
+        for (let i = 0; i < len; i++) {
+          const ms = maskStr[i];
+          if (ms >= 1) continue; // deep inside mask — full opacity
+          const i4 = i * 4;
+          if (ms <= 0) { dd[i4 + 3] = 0; continue; } // outside mask
+          dd[i4 + 3] = Math.round(dd[i4 + 3] * ms);
+        }
+      }
+
       ctx.putImageData(dst, 0, 0);
     }
 
@@ -3217,6 +3304,24 @@
         bloomIntensity: fx.params.intensity ?? 0.6
       };
       applyBloomPost(ctx, asciiCanvas, outW, outH, pseudoLayer);
+    }
+
+    function applySepiaEffect(ctx, fx, context) {
+      const { outW, outH } = context;
+      const intensity = (fx.params.intensity ?? 80) / 100;
+      if (intensity <= 0) return;
+      const imageData = ctx.getImageData(0, 0, outW, outH);
+      const d = imageData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2];
+        const sr = Math.min(255, 0.393 * r + 0.769 * g + 0.189 * b);
+        const sg = Math.min(255, 0.349 * r + 0.686 * g + 0.168 * b);
+        const sb = Math.min(255, 0.272 * r + 0.534 * g + 0.131 * b);
+        d[i]     = r + (sr - r) * intensity;
+        d[i + 1] = g + (sg - g) * intensity;
+        d[i + 2] = b + (sb - b) * intensity;
+      }
+      ctx.putImageData(imageData, 0, 0);
     }
 
     function applyGrainEffect(ctx, fx, context) {
@@ -3311,7 +3416,7 @@
       ctx.drawImage(fillC, 0, 0);
     }
 
-    function applyFractalGlass(ctx, w, h, fx, effectScale = 1, geometry = null, forExport = false, gridStep = 0) {
+    function applyFractalGlass(ctx, w, h, fx, effectScale = 1, geometry = null, forExport = false, gridStep = 0, layer = null) {
       // Backward compatibility: migrate old slices param to new scale param
       if (fx.params.slices !== undefined && fx.params.scale === undefined) {
         fx.params.scale = Math.round(w / fx.params.slices);
@@ -3331,29 +3436,28 @@
 
       if (maxDisp < 0.5) return;
 
-      const { gradX: gradXArr, gradY: gradYArr, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness);
+      const { map: tileMap, gradX: gradXArr, gradY: gradYArr, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness);
 
       // Preview: nearest-neighbor (Uint32 copy, no interpolation) — ~4x faster
       // Export: bilinear interpolation for smooth sub-pixel quality
       const useNN = !forExport;
 
-      function applyGlassDisplacement(srcCanvas, dstCtx, sw, sh) {
+      function applyGlassDisplacement(srcCanvas, dstCtx, sw, sh, clampRect) {
         const src = srcCanvas.getContext('2d', { willReadFrequently: true })
           .getImageData(0, 0, sw, sh);
         const dst = dstCtx.createImageData(sw, sh);
         const sData = src.data;
         const dData = dst.data;
         const sw4 = sw * 4;
-        const swMax = sw - 1;
-        const shMax = sh - 1;
+        // Clamp to image content region if provided, otherwise full canvas
+        const cxMin = clampRect ? clampRect.left : 0;
+        const cyMin = clampRect ? clampRect.top : 0;
+        const cxMax = clampRect ? (clampRect.left + clampRect.width - 1) : (sw - 1);
+        const cyMax = clampRect ? (clampRect.top + clampRect.height - 1) : (sh - 1);
 
         // Uint32 views for fast nearest-neighbor pixel copy
         const sData32 = new Uint32Array(sData.buffer);
         const dData32 = new Uint32Array(dData.buffer);
-
-        // Pre-expand tile displacement LUTs per row
-        const rowDxLut = new Float32Array(sw);
-        const rowDyLut = new Float32Array(sw);
 
         if (useNN) {
           // Nearest-neighbor: ~1 op per pixel via Uint32Array
@@ -3368,12 +3472,10 @@
               let srcXf = x + gradXArr[tileIdx] * maxDisp;
               let srcYf = y + gradYArr[tileIdx] * maxDisp;
 
-              if (srcXf < 0) srcXf = -srcXf;
-              else if (srcXf > swMax) srcXf = swMax + swMax - srcXf;
-              if (srcYf < 0) srcYf = -srcYf;
-              else if (srcYf > shMax) srcYf = shMax + shMax - srcYf;
-              if (srcXf < 0) srcXf = 0; else if (srcXf > swMax) srcXf = swMax;
-              if (srcYf < 0) srcYf = 0; else if (srcYf > shMax) srcYf = shMax;
+              if (srcXf < cxMin) srcXf = cxMin;
+              else if (srcXf > cxMax) srcXf = cxMax;
+              if (srcYf < cyMin) srcYf = cyMin;
+              else if (srcYf > cyMax) srcYf = cyMax;
 
               dData32[rowOff32 + x] = sData32[(srcYf | 0) * sw + (srcXf | 0)];
             }
@@ -3391,17 +3493,15 @@
               let srcXf = x + gradXArr[tileIdx] * maxDisp;
               let srcYf = y + gradYArr[tileIdx] * maxDisp;
 
-              if (srcXf < 0) srcXf = -srcXf;
-              else if (srcXf > swMax) srcXf = swMax + swMax - srcXf;
-              if (srcYf < 0) srcYf = -srcYf;
-              else if (srcYf > shMax) srcYf = shMax + shMax - srcYf;
-              if (srcXf < 0) srcXf = 0; else if (srcXf > swMax) srcXf = swMax;
-              if (srcYf < 0) srcYf = 0; else if (srcYf > shMax) srcYf = shMax;
+              if (srcXf < cxMin) srcXf = cxMin;
+              else if (srcXf > cxMax) srcXf = cxMax;
+              if (srcYf < cyMin) srcYf = cyMin;
+              else if (srcYf > cyMax) srcYf = cyMax;
 
               const sx0 = srcXf | 0;
               const sy0 = srcYf | 0;
-              const sx1 = sx0 < swMax ? sx0 + 1 : swMax;
-              const sy1 = sy0 < shMax ? sy0 + 1 : shMax;
+              const sx1 = sx0 < cxMax ? sx0 + 1 : cxMax;
+              const sy1 = sy0 < cyMax ? sy0 + 1 : cyMax;
               const fx1 = srcXf - sx0;
               const fy1 = srcYf - sy0;
               const fx0 = 1 - fx1;
@@ -3426,12 +3526,14 @@
         dstCtx.putImageData(dst, 0, 0);
       }
 
-      const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-fg-src');
+      // Get image content bounds for clamping displacement samples
+      const rect = getImageBoundsRect(geometry);
+      const clampRect = rect || { left: 0, top: 0, width: w, height: h };
 
       if (angle === 0) {
-        applyGlassDisplacement(effectInput, ctx, w, h);
+        applyGlassDisplacement(ctx.canvas, ctx, w, h, clampRect);
       } else {
-        // Rotate-apply-unrotate strategy
+        // Rotate-apply-unrotate strategy with edge padding
         const rad = angle * Math.PI / 180;
         const cosA = Math.abs(Math.cos(rad));
         const sinA = Math.abs(Math.sin(rad));
@@ -3441,17 +3543,12 @@
         const padded = getScratchCanvas('fx-fg-pad-' + fx.id, pw, ph);
         const pctx = padded.getContext('2d');
         pctx.clearRect(0, 0, pw, ph);
-        pctx.drawImage(effectInput, 0, 0, w, h, pad, pad, w, h);
-        pctx.drawImage(effectInput, 0, 0, w, 1, pad, 0, w, pad);
-        pctx.drawImage(effectInput, 0, h - 1, w, 1, pad, pad + h, w, pad);
-        pctx.drawImage(effectInput, 0, 0, 1, h, 0, pad, pad, h);
-        pctx.drawImage(effectInput, w - 1, 0, 1, h, pad + w, pad, pad, h);
-        pctx.drawImage(effectInput, 0, 0, 1, 1, 0, 0, pad, pad);
-        pctx.drawImage(effectInput, w - 1, 0, 1, 1, pad + w, 0, pad, pad);
-        pctx.drawImage(effectInput, 0, h - 1, 1, 1, 0, pad + h, pad, pad);
-        pctx.drawImage(effectInput, w - 1, h - 1, 1, 1, pad + w, pad + h, pad, pad);
+        // Use extendCanvasToImageBounds for edge fill, then pad further
+        const effectInput = extendCanvasToImageBounds(ctx.canvas, geometry, fx.id + '-fg-src');
+        padCanvasForBlur(effectInput, w, h, pad, fx.id + '-fg-pad');
+        const paddedSrc = getScratchCanvas('fx-pad-' + fx.id + '-fg-pad', pw, ph);
 
-        // Use tight rotated bounding box instead of full diagonal
+        // Use tight rotated bounding box
         const rotW = Math.ceil(pw * cosA + ph * sinA);
         const rotH = Math.ceil(pw * sinA + ph * cosA);
         const rot = getScratchCanvas('fx-fg-rot-' + fx.id, rotW, rotH);
@@ -3460,12 +3557,13 @@
         rctx.save();
         rctx.translate(rotW / 2, rotH / 2);
         rctx.rotate(rad);
-        rctx.drawImage(padded, -pw / 2, -ph / 2);
+        rctx.drawImage(paddedSrc, -pw / 2, -ph / 2);
         rctx.restore();
 
+        // For rotated path, clamp to full rotated canvas (padding handles edges)
         const result = getScratchCanvas('fx-fg-res-' + fx.id, rotW, rotH);
         const resCtx = result.getContext('2d');
-        applyGlassDisplacement(rot, resCtx, rotW, rotH);
+        applyGlassDisplacement(rot, resCtx, rotW, rotH, null);
 
         ctx.clearRect(0, 0, w, h);
         ctx.save();
@@ -3473,6 +3571,61 @@
         ctx.rotate(-rad);
         ctx.drawImage(result, -rotW / 2, -rotH / 2);
         ctx.restore();
+      }
+
+      // Fractal feather interaction: use glass displacement map to shape
+      // the mask feather edge so it follows the fractal glass texture.
+      // This replaces the normal applyLayerMask for this layer.
+      if (layer && geometry) {
+        const mask = getMask(layer);
+        if (mask && maskHasRegions(mask) && mask.feather > 0) {
+          layer._maskHandledByEffect = true;
+          const bitmapData = buildMaskAlphaBitmap(layer.id, mask, geometry.srcW, geometry.srcH);
+          const transform = getImageTransform(geometry);
+          if (bitmapData && transform) {
+            const { rect } = transform;
+            const scaleToSrcX = geometry.srcW / rect.width;
+            const scaleToSrcY = geometry.srcH / rect.height;
+            const feather = mask.feather;
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+
+            for (let py = 0; py < h; py++) {
+              for (let px = 0; px < w; px++) {
+                const i = (py * w + px) * 4;
+                if (data[i + 3] === 0) continue;
+
+                // Map output pixel to source coordinates
+                const sx = (px - rect.left) * scaleToSrcX;
+                const sy = (py - rect.top) * scaleToSrcY;
+                const isx = Math.round(sx);
+                const isy = Math.round(sy);
+                if (isx < 0 || isx >= bitmapData.w || isy < 0 || isy >= bitmapData.h) continue;
+
+                const bidx = isy * bitmapData.w + isx;
+                const inside = bitmapData.bitmap[bidx] > 128;
+                const keep = mask.inverted ? !inside : inside;
+                if (!keep) { data[i + 3] = 0; continue; }
+
+                const dist = mask.inverted ? bitmapData.distOut[bidx] : bitmapData.distIn[bidx];
+
+                const range = feather * 2;
+                if (dist >= range) continue;
+
+                // Sample the glass tile map value (0–1) at this pixel
+                const tx = ((px % tileW) + tileW) % tileW;
+                const ty = ((py % tileH) + tileH) % tileH;
+                const mapVal = tileMap[ty * tileW + tx]; // 0–1
+
+                const edgeProgress = dist / range; // 0 at mask edge, 1 deep inside
+                const patternZone = 1 - smoothstep(0.4, 1.0, edgeProgress);
+                const alpha = edgeProgress * (1 - patternZone * (1 - clamp(mapVal, 0, 1)));
+                data[i + 3] = Math.round(data[i + 3] * clamp(alpha, 0, 1));
+              }
+            }
+            ctx.putImageData(imgData, 0, 0);
+          }
+        }
       }
     }
 
@@ -3686,14 +3839,742 @@
       ctx.putImageData(dst, 0, 0);
     }
 
+    // ============ WebGL EFFECT PIPELINE ============
+    const _glPipeline = (() => {
+      const cvs = document.createElement('canvas');
+      const gl = cvs.getContext('webgl2', { premultipliedAlpha: false, preserveDrawingBuffer: true });
+      if (!gl) return null;
+
+      // --- Shader compilation helpers ---
+      function compileShader(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+          console.error('Shader error:', gl.getShaderInfoLog(s));
+          gl.deleteShader(s);
+          return null;
+        }
+        return s;
+      }
+      function createProgram(vsSrc, fsSrc) {
+        const vs = compileShader(gl.VERTEX_SHADER, vsSrc);
+        const fs = compileShader(gl.FRAGMENT_SHADER, fsSrc);
+        if (!vs || !fs) return null;
+        const p = gl.createProgram();
+        gl.attachShader(p, vs);
+        gl.attachShader(p, fs);
+        gl.linkProgram(p);
+        if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+          console.error('Program error:', gl.getProgramInfoLog(p));
+          return null;
+        }
+        return p;
+      }
+
+      // --- Fullscreen quad ---
+      const VERT = `#version 300 es
+        in vec2 aPos;
+        out vec2 vUv;
+        void main() { vUv = aPos * 0.5 + 0.5; gl_Position = vec4(aPos, 0, 1); }`;
+
+      const quadBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+      // --- Framebuffer ping-pong ---
+      let fbA = null, fbB = null, texA = null, texB = null, fbW = 0, fbH = 0;
+      function ensureFBOs(w, h) {
+        if (fbW === w && fbH === h) return;
+        fbW = w; fbH = h;
+        cvs.width = w; cvs.height = h;
+        gl.viewport(0, 0, w, h);
+        [texA, texB].forEach(t => { if (t) gl.deleteTexture(t); });
+        [fbA, fbB].forEach(f => { if (f) gl.deleteFramebuffer(f); });
+        function makeFBO() {
+          const tex = gl.createTexture();
+          gl.bindTexture(gl.TEXTURE_2D, tex);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          const fb = gl.createFramebuffer();
+          gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+          gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+          return { fb, tex };
+        }
+        const a = makeFBO(), b = makeFBO();
+        fbA = a.fb; texA = a.tex; fbB = b.fb; texB = b.tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      }
+
+      // --- Program cache ---
+      const programCache = new Map();
+      function getProgram(key, fsSrc) {
+        if (programCache.has(key)) return programCache.get(key);
+        const p = createProgram(VERT, fsSrc);
+        if (p) programCache.set(key, p);
+        return p;
+      }
+
+      // --- Run a single-pass shader ---
+      let pingIsA = true;
+      function drawQuad(prog) {
+        gl.useProgram(prog);
+        const loc = gl.getAttribLocation(prog, 'aPos');
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      function runPass(prog, inputTex, toScreen) {
+        if (toScreen) {
+          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        } else {
+          const outFB = pingIsA ? fbA : fbB;
+          gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        }
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, inputTex);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        drawQuad(prog);
+        if (!toScreen) {
+          const outTex = pingIsA ? texA : texB;
+          pingIsA = !pingIsA;
+          return outTex;
+        }
+      }
+
+      // --- Upload Canvas2D → GL texture ---
+      let inputTex = null;
+      function uploadCanvas(canvas, w, h) {
+        ensureFBOs(w, h);
+        if (!inputTex) inputTex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, inputTex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        pingIsA = true;
+        return inputTex;
+      }
+
+      // --- Read back GL → Canvas2D ---
+      function readBack(ctx, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.drawImage(cvs, 0, 0, w, h);
+      }
+
+      // --- Displacement map texture cache ---
+      let dispMapTex = null, dispMapKey = '';
+
+      // ========== SHADER SOURCES ==========
+      const FRAG_SEPIA = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform float uIntensity;
+        void main() {
+          vec4 c = texture(uTex, vUv);
+          vec3 s = vec3(
+            dot(c.rgb, vec3(0.393, 0.769, 0.189)),
+            dot(c.rgb, vec3(0.349, 0.686, 0.168)),
+            dot(c.rgb, vec3(0.272, 0.534, 0.131))
+          );
+          fragColor = vec4(mix(c.rgb, min(s, 1.0), uIntensity), c.a);
+        }`;
+
+      const FRAG_GRAIN = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uRes;
+        uniform float uAmount;
+        uniform float uSize;
+        uniform float uRoughness;
+        uniform float uSeed;
+        // Simple hash noise
+        float hash(vec2 p) {
+          vec3 p3 = fract(vec3(p.xyx) * vec3(443.897, 441.423, 437.195));
+          p3 += dot(p3, p3.yzx + 19.19);
+          return fract((p3.x + p3.y) * p3.z);
+        }
+        float valueNoise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hash(i), hash(i + vec2(1,0)), f.x),
+                     mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), f.x), f.y);
+        }
+        void main() {
+          vec4 c = texture(uTex, vUv);
+          if (c.a == 0.0) { fragColor = c; return; }
+          vec2 px = vUv * uRes;
+          float coarse = valueNoise(px / (uSize * 1.35) + uSeed) * 2.0 - 1.0;
+          float medium = valueNoise(px / max(1.0, uSize * (0.9 - uRoughness * 0.55)) + uSeed + 100.0) * 2.0 - 1.0;
+          float fine = valueNoise(px / max(1.0, uSize * (1.0 - uRoughness * 0.94)) + uSeed + 200.0) * 2.0 - 1.0;
+          float detail = valueNoise(px / max(1.0, uSize * 0.3) + uSeed + 300.0) * 2.0 - 1.0;
+          float n = mix(mix(fine, medium, uRoughness), coarse, uRoughness * 0.5) * 0.7 + detail * 0.3;
+          float strength = uAmount * 80.0 / 255.0;
+          fragColor = vec4(clamp(c.rgb + n * strength, 0.0, 1.0), c.a);
+        }`;
+
+      const FRAG_CHROMATIC = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uOffset; // dx/w, dy/h
+        void main() {
+          float r = texture(uTex, vUv + uOffset).r;
+          vec4 g = texture(uTex, vUv);
+          float b = texture(uTex, vUv - uOffset).b;
+          fragColor = vec4(r, g.g, b, g.a);
+        }`;
+
+      const FRAG_BLOOM_BLUR = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uDir; // (1/w, 0) or (0, 1/h)
+        uniform float uRadius;
+        void main() {
+          vec4 sum = vec4(0.0);
+          float total = 0.0;
+          for (float i = -16.0; i <= 16.0; i += 1.0) {
+            float w = exp(-0.5 * (i * i) / max(uRadius * uRadius * 0.11, 0.5));
+            sum += texture(uTex, vUv + uDir * i) * w;
+            total += w;
+          }
+          fragColor = sum / total;
+        }`;
+
+      const FRAG_BLOOM_BLEND = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform sampler2D uBloom;
+        uniform float uIntensity;
+        void main() {
+          vec4 orig = texture(uTex, vUv);
+          vec4 bloom = texture(uBloom, vUv);
+          fragColor = vec4(orig.rgb + bloom.rgb * uIntensity, orig.a);
+        }`;
+
+      const FRAG_BLUR_GAUSS = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uDir;
+        uniform float uRadius;
+        void main() {
+          vec4 sum = vec4(0.0);
+          float total = 0.0;
+          float sigma = max(uRadius * 0.33, 0.5);
+          float invSig2 = -0.5 / (sigma * sigma);
+          int r = int(ceil(uRadius));
+          for (int i = -r; i <= r; i++) {
+            float w = exp(float(i * i) * invSig2);
+            sum += texture(uTex, vUv + uDir * float(i)) * w;
+            total += w;
+          }
+          fragColor = sum / total;
+        }`;
+
+      const FRAG_BLUR_MOTION = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uDir;
+        uniform int uSamples;
+        void main() {
+          vec4 sum = vec4(0.0);
+          int s = max(uSamples, 1);
+          for (int i = 0; i < 64; i++) {
+            if (i >= s) break;
+            float t = float(i) / float(s - 1) - 0.5;
+            sum += texture(uTex, vUv + uDir * t);
+          }
+          fragColor = sum / float(s);
+        }`;
+
+      const FRAG_BLUR_RADIAL = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uCenter;
+        uniform float uAmount;
+        void main() {
+          vec2 dir = vUv - uCenter;
+          vec4 sum = vec4(0.0);
+          const int SAMPLES = 24;
+          for (int i = 0; i < SAMPLES; i++) {
+            float t = float(i) / float(SAMPLES - 1) * uAmount;
+            sum += texture(uTex, vUv - dir * t);
+          }
+          fragColor = sum / float(SAMPLES);
+        }`;
+
+      const FRAG_LENS = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uCenter;
+        uniform vec2 uRes;
+        uniform float uStrength;
+        uniform float uAngle;
+        uniform int uType; // 0=barrel, 1=zoom, 2=swirl, 3=fisheye
+        void main() {
+          vec2 uv = vUv;
+          vec2 d = (uv - uCenter) * uRes;
+          float r2 = dot(d, d);
+          float maxR2 = dot(uRes, uRes) * 0.25;
+
+          if (uType == 0) { // barrel
+            float k = uStrength * 0.0004;
+            float factor = 1.0 + k * r2;
+            uv = uCenter + d / (factor * uRes);
+          } else if (uType == 1) { // zoom
+            float s = uStrength / 100.0;
+            float factor = 1.0 + s * (r2 / maxR2);
+            uv = uCenter + d / (factor * uRes);
+          } else if (uType == 2) { // swirl
+            float angle = uAngle * 3.14159 / 180.0;
+            float dist = sqrt(r2);
+            float maxR = sqrt(maxR2);
+            float t = angle * (1.0 - dist / maxR);
+            float cosT = cos(t), sinT = sin(t);
+            vec2 rd = vec2(d.x * cosT - d.y * sinT, d.x * sinT + d.y * cosT);
+            uv = uCenter + rd / uRes;
+          } else { // fisheye
+            float dist = sqrt(r2);
+            float maxR = sqrt(maxR2);
+            float nd = dist / maxR;
+            float s = uStrength / 100.0;
+            float power = mix(1.0, 1.8, abs(s));
+            float newDist;
+            if (s > 0.0) { newDist = pow(nd, power) * maxR; }
+            else { newDist = pow(nd, 1.0/power) * maxR; }
+            uv = uCenter + d * (newDist / max(dist, 0.001)) / uRes;
+          }
+
+          uv = clamp(uv, vec2(0.0), vec2(1.0));
+          fragColor = texture(uTex, uv);
+        }`;
+
+      const FRAG_FRACTAL = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform sampler2D uDispMap;
+        uniform vec2 uRes;
+        uniform vec2 uTileSize;
+        uniform float uMaxDisp;
+        uniform float uAngle;
+        uniform vec4 uClampRect;
+        void main() {
+          vec2 px = vUv * uRes;
+          // Rotate pixel position for angled tile lookup
+          float cosA = cos(uAngle);
+          float sinA = sin(uAngle);
+          vec2 center = uRes * 0.5;
+          vec2 d = px - center;
+          vec2 rotPx = vec2(d.x * cosA - d.y * sinA, d.x * sinA + d.y * cosA) + center;
+          vec2 tileUv = fract(rotPx / uTileSize);
+          vec2 grad = texture(uDispMap, tileUv).rg * 2.0 - 1.0;
+          // Rotate displacement back to screen space
+          vec2 rotGrad = vec2(grad.x * cosA + grad.y * sinA, -grad.x * sinA + grad.y * cosA);
+          vec2 displaced = vUv + rotGrad * uMaxDisp / uRes;
+          displaced = clamp(displaced, uClampRect.xy, uClampRect.zw);
+          fragColor = texture(uTex, displaced);
+        }`;
+
+      const FRAG_PIXELATE = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uRes;
+        uniform float uBlockSize;
+        void main() {
+          vec2 block = floor(vUv * uRes / uBlockSize) * uBlockSize + uBlockSize * 0.5;
+          fragColor = texture(uTex, block / uRes);
+        }`;
+
+      // ========== GRAIN SEED COUNTER ==========
+      let _glGrainSeed = 0;
+
+      // ========== EFFECT RUNNERS ==========
+      function glSepia(tex, w, h, fx) {
+        const intensity = (fx.params.intensity ?? 80) / 100;
+        if (intensity <= 0) return tex;
+        const prog = getProgram('sepia', FRAG_SEPIA);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uIntensity'), intensity);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glGrain(tex, w, h, fx, effectScale) {
+        const amount = (fx.params.amount ?? 25) / 100;
+        if (amount <= 0) return tex;
+        const sCtrl = fx.params.size ?? 25;
+        const sT = Math.max(0, Math.min(1, (sCtrl - 1) / 99));
+        const size = Math.max(1, (1 + Math.pow(sT, 2.35) * 23) * (effectScale || 1));
+        const roughness = (fx.params.roughness ?? 50) / 100;
+        const prog = getProgram('grain', FRAG_GRAIN);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAmount'), amount);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uSize'), size);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uRoughness'), roughness);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uSeed'), (_glGrainSeed++) * 0.01);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glChromatic(tex, w, h, fx, effectScale) {
+        const offset = (fx.params.amount ?? 5) * (effectScale || 1);
+        if (offset <= 0) return tex;
+        const angle = ((fx.params.angle || 0) * Math.PI) / 180;
+        const dx = (Math.cos(angle) * offset) / w;
+        const dy = (Math.sin(angle) * offset) / h;
+        const prog = getProgram('chromatic', FRAG_CHROMATIC);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uOffset'), dx, -dy);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glBloom(tex, w, h, fx, effectScale, asciiCanvas) {
+        const radius = (fx.params.radius ?? 8) * (effectScale || 1);
+        const intensity = fx.params.intensity ?? 0.6;
+        if (intensity <= 0 || radius <= 0) return tex;
+        const progBlur = getProgram('bloom-blur', FRAG_BLOOM_BLUR);
+        const progBlend = getProgram('bloom-blend', FRAG_BLOOM_BLEND);
+        if (!progBlur || !progBlend) return tex;
+
+        // Pass 1: horizontal blur
+        let cur = tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, cur);
+        gl.useProgram(progBlur);
+        gl.uniform1i(gl.getUniformLocation(progBlur, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(progBlur, 'uDir'), 1.0 / w, 0);
+        gl.uniform1f(gl.getUniformLocation(progBlur, 'uRadius'), radius);
+        drawQuad(progBlur);
+        const blurHTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+
+        // Pass 2: vertical blur
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, blurHTex);
+        gl.useProgram(progBlur);
+        gl.uniform1i(gl.getUniformLocation(progBlur, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(progBlur, 'uDir'), 0, 1.0 / h);
+        gl.uniform1f(gl.getUniformLocation(progBlur, 'uRadius'), radius);
+        drawQuad(progBlur);
+        const bloomTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+
+        // Pass 3: additive blend original + bloom
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.useProgram(progBlend);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.uniform1i(gl.getUniformLocation(progBlend, 'uTex'), 0);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, bloomTex);
+        gl.uniform1i(gl.getUniformLocation(progBlend, 'uBloom'), 1);
+        gl.uniform1f(gl.getUniformLocation(progBlend, 'uIntensity'), intensity);
+        drawQuad(progBlend);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glGaussianBlur(tex, w, h, fx, effectScale) {
+        const r = (fx.params.amount ?? 5) * (effectScale || 1);
+        if (r <= 0.5) return tex;
+        const prog = getProgram('blur-gauss', FRAG_BLUR_GAUSS);
+        if (!prog) return tex;
+        // Horizontal
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uDir'), 1.0 / w, 0);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uRadius'), r);
+        drawQuad(prog);
+        const hTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        // Vertical
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, hTex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uDir'), 0, 1.0 / h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uRadius'), r);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glMotionBlur(tex, w, h, fx, effectScale) {
+        const dist = (fx.params.amount ?? 10) * (effectScale || 1);
+        if (dist <= 0) return tex;
+        const angle = ((fx.params.angle || 0) * Math.PI) / 180;
+        const samples = Math.max(4, Math.min(64, Math.ceil(dist * 2)));
+        const prog = getProgram('blur-motion', FRAG_BLUR_MOTION);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uDir'), (Math.cos(angle) * dist) / w, -(Math.sin(angle) * dist) / h);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uSamples'), samples);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glRadialBlur(tex, w, h, fx, effectScale) {
+        const amount = (fx.params.amount ?? 10) * (effectScale || 1) / 100;
+        if (amount <= 0) return tex;
+        const prog = getProgram('blur-radial', FRAG_BLUR_RADIAL);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uCenter'), (fx.params.centerX ?? 50) / 100, 1.0 - (fx.params.centerY ?? 50) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAmount'), amount);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glLens(tex, w, h, fx, effectScale) {
+        const p = fx.params;
+        const subtype = fx.subtype || 'barrel';
+        const typeMap = { barrel: 0, zoom: 1, swirl: 2, fisheye: 3 };
+        if ((subtype === 'barrel' || subtype === 'zoom') && p.strength === 0) return tex;
+        if (subtype === 'swirl' && p.angle === 0) return tex;
+        if (subtype === 'fisheye' && p.strength === 0) return tex;
+        const prog = getProgram('lens', FRAG_LENS);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uCenter'), (p.centerX ?? 50) / 100, 1.0 - (p.centerY ?? 50) / 100);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uStrength'), p.strength ?? 0);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAngle'), p.angle ?? 0);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uType'), typeMap[subtype] ?? 0);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glFractalGlass(tex, w, h, fx, effectScale, geometry) {
+        const texture = fx.params.texture || 'reeded';
+        const scale = Math.max(4, Math.round((fx.params.scale ?? 40) * (effectScale || 1)));
+        const smoothness = Math.round(fx.params.smoothness ?? 3);
+        const distortion = (fx.params.distortion ?? 50) / 100;
+        const maxDisp = scale * distortion * 15;
+        if (maxDisp < 0.5) return tex;
+
+        // Get displacement map (reuse CPU function for tile generation)
+        const { gradX, gradY, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness);
+
+        // Upload displacement map as texture (RG channels = gradX, gradY remapped 0-1)
+        const mapKey = texture + '|' + tileW + '|' + smoothness;
+        if (mapKey !== dispMapKey) {
+          const mapData = new Uint8Array(tileW * tileH * 4);
+          for (let i = 0; i < tileW * tileH; i++) {
+            mapData[i * 4] = Math.round((gradX[i] * 0.5 + 0.5) * 255);
+            mapData[i * 4 + 1] = Math.round((gradY[i] * 0.5 + 0.5) * 255);
+            mapData[i * 4 + 2] = 0;
+            mapData[i * 4 + 3] = 255;
+          }
+          if (!dispMapTex) dispMapTex = gl.createTexture();
+          gl.bindTexture(gl.TEXTURE_2D, dispMapTex);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, tileW, tileH, 0, gl.RGBA, gl.UNSIGNED_BYTE, mapData);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+          dispMapKey = mapKey;
+        }
+
+        const rect = getImageBoundsRect(geometry);
+        const cLeft = rect ? rect.left / w : 0;
+        const cTop = rect ? rect.top / h : 0;
+        const cRight = rect ? (rect.left + rect.width) / w : 1;
+        const cBottom = rect ? (rect.top + rect.height) / h : 1;
+
+        const prog = getProgram('fractal', FRAG_FRACTAL);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.useProgram(prog);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, dispMapTex);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uDispMap'), 1);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uTileSize'), tileW, tileH);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uMaxDisp'), maxDisp);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAngle'), (fx.params.angle || 0) * Math.PI / 180);
+        // Note: GL has Y-flipped UVs, so flip top/bottom
+        gl.uniform4f(gl.getUniformLocation(prog, 'uClampRect'), cLeft, 1.0 - cBottom, cRight, 1.0 - cTop);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glPixelate(tex, w, h, fx, effectScale, gridStep) {
+        const blockSize = gridStep > 0 ? gridStep : Math.max(2, Math.round((fx.params.amount ?? 8) * (effectScale || 1)));
+        if (blockSize < 2) return tex;
+        const prog = getProgram('pixelate', FRAG_PIXELATE);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, pingIsA ? fbA : fbB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uBlockSize'), blockSize);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      // ========== CHAIN RUNNER ==========
+      // Returns true if the entire chain was handled on GPU, false otherwise
+      function runChain(ctx, chain, context) {
+        const { outW, outH, effectScale, geometry } = context;
+        const w = outW, h = outH;
+
+        // Check if all effects in chain can be handled by GL
+        const glHandled = new Set(['sepia', 'grain', 'chromatic', 'pixelate', 'fractalGlass', 'lens', 'bloom', 'blur']);
+        // Blur subtypes we handle
+        const glBlurSubs = new Set(['gaussian', 'motion', 'radial', 'box']);
+        const canDoAll = chain.every(fx => {
+          if (!fx.enabled) return true;
+          if (fx.type === 'blur') return glBlurSubs.has(fx.subtype);
+          return glHandled.has(fx.type);
+        });
+        if (!canDoAll) return false;
+
+        // Upload canvas to GPU
+        let tex = uploadCanvas(ctx.canvas, w, h);
+
+        for (const fx of chain) {
+          if (!fx.enabled) continue;
+          switch (fx.type) {
+            case 'sepia': tex = glSepia(tex, w, h, fx); break;
+            case 'grain': tex = glGrain(tex, w, h, fx, effectScale); break;
+            case 'chromatic': tex = glChromatic(tex, w, h, fx, effectScale); break;
+            case 'pixelate': tex = glPixelate(tex, w, h, fx, effectScale, context.gridStepY); break;
+            case 'fractalGlass': tex = glFractalGlass(tex, w, h, fx, effectScale, geometry); break;
+            case 'lens': tex = glLens(tex, w, h, fx, effectScale); break;
+            case 'bloom': tex = glBloom(tex, w, h, fx, effectScale, context.asciiCanvas); break;
+            case 'blur': {
+              switch (fx.subtype) {
+                case 'gaussian': tex = glGaussianBlur(tex, w, h, fx, effectScale); break;
+                case 'motion': tex = glMotionBlur(tex, w, h, fx, effectScale); break;
+                case 'radial': tex = glRadialBlur(tex, w, h, fx, effectScale); break;
+                case 'box': tex = glGaussianBlur(tex, w, h, fx, effectScale); break; // box → gaussian approximation
+              }
+              break;
+            }
+          }
+        }
+
+        // Render final result to GL canvas and copy back
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, w, h);
+        const copyProg = getProgram('copy', `#version 300 es
+          precision mediump float;
+          in vec2 vUv;
+          out vec4 fragColor;
+          uniform sampler2D uTex;
+          void main() { fragColor = texture(uTex, vUv); }`);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(copyProg);
+        gl.uniform1i(gl.getUniformLocation(copyProg, 'uTex'), 0);
+        drawQuad(copyProg);
+
+        readBack(ctx, w, h);
+        return true;
+      }
+
+      return { runChain, gl };
+    })();
+
     const EFFECT_APPLY = {
       bloom: applyBloomEffect,
       grain: applyGrainEffect,
+      sepia: applySepiaEffect,
       inkBleed: applyInkBleedEffect,
       chromatic: (ctx, fx, context) => applyChromaticAberration(ctx, context.outW, context.outH, fx),
       pixelate: (ctx, fx, context) => applyPixelate(ctx, context.outW, context.outH, fx, 1, null, context.gridStepY),
-      halftone: (ctx, fx, context) => applyCmykHalftone(ctx, context.outW, context.outH, fx, context.effectScale, context.gridStepY),
-      fractalGlass: (ctx, fx, context) => applyFractalGlass(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport, context.gridStepY),
+      halftone: (ctx, fx, context) => applyCmykHalftone(ctx, context.outW, context.outH, fx, context.effectScale, context.gridStepY, context.layer, context.geometry),
+      fractalGlass: (ctx, fx, context) => applyFractalGlass(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport, context.gridStepY, context.layer),
       blur: applyBlurEffect,
       lens: (ctx, fx, context) => applyLensEffect(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport)
     };
@@ -3708,6 +4589,14 @@
       if (fn) fn(ctx, fx, context);
     }
 
+    // Try to run an entire effect chain on the GPU. Returns true if handled.
+    function applyEffectChainGL(ctx, chain, context) {
+      if (!_glPipeline) return false;
+      const enabled = chain.filter(fx => fx.enabled);
+      if (enabled.length === 0) return true; // nothing to do
+      return _glPipeline.runChain(ctx, enabled, context);
+    }
+
     function buildPostProcessKey(layer, geometry, forExport) {
       const mask = getMask(layer);
       const chain = getEffectChain(layer);
@@ -3717,6 +4606,18 @@
       const chainKey = chain.map(fx =>
         `${fx.type}:${fx.subtype || ''}:${fx.enabled ? 1 : 0}:${JSON.stringify(fx.params)}`
       ).join('|');
+      // Include source layer effects in cache key for non-source layers,
+      // since source effects propagate to all layers that render the source
+      let srcEffectKey = '';
+      if (layer.kind !== 'source') {
+        const srcLayer = state.layers.find(l => l.kind === 'source');
+        if (srcLayer) {
+          const srcChain = getEffectChain(srcLayer);
+          srcEffectKey = srcChain.map(fx =>
+            `${fx.type}:${fx.enabled ? 1 : 0}:${JSON.stringify(fx.params)}`
+          ).join('|');
+        }
+      }
       return [
         geometry.key,
         forExport ? 'export' : 'preview',
@@ -3743,7 +4644,8 @@
         layer.wordArtifactDensity,
         layer.wordArtifactCoherence,
         chainKey,
-        mask ? `${mask.inverted ? 1 : 0}:${mask.feather}:${mask.regions.map(r => r.op + r.points.length).join(',')}` : 'nomask'
+        mask ? `${mask.inverted ? 1 : 0}:${mask.feather}:${mask.regions.map(r => r.op + r.points.length).join(',')}` : 'nomask',
+        srcEffectKey
       ].join('|');
     }
 
@@ -4170,6 +5072,7 @@
     }
 
     const VARIANTS = {
+      None:      { mode: 'none', chars: '' },
       Standard:  { mode: 'replacement', chars: ' .-:+*=%#@' },
       Dense:     { mode: 'replacement', chars: ' ░▒▓█' },
       Minimal:   { mode: 'replacement', chars: ' .#@' },
@@ -4485,6 +5388,32 @@
       invalidatePostProcessCache();
       render();
     });
+    const previewResBtn = document.getElementById('previewResBtn');
+    const previewResLabel = document.getElementById('previewResLabel');
+    const previewResOptions = [
+      { value: 'auto', label: 'Auto' },
+      { value: 'full', label: 'Full' },
+      { value: '1/2', label: '1/2' },
+      { value: '1/4', label: '1/4' }
+    ];
+    previewResBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openOptionMenu(previewResBtn, {
+        options: previewResOptions,
+        value: state.previewResolution,
+        compact: true,
+        align: 'left',
+        placement: 'top',
+        gap: 6,
+        matchWidth: false,
+        onSelect: (val) => {
+          state.previewResolution = val;
+          previewResLabel.textContent = previewResOptions.find(o => o.value === val).label.toUpperCase();
+          layerRenderCache.clear();
+          scheduleRender();
+        }
+      });
+    });
     const manualColorToggle = document.getElementById('manualColorToggle');
     const manualColorBtn = document.getElementById('manualColorBtn');
     const manualColorPopover = document.getElementById('manualColorPopover');
@@ -4678,14 +5607,14 @@
         header.innerHTML = `
           <span class="fx-drag text-[#52525b]">≡</span>
           <span class="text-[10px] text-[#71717a] uppercase tracking-wider flex-1 cursor-pointer fx-toggle-params flex items-center gap-1.5" style="font-family:'JetBrains Mono',monospace">${getEffectLabel(fx)}${state.forceGrid && ['pixelate','halftone','fractalGlass'].includes(fx.type) ? '<span class="fx-grid-badge" style="color:#00e5ff;display:inline-flex;align-items:center" title="Grid-locked"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg></span>' : ''}</span>
-          <button class="fx-del text-[10px] text-[#52525b] hover:text-red-400 cursor-pointer bg-transparent border-none" style="font-family:'JetBrains Mono',monospace">✕</button>
+          <button class="fx-del text-[12px] text-[#555] hover:text-red-400 cursor-pointer bg-transparent border-none flex items-center justify-center w-[22px] h-[22px]" style="font-family:'JetBrains Mono',monospace">✕</button>
           <label class="toggle-switch" style="flex-shrink:0"><input type="checkbox" class="fx-enabled" ${fx.enabled ? 'checked' : ''}><span class="toggle-slider"></span></label>
         `;
         card.appendChild(header);
 
         // Params container (collapsible)
         const paramsDiv = document.createElement('div');
-        paramsDiv.className = 'fx-params pl-5 pr-2 pb-2 flex flex-col gap-2';
+        paramsDiv.className = 'fx-params pl-5 pr-2 pb-3 flex flex-col gap-2';
         paramsDiv.style.display = (fx.enabled && !collapsedFxCards.has(fx.id)) ? '' : 'none';
 
         // Blur subtype selector
@@ -4772,6 +5701,19 @@
               valInput.value = v;
               if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
               render();
+            });
+            valInput.addEventListener('keydown', (e) => {
+              if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+              e.preventDefault();
+              const step = parseFloat(pDef.step) * (e.shiftKey ? 10 : 1);
+              let v = parseFloat(valInput.value) || 0;
+              v += e.key === 'ArrowUp' ? step : -step;
+              v = Math.min(pDef.max, Math.max(pDef.min, parseFloat(v.toFixed(6))));
+              fx.params[pDef.key] = v;
+              slider.value = v;
+              valInput.value = v;
+              if (fx.type === 'inkBleed') invalidatePostProcessCache(fx.id);
+              scheduleRender();
             });
             row.appendChild(slider);
           } else if (pDef.type === 'select') {
@@ -4934,13 +5876,14 @@
         dropdown.appendChild(item);
       }
 
-      addItem('Ink Bleed', 'inkBleed', null);
+      addItem('Bleed', 'inkBleed', null);
       addItem('Bloom', 'bloom', null);
       addItem('Grain', 'grain', null);
-      addItem('Chromatic Aberration', 'chromatic', null);
+      addItem('Sepia', 'sepia', null);
+      addItem('Aberration', 'chromatic', null);
       addItem('Pixelate', 'pixelate', null);
-      addItem('CMYK Halftone', 'halftone', null);
-      addItem('Fractal Glass', 'fractalGlass', null);
+      addItem('CMYK', 'halftone', null);
+      addItem('Fractal', 'fractalGlass', null);
 
       // Blur subtypes
       const blurHeader = document.createElement('div');
@@ -5049,12 +5992,15 @@
     const variantSelect = document.getElementById('variantSelect');
     function updateVariantSections() {
       const v = activeLayer().variant;
-      document.getElementById('contourControls').classList.toggle('hidden', v !== 'Contour');
-      document.getElementById('outlineControls').classList.toggle('hidden', v !== 'Outline');
-      document.getElementById('invertRow').classList.toggle('hidden', v === 'Contour' || v === 'Highlight');
-      document.getElementById('colorModeRow').classList.toggle('hidden', v === 'Outline');
-      document.getElementById('charRotationRow').classList.toggle('hidden', v === 'Dense' || v === 'Outline' || v === 'Highlight');
-      document.getElementById('fontRow').classList.toggle('hidden', v === 'Outline');
+      const isNone = v === 'None';
+      document.getElementById('settingsSection').classList.toggle('hidden', isNone);
+      document.getElementById('artifactsSection').classList.toggle('hidden', isNone);
+      document.getElementById('contourControls').classList.toggle('hidden', isNone || v !== 'Contour');
+      document.getElementById('outlineControls').classList.toggle('hidden', isNone || v !== 'Outline');
+      document.getElementById('invertRow').classList.toggle('hidden', isNone || v === 'Contour' || v === 'Highlight');
+      document.getElementById('colorModeRow').classList.toggle('hidden', isNone || v === 'Outline');
+      document.getElementById('charRotationRow').classList.toggle('hidden', isNone || v === 'Dense' || v === 'Outline' || v === 'Highlight');
+      document.getElementById('fontRow').classList.toggle('hidden', isNone || v === 'Outline');
       updateManualColorUI();
       updateOutlineFillUI();
     }
@@ -5189,17 +6135,6 @@
       if (e.target.files[0]) loadImage(e.target.files[0]);
     });
 
-    // Image button triggers file input
-    document.getElementById('imageBtn').addEventListener('click', () => {
-      hideFloatingPanel(sourceMenu);
-      document.getElementById('imageInput').click();
-    });
-
-    // Video button triggers file input
-    document.getElementById('videoBtn').addEventListener('click', () => {
-      hideFloatingPanel(sourceMenu);
-      document.getElementById('videoInput').click();
-    });
 
     // Drag-and-drop
     canvasArea.addEventListener('dragover', e => { e.preventDefault(); });
@@ -5217,18 +6152,28 @@
       const w = Math.round(area.width);
       const h = Math.round(area.height);
       updateProjectButtonPosition();
-      if (outputCanvas.width === w && outputCanvas.height === h) return;
-      outputCanvas.width = w;
-      outputCanvas.height = h;
-      invalidateMaskCaches();
-      invalidatePostProcessCache();
-      if (!state.sourceElement) return;
+      const canvasSizeChanged = outputCanvas.width !== w || outputCanvas.height !== h;
+      if (canvasSizeChanged) {
+        outputCanvas.width = w;
+        outputCanvas.height = h;
+      }
+      if (!state.sourceElement) {
+        if (canvasSizeChanged) { invalidateMaskCaches(); invalidatePostProcessCache(); }
+        return;
+      }
       const src = state.sourceElement;
       const srcW = src.videoWidth || src.naturalWidth || src.width;
       const srcH = src.videoHeight || src.naturalHeight || src.height;
-      sourceCanvas.width = srcW;
-      sourceCanvas.height = srcH;
-      if (state.source === 'image' || (state.source === 'video' && state.sourceElement.paused)) render();
+      const sourceSizeChanged = sourceCanvas.width !== srcW || sourceCanvas.height !== srcH;
+      if (sourceSizeChanged) {
+        sourceCanvas.width = srcW;
+        sourceCanvas.height = srcH;
+      }
+      if (canvasSizeChanged || sourceSizeChanged) {
+        invalidateMaskCaches();
+        invalidatePostProcessCache();
+        if (state.source === 'image' || (state.source === 'video' && state.sourceElement.paused)) render();
+      }
     }
     new ResizeObserver(() => {
       resizeCanvas();
@@ -5251,11 +6196,31 @@
       return entry;
     }
 
+    // When the source (IMAGE) layer has effects, store its post-effect canvas
+    // so other layers can draw from the effected source instead of the raw element.
+    let _effectedSourceCanvas = null;
+    let _effectedSourceKey = '';
+
     function renderSourceLayer(layerCtx, layer, geometry) {
       const filter = `brightness(${layer.brightness ?? 1}) contrast(${layer.contrast ?? 1}) saturate(${layer.saturation ?? 1})`;
       const transform = getImageTransform(geometry);
       if (!transform) return;
       const { rect } = transform;
+
+      // If this is NOT the source layer itself, and the source layer has
+      // already been rendered with effects, draw from the effected canvas.
+      if (layer.kind !== 'source' && _effectedSourceCanvas) {
+        layerCtx.save();
+        layerCtx.filter = filter;
+        layerCtx.drawImage(
+          _effectedSourceCanvas,
+          0, 0, _effectedSourceCanvas.width, _effectedSourceCanvas.height,
+          0, 0, geometry.outW, geometry.outH
+        );
+        layerCtx.restore();
+        return;
+      }
+
       layerCtx.save();
       layerCtx.filter = filter;
       layerCtx.drawImage(
@@ -5293,6 +6258,13 @@
 
     function applyLayerMask(layerCtx, layer, geometry, forExport) {
       const mask = getMask(layer);
+      if (mask && mask.enabled === false) return;
+      // If an effect (halftone, fractal glass) already handled the mask
+      // with its own feather logic, skip the hard clip to avoid a visible edge
+      if (layer._maskHandledByEffect) {
+        delete layer._maskHandledByEffect;
+        return;
+      }
       const paths = buildMaskPath(layer, geometry);
       if (!mask || !paths || paths.length === 0) return;
 
@@ -5355,19 +6327,49 @@
         renderSourceLayer(layerCtx, layer, geometry);
         // Apply effect chain to source layer too
         const srcChain = getEffectChain(layer);
+        const hasActiveEffects = srcChain.some(fx => fx.enabled);
         if (srcChain.length > 0) {
-          for (const fx of srcChain) {
-            if (!fx.enabled) continue;
-            const gGrid = getGlobalGridStep(geometry);
-            applyEffect(layerCtx, fx, { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX: gGrid, gridStepY: gGrid });
+          const gGrid = getGlobalGridStep(geometry);
+          const srcCtx = { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX: gGrid, gridStepY: gGrid };
+          if (!applyEffectChainGL(layerCtx, srcChain, srcCtx)) {
+            for (const fx of srcChain) {
+              if (!fx.enabled) continue;
+              applyEffect(layerCtx, fx, srcCtx);
+            }
           }
           // Clip to image bounds
           clipToImageBounds(layerCtx, geometry);
         }
+        // Store effected source canvas so other layers can use it
+        if (hasActiveEffects) {
+          _effectedSourceCanvas = layerCanvas;
+        } else {
+          _effectedSourceCanvas = null;
+        }
         return layerCanvas;
       }
 
-      const variant = VARIANTS[layer.variant];
+      const variant = VARIANTS[layer.variant] || VARIANTS.None;
+
+      // None variant — render source image directly (passthrough)
+      if (variant.mode === 'none') {
+        renderSourceLayer(layerCtx, layer, geometry);
+        const chain = getEffectChain(layer);
+        if (chain.length > 0) {
+          const globalGrid = getGlobalGridStep(geometry);
+          const noneCtx = { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX: globalGrid || 0, gridStepY: globalGrid || 0 };
+          if (!applyEffectChainGL(layerCtx, chain, noneCtx)) {
+            for (const fx of chain) {
+              if (!fx.enabled) continue;
+              applyEffect(layerCtx, fx, noneCtx);
+            }
+          }
+          clipToImageBounds(layerCtx, geometry);
+        }
+        applyLayerMask(layerCtx, layer, geometry, forExport);
+        return layerCanvas;
+      }
+
       const cellHeight = state.forceGrid ? state.forceGridSize : layer.cellSize;
       const cellWidth = (layer.variant === 'Dense' && !state.forceGrid) ? getDenseCellWidth(cellHeight) : cellHeight;
       const strideX = Math.round(cellWidth * (1 + layer.gap));
@@ -5404,9 +6406,12 @@
         const gridStepX = globalGrid || 0;
         const gridStepY = globalGrid || 0;
         const chain = getEffectChain(layer);
-        for (const fx of chain) {
-          if (!fx.enabled) continue;
-          applyEffect(layerCtx, fx, { asciiCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX, gridStepY });
+        const asciiEffCtx = { asciiCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX, gridStepY };
+        if (!applyEffectChainGL(layerCtx, chain, asciiEffCtx)) {
+          for (const fx of chain) {
+            if (!fx.enabled) continue;
+            applyEffect(layerCtx, fx, asciiEffCtx);
+          }
         }
 
         // Always clip ASCII layers to the image frame so partial edge cells
@@ -5436,11 +6441,13 @@
       const resH = src ? (src.videoHeight || src.naturalHeight || src.height) : 0;
       const resEl = document.getElementById('statResolution');
       const lyEl = document.getElementById('statLayers');
-      const vrEl = document.getElementById('statVariant');
       const fpEl = document.getElementById('statFps');
-      if (resEl) resEl.textContent = resW ? `${resW}x${resH}` : '—';
+      if (resEl) {
+        const pr = state.previewResolution;
+        const suffix = pr && pr !== 'full' && state.source !== 'video' ? ` (${pr})` : '';
+        resEl.textContent = resW ? `${resW}×${resH}${suffix}` : '—';
+      }
       if (lyEl) lyEl.textContent = state.layers ? state.layers.length : '—';
-      if (vrEl) vrEl.textContent = layer?.variant ?? '—';
       if (fpEl) fpEl.textContent = _lastStatsFps || '—';
     }
 
@@ -5458,12 +6465,29 @@
       const { srcW, srcH } = displayGeometry;
       const { outW: dispW, outH: dispH } = displayGeometry;
 
-      // For video playback, render at display resolution for performance.
-      // For images, render at full source resolution so preview matches export exactly.
-      const useFullRes = state.source !== 'video';
-      const forExport = false; // preview render — allow effect downscaling for performance
-      const renderGeometry = useFullRes ? getRenderGeometry(srcW, srcH) : displayGeometry;
+      // Determine preview resolution scale
+      const forExport = false;
+      let previewScale = 1;
+      if (state.source === 'video') {
+        previewScale = dispW / srcW; // match display (existing video behavior)
+      } else {
+        switch (state.previewResolution) {
+          case 'full':  previewScale = 1; break;
+          case '1/2':   previewScale = 0.5; break;
+          case '1/4':   previewScale = 0.25; break;
+          case 'auto':
+          default: {
+            const targetPx = 360000;
+            previewScale = clamp(Math.sqrt(targetPx / Math.max(1, srcW * srcH)), 0.1, 1);
+            break;
+          }
+        }
+      }
+      const prevW = Math.max(1, Math.round(srcW * previewScale));
+      const prevH = Math.max(1, Math.round(srcH * previewScale));
+      const renderGeometry = getRenderGeometry(prevW, prevH);
       if (!renderGeometry) return;
+      const useFullRes = (prevW > dispW || prevH > dispH);
       const renderW = renderGeometry.outW;
       const renderH = renderGeometry.outH;
 
@@ -5472,6 +6496,9 @@
       const compositeCtx = compositeCanvas.getContext('2d');
       compositeCtx.fillStyle = '#0e0e0e';
       compositeCtx.fillRect(0, 0, renderW, renderH);
+
+      // Reset effected source — will be set when the source layer renders with effects
+      _effectedSourceCanvas = null;
 
       // Pixel data cache — reuse across layers with same brightness/contrast/saturation
       const pixelCache = new Map();
@@ -5484,7 +6511,11 @@
         if (layer.kind === 'adjustment') {
           const chain = getEffectChain(layer);
           const activeEffects = chain.filter(fx => fx.enabled);
-          if (activeEffects.length === 0) continue;
+          const adjBright = layer.brightness ?? 1;
+          const adjContrast = layer.contrast ?? 1;
+          const adjSat = layer.saturation ?? 1;
+          const hasBCS = Math.abs(adjBright - 1) > 0.001 || Math.abs(adjContrast - 1) > 0.001 || Math.abs(adjSat - 1) > 0.001;
+          if (activeEffects.length === 0 && !hasBCS) continue;
           const effectScale = getScreenEffectScale(renderGeometry, useFullRes);
           const hasMask = !!(layer.mask?.regions?.length);
           const needsBlend = hasMask || layer.opacity < 1 || layer.blendMode !== 'source-over';
@@ -5495,8 +6526,24 @@
             const before = getScratchCanvas('adj-before', renderW, renderH);
             before.getContext('2d').drawImage(compositeCanvas, 0, 0);
 
-            for (const fx of activeEffects) {
-              applyEffect(compositeCtx, fx, { asciiCanvas: compositeCanvas, outW: renderW, outH: renderH, layer, geometry: renderGeometry, forExport, effectScale, gridStepX: adjGrid, gridStepY: adjGrid });
+            // Apply brightness/contrast/saturation
+            if (hasBCS) {
+              const bcsFilter = `brightness(${adjBright}) contrast(${adjContrast}) saturate(${adjSat})`;
+              const temp = getScratchCanvas('adj-bcs', renderW, renderH);
+              const tempCtx = temp.getContext('2d');
+              tempCtx.clearRect(0, 0, renderW, renderH);
+              tempCtx.filter = bcsFilter;
+              tempCtx.drawImage(compositeCanvas, 0, 0);
+              tempCtx.filter = 'none';
+              compositeCtx.clearRect(0, 0, renderW, renderH);
+              compositeCtx.drawImage(temp, 0, 0);
+            }
+
+            const adjCtx1 = { asciiCanvas: compositeCanvas, outW: renderW, outH: renderH, layer, geometry: renderGeometry, forExport, effectScale, gridStepX: adjGrid, gridStepY: adjGrid };
+            if (!applyEffectChainGL(compositeCtx, activeEffects, adjCtx1)) {
+              for (const fx of activeEffects) {
+                applyEffect(compositeCtx, fx, adjCtx1);
+              }
             }
 
             const after = getScratchCanvas('adj-after', renderW, renderH);
@@ -5513,8 +6560,24 @@
             compositeCtx.drawImage(after, 0, 0);
             compositeCtx.restore();
           } else {
-            for (const fx of activeEffects) {
-              applyEffect(compositeCtx, fx, { asciiCanvas: compositeCanvas, outW: renderW, outH: renderH, layer, geometry: renderGeometry, forExport, effectScale, gridStepX: adjGrid, gridStepY: adjGrid });
+            // Apply brightness/contrast/saturation
+            if (hasBCS) {
+              const bcsFilter = `brightness(${adjBright}) contrast(${adjContrast}) saturate(${adjSat})`;
+              const temp = getScratchCanvas('adj-bcs', renderW, renderH);
+              const tempCtx = temp.getContext('2d');
+              tempCtx.clearRect(0, 0, renderW, renderH);
+              tempCtx.filter = bcsFilter;
+              tempCtx.drawImage(compositeCanvas, 0, 0);
+              tempCtx.filter = 'none';
+              compositeCtx.clearRect(0, 0, renderW, renderH);
+              compositeCtx.drawImage(temp, 0, 0);
+            }
+
+            const adjCtx2 = { asciiCanvas: compositeCanvas, outW: renderW, outH: renderH, layer, geometry: renderGeometry, forExport, effectScale, gridStepX: adjGrid, gridStepY: adjGrid };
+            if (!applyEffectChainGL(compositeCtx, activeEffects, adjCtx2)) {
+              for (const fx of activeEffects) {
+                applyEffect(compositeCtx, fx, adjCtx2);
+              }
             }
           }
           continue;
@@ -5556,17 +6619,19 @@
       // Draw to display canvas
       outputCtx.fillStyle = '#0e0e0e';
       outputCtx.fillRect(0, 0, dispW, dispH);
-      if (useFullRes) {
-        // Scale full-res composite down to display canvas
+      if (renderW === dispW && renderH === dispH) {
+        // Exact match — direct copy (video path, or display matching preview res)
+        outputCtx.drawImage(compositeCanvas, 0, 0);
+      } else {
+        // Scale render to display (works for both downscale and upscale)
         outputCtx.save();
         outputCtx.imageSmoothingEnabled = true;
-        outputCtx.imageSmoothingQuality = 'high';
-        outputCtx.drawImage(compositeCanvas, 0, 0, srcW, srcH,
+        outputCtx.imageSmoothingQuality = useFullRes ? 'high' : 'medium';
+        outputCtx.drawImage(compositeCanvas,
+          0, 0, renderW, renderH,
           displayGeometry.offsetX, displayGeometry.offsetY,
           srcW * displayGeometry.scale, srcH * displayGeometry.scale);
         outputCtx.restore();
-      } else {
-        outputCtx.drawImage(compositeCanvas, 0, 0);
       }
 
       if (!state.recording) drawSelectionOverlay(displayGeometry);
@@ -5607,10 +6672,10 @@
               outputCtx.lineWidth = 2;
               outputCtx.stroke(path);
               outputCtx.restore();
-              // Cyan marching ants on top
+              // Orange marching ants on top
               outputCtx.save();
               outputCtx.setLineDash([6, 4]);
-              outputCtx.strokeStyle = 'rgba(0,255,255,0.85)';
+              outputCtx.strokeStyle = 'rgba(251,70,13,0.85)';
               outputCtx.lineWidth = 1;
               outputCtx.stroke(path);
               outputCtx.restore();
@@ -5622,12 +6687,12 @@
       // In-progress stroke — always visible, colored by mode, with real-time smoothing
       if (selectionState.drawing && selectionState.rawPoints.length > 1) {
         const modeColors = {
-          'new': 'rgba(0,255,255,0.9)',
-          'add': 'rgba(0,255,255,0.9)',
+          'new': 'rgba(251,70,13,0.9)',
+          'add': 'rgba(251,70,13,0.9)',
           'subtract': 'rgba(255,80,80,0.9)',
           'intersect': 'rgba(255,220,60,0.9)'
         };
-        const color = modeColors[selectionState.compositionMode] || 'rgba(0,255,255,0.9)';
+        const color = modeColors[selectionState.compositionMode] || 'rgba(251,70,13,0.9)';
         // Apply lightweight real-time smoothing for smooth preview while drawing
         let displayPoints = selectionState.rawPoints;
         if (displayPoints.length > 6) {
@@ -5655,9 +6720,9 @@
 
       // Preview points after stroke finalized
       if (guidesOn && !selectionState.drawing && selectionState.previewPoints.length > 2) {
-        drawPathOverlay(selectionState.previewPoints, geometry, true, true, 'rgba(0,255,255,0.35)', 1);
+        drawPathOverlay(selectionState.previewPoints, geometry, true, true, 'rgba(251,70,13,0.35)', 1);
         outputCtx.save();
-        outputCtx.fillStyle = 'rgba(0,255,255,0.7)';
+        outputCtx.fillStyle = 'rgba(251,70,13,0.7)';
         for (const point of selectionState.previewPoints) {
           const pt = sourceToCanvasPoint(point[0], point[1], geometry);
           outputCtx.beginPath();
@@ -7218,6 +8283,7 @@
 
       // Pixel data cache
       const pixelCache = new Map();
+      _effectedSourceCanvas = null;
 
       for (let i = 0; i < state.layers.length; i++) {
         const layer = state.layers[i];
@@ -7227,7 +8293,11 @@
         if (layer.kind === 'adjustment') {
           const chain = getEffectChain(layer);
           const activeEffects = chain.filter(fx => fx.enabled);
-          if (activeEffects.length === 0) continue;
+          const adjBright = layer.brightness ?? 1;
+          const adjContrast = layer.contrast ?? 1;
+          const adjSat = layer.saturation ?? 1;
+          const hasBCS = Math.abs(adjBright - 1) > 0.001 || Math.abs(adjContrast - 1) > 0.001 || Math.abs(adjSat - 1) > 0.001;
+          if (activeEffects.length === 0 && !hasBCS) continue;
           const effectScale = getScreenEffectScale(geometry, true);
           const hasMask = !!(layer.mask?.regions?.length);
           const needsBlend = hasMask || layer.opacity < 1 || layer.blendMode !== 'source-over';
@@ -7238,8 +8308,23 @@
             const before = getScratchCanvas('adj-export-before', srcW, srcH);
             before.getContext('2d').drawImage(tmpCanvas, 0, 0);
 
-            for (const fx of activeEffects) {
-              applyEffect(tmpCtx, fx, { asciiCanvas: tmpCanvas, outW: srcW, outH: srcH, layer, geometry, forExport: true, effectScale, gridStepX: expGrid, gridStepY: expGrid });
+            if (hasBCS) {
+              const bcsFilter = `brightness(${adjBright}) contrast(${adjContrast}) saturate(${adjSat})`;
+              const temp = getScratchCanvas('adj-export-bcs', srcW, srcH);
+              const tempCtx = temp.getContext('2d');
+              tempCtx.clearRect(0, 0, srcW, srcH);
+              tempCtx.filter = bcsFilter;
+              tempCtx.drawImage(tmpCanvas, 0, 0);
+              tempCtx.filter = 'none';
+              tmpCtx.clearRect(0, 0, srcW, srcH);
+              tmpCtx.drawImage(temp, 0, 0);
+            }
+
+            const adjExpCtx1 = { asciiCanvas: tmpCanvas, outW: srcW, outH: srcH, layer, geometry, forExport: true, effectScale, gridStepX: expGrid, gridStepY: expGrid };
+            if (!applyEffectChainGL(tmpCtx, activeEffects, adjExpCtx1)) {
+              for (const fx of activeEffects) {
+                applyEffect(tmpCtx, fx, adjExpCtx1);
+              }
             }
 
             const after = getScratchCanvas('adj-export-after', srcW, srcH);
@@ -7256,8 +8341,23 @@
             tmpCtx.drawImage(after, 0, 0);
             tmpCtx.restore();
           } else {
-            for (const fx of activeEffects) {
-              applyEffect(tmpCtx, fx, { asciiCanvas: tmpCanvas, outW: srcW, outH: srcH, layer, geometry, forExport: true, effectScale, gridStepX: expGrid, gridStepY: expGrid });
+            if (hasBCS) {
+              const bcsFilter = `brightness(${adjBright}) contrast(${adjContrast}) saturate(${adjSat})`;
+              const temp = getScratchCanvas('adj-export-bcs', srcW, srcH);
+              const tempCtx = temp.getContext('2d');
+              tempCtx.clearRect(0, 0, srcW, srcH);
+              tempCtx.filter = bcsFilter;
+              tempCtx.drawImage(tmpCanvas, 0, 0);
+              tempCtx.filter = 'none';
+              tmpCtx.clearRect(0, 0, srcW, srcH);
+              tmpCtx.drawImage(temp, 0, 0);
+            }
+
+            const adjExpCtx2 = { asciiCanvas: tmpCanvas, outW: srcW, outH: srcH, layer, geometry, forExport: true, effectScale, gridStepX: expGrid, gridStepY: expGrid };
+            if (!applyEffectChainGL(tmpCtx, activeEffects, adjExpCtx2)) {
+              for (const fx of activeEffects) {
+                applyEffect(tmpCtx, fx, adjExpCtx2);
+              }
             }
           }
           continue;
@@ -7315,22 +8415,6 @@
         URL.revokeObjectURL(url);
       }, 'image/png');
     }
-
-    // Source menu toggle
-    const sourceMenu = document.getElementById('sourceMenu');
-    const sourceBtn = document.getElementById('sourceBtn');
-    setupMenuNavigation(sourceMenu, {
-      itemSelector: 'button',
-      onEscape: () => {
-        hideFloatingPanel(sourceMenu);
-        sourceBtn.focus({ preventScroll: true });
-      }
-    });
-    sourceBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const opened = toggleFloatingPanel(sourceMenu, e.currentTarget, { align: 'left', placement: 'bottom', gap: 4 });
-      if (opened) requestAnimationFrame(() => focusMenuNavigationDefault(sourceMenu, 'button'));
-    });
 
     // Export menu toggle
     const exportMenu = document.getElementById('exportMenu');
@@ -7472,14 +8556,15 @@
 
     function updateRecordButton() {
       const btn = document.getElementById('recordBtn');
+      const label = btn.querySelector('.rec-label');
       if (state.recording) {
         btn.classList.add('recording');
         btn.title = 'Stop Recording';
-        btn.textContent = 'STOP';
+        label.textContent = 'STOP';
       } else {
         btn.classList.remove('recording');
         btn.title = 'Record Video';
-        btn.textContent = 'REC';
+        label.textContent = 'REC';
       }
     }
 
@@ -7797,12 +8882,12 @@
         const deleteHidden = canDelete ? '' : 'hidden';
 
         row.innerHTML = `
-          <button class="layer-vis flex-shrink-0 flex items-center justify-center" data-id="${layer.id}" title="${layer.visible ? 'Hide' : 'Show'}" style="width:18px;height:18px;color:${layer.visible ? '#fb460d' : '#2a2a2a'}">${layerVisibilityIcon(layer.visible)}</button>
-          <div class="flex-1 min-w-0 flex items-center gap-1.5 h-[18px]">
+          <button class="layer-vis flex-shrink-0 flex items-center justify-center" data-id="${layer.id}" title="${layer.visible ? 'Hide' : 'Show'}" style="width:22px;height:22px;color:${layer.visible ? '#fb460d' : '#2a2a2a'}">${layerVisibilityIcon(layer.visible)}</button>
+          <div class="flex-1 min-w-0 flex items-center gap-1.5 h-[22px]">
                         <span class="text-[10px] font-mono ${isActive ? 'text-on-surface' : 'text-[#999]'} truncate uppercase tracking-wider font-medium leading-none">${displayName}</span>${state.forceGrid && !isSource && !isAdjustment ? '<span style="color:#00e5ff;flex-shrink:0;display:inline-flex;align-items:center" title="Grid-locked"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg></span>' : ''}
           </div>
-          <button class="layer-dup flex-shrink-0 flex items-center justify-center text-[8px] font-mono uppercase tracking-wider text-[#3a3a3a] hover:text-on-surface h-[18px] ${duplicateHidden}" data-id="${layer.id}">DUP</button>
-          <button class="layer-del flex-shrink-0 flex items-center justify-center text-[10px] font-mono text-[#3a3a3a] hover:text-red-400 h-[18px] w-[18px] ${deleteHidden}" data-id="${layer.id}">\u2715</button>
+          <button class="layer-dup flex-shrink-0 flex items-center justify-center text-[9px] font-mono uppercase tracking-wider text-[#555] hover:text-on-surface h-[22px] ${duplicateHidden}" data-id="${layer.id}">DUP</button>
+          <button class="layer-del flex-shrink-0 flex items-center justify-center text-[12px] font-mono text-[#555] hover:text-red-400 h-[22px] w-[22px] ${deleteHidden}" data-id="${layer.id}">\u2715</button>
         `;
         group.appendChild(row);
 
@@ -7868,27 +8953,25 @@
           // Inline "+ Add" on the toggle row
           const inlineAdd = document.createElement('button');
           inlineAdd.type = 'button';
-          inlineAdd.className = 'text-[11px] text-[#555] hover:text-primary font-mono bg-transparent border-none cursor-pointer transition-colors px-2 py-1 leading-none';
+          inlineAdd.className = 'lp-inline-add text-[12px] text-primary hover:text-[#ff5627] font-mono bg-transparent border border-primary hover:border-[#ff5627] cursor-pointer transition-colors w-[18px] h-[18px] flex items-center justify-center rounded-none';
           inlineAdd.textContent = '+';
           inlineAdd.addEventListener('click', (e) => {
             e.stopPropagation();
             if (!expandedFxLayers.has(layer.id) && !isAdjustment) {
               expandedFxLayers.add(layer.id);
               renderLayerPanel();
-              // Re-grab the button after re-render
+            }
+            // After re-render, re-grab this layer's "+" button to anchor the dropdown
+            requestAnimationFrame(() => {
               const groups = document.querySelectorAll('.layer-group');
               for (const g of groups) {
                 if (g.dataset.layerId === layer.id) {
-                  const addBtns = g.querySelectorAll('.lp-add-fx-btn');
-                  if (addBtns.length) {
-                    requestAnimationFrame(() => openAddEffectDropdown(addBtns[addBtns.length - 1], layer));
-                  }
+                  const btn = g.querySelector('.lp-inline-add');
+                  if (btn) openAddEffectDropdown(btn, layer);
                   break;
                 }
               }
-              return;
-            }
-            openAddEffectDropdown(inlineAdd, layer);
+            });
           });
           fxToggle.appendChild(inlineAdd);
 
@@ -7902,7 +8985,7 @@
 
           if (isExpanded) {
             const fxContainer = document.createElement('div');
-            fxContainer.className = 'px-2 pb-2 flex flex-col gap-1';
+            fxContainer.className = 'px-2 pb-4 flex flex-col gap-1';
 
             // === Mask as top-of-list effect card (AE-style) — not for source ===
             const maskCard = document.createElement('div');
@@ -7912,28 +8995,43 @@
             const maskHeader = document.createElement('div');
             maskHeader.className = 'flex items-center gap-2';
 
-            const maskIcon = document.createElement('span');
-            maskIcon.className = 'text-[9px] flex-shrink-0';
-            maskIcon.style.color = hasMask ? 'rgba(0,255,255,0.7)' : '#3a3a3a';
+            const maskEnabled = !mask || mask.enabled !== false;
+            const maskIcon = document.createElement('button');
+            maskIcon.type = 'button';
+            maskIcon.className = 'text-[9px] flex-shrink-0 bg-transparent border-none cursor-pointer transition-colors p-0 flex items-center justify-center';
+            maskIcon.style.color = hasMask ? (maskEnabled ? 'rgba(251,70,13,0.7)' : '#3a3a3a') : '#3a3a3a';
+            maskIcon.title = hasMask ? (maskEnabled ? 'Disable mask' : 'Enable mask') : 'Mask';
             maskIcon.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5A5.5 5.5 0 0 1 8 13.5Z" fill="currentColor"/></svg>';
+            if (hasMask) {
+              maskIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const m = getMask(layer);
+                if (!m) return;
+                m.enabled = m.enabled === false ? true : false;
+                invalidateMaskCaches(layer.id);
+                invalidatePostProcessCache(layer.id);
+                renderLayerPanel();
+                render();
+              });
+            }
 
             const maskLabel = document.createElement('span');
             maskLabel.className = 'text-[9px] font-mono uppercase tracking-wider flex-1';
-            maskLabel.style.color = hasMask ? 'rgba(0,255,255,0.7)' : '#52525b';
-            maskLabel.textContent = hasMask ? (mask.inverted ? 'Mask (Inv)' : 'Mask') : 'Mask';
+            maskLabel.style.color = hasMask && maskEnabled ? 'rgba(251,70,13,0.7)' : '#52525b';
+            maskLabel.textContent = hasMask ? ((!maskEnabled ? 'Mask (Off)' : mask.inverted ? 'Mask (Inv)' : 'Mask')) : 'Mask';
 
             const maskActions = document.createElement('div');
             maskActions.className = 'flex items-center gap-1';
 
             const mkBtn = (text, handler, disabled = false) => {
               const b = document.createElement('button');
-              b.className = 'text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 transition-colors cursor-pointer bg-transparent border-none';
-              b.style.color = disabled ? '#2a2a2a' : '#52525b';
+              b.className = 'text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 transition-colors cursor-pointer bg-transparent border-none flex items-center justify-center h-[22px]';
+              b.style.color = disabled ? '#2a2a2a' : '#555';
               b.textContent = text;
               b.disabled = disabled;
               if (!disabled) {
                 b.addEventListener('mouseenter', () => { b.style.color = '#fb460d'; });
-                b.addEventListener('mouseleave', () => { b.style.color = '#52525b'; });
+                b.addEventListener('mouseleave', () => { b.style.color = '#555'; });
               }
               b.addEventListener('click', (e) => { e.stopPropagation(); if (!disabled) handler(); });
               return b;
@@ -8008,17 +9106,6 @@
             fxList.className = 'flex flex-col gap-1';
             renderEffectChainForLayer(layer, fxList);
             fxContainer.appendChild(fxList);
-
-            // + Add Effect button
-            const addBtn = document.createElement('button');
-            addBtn.type = 'button';
-            addBtn.className = 'lp-add-fx-btn text-[9px] text-[#3a3a3a] hover:text-primary font-label uppercase tracking-[0.1em] cursor-pointer bg-transparent border border-[#252525] hover:border-primary px-2 py-1 transition-colors mt-0.5 w-full';
-            addBtn.textContent = '+ Add Effect';
-            addBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              openAddEffectDropdown(addBtn, layer);
-            });
-            fxContainer.appendChild(addBtn);
 
             group.appendChild(fxContainer);
           }
@@ -8275,6 +9362,35 @@
       });
       dropdown.appendChild(addAdj);
 
+      // Separator
+      const sep = document.createElement('div');
+      sep.className = 'border-t border-[#353535] my-1';
+      dropdown.appendChild(sep);
+
+      // Import Image
+      const addImage = document.createElement('button');
+      addImage.type = 'button';
+      addImage.className = 'fx-menu-item';
+      addImage.textContent = 'Image';
+      addImage.addEventListener('click', () => {
+        hideFloatingPanel(dropdown);
+        dropdown.remove();
+        document.getElementById('imageInput').click();
+      });
+      dropdown.appendChild(addImage);
+
+      // Import Video
+      const addVideo = document.createElement('button');
+      addVideo.type = 'button';
+      addVideo.className = 'fx-menu-item';
+      addVideo.textContent = 'Video';
+      addVideo.addEventListener('click', () => {
+        hideFloatingPanel(dropdown);
+        dropdown.remove();
+        document.getElementById('videoInput').click();
+      });
+      dropdown.appendChild(addVideo);
+
       const btn = document.getElementById('addLayerBtn');
       document.body.appendChild(dropdown);
       showFloatingPanel(dropdown, btn, { align: 'left', placement: 'bottom', gap: 4 });
@@ -8354,6 +9470,37 @@
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         doSaveProject();
+      }
+    });
+
+    // ============ FULL-RES QUICK VIEW (hold ` to preview at full resolution) ============
+    let _quickViewActive = false;
+    let _quickViewPrev = null;
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '`' && !_quickViewActive && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+        e.preventDefault();
+        _quickViewActive = true;
+        _quickViewPrev = state.previewResolution;
+        state.previewResolution = 'full';
+        const lbl = document.getElementById('previewResLabel');
+        if (lbl) lbl.textContent = 'FULL';
+        layerRenderCache.clear();
+        render();
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (e.key === '`' && _quickViewActive) {
+        _quickViewActive = false;
+        state.previewResolution = _quickViewPrev || 'auto';
+        const lbl = document.getElementById('previewResLabel');
+        if (lbl) {
+          const labels = { auto: 'AUTO', full: 'FULL', '1/2': '1/2', '1/4': '1/4' };
+          lbl.textContent = labels[state.previewResolution] || 'AUTO';
+        }
+        _quickViewPrev = null;
+        layerRenderCache.clear();
+        render();
       }
     });
 
