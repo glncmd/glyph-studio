@@ -6,9 +6,9 @@
 
 - Renders uploaded images, video files, and live webcam input as ASCII.
 - Stacks multiple ASCII layers with per-layer visibility, opacity, and blend modes.
-- Switches between variants including Standard, Dense, Minimal, Blocks, Braille, Technical, Matrix, Hatching, Contour, Outline, and Highlight.
+- Switches between variants including Standard, Dense, Minimal, Blocks, Braille, Technical, Matrix, Hatching, Contour (Edge/Topo modes), Outline (configurable levels, depth, fill modes), and Highlight.
 - Adds lasso masks with replace, add, subtract, and intersect behavior plus invert and feather controls.
-- Applies layer effects including bloom, grain, ink bleed, chromatic aberration, pixelate, and multiple blur types.
+- Applies GPU-accelerated layer effects including bloom, grain, ink bleed, chromatic aberration, pixelate, fractal glass, lens distortion, CMYK halftone, feedback loop, pixel sort, gradient map, and multiple blur types.
 - Embeds word artifacts with adjustable distribution, density, and coherence.
 - Saves projects to local storage and exports PNG, transparent PNG, and WebM recordings.
 
@@ -41,6 +41,6 @@ When starting a lasso stroke:
 ## Stack
 
 - Vanilla JavaScript
-- HTML canvas
+- HTML canvas + WebGL2 (GPU effect pipeline)
 - [Tailwind CSS](https://tailwindcss.com/) via CDN
 - Space Grotesk, JetBrains Mono, Inter via Google Fonts
