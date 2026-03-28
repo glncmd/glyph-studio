@@ -759,19 +759,52 @@
         <div id="contourControls" class="hidden">
           <div class="section-label">CONTOUR</div>
           <div class="flex flex-col gap-3">
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center justify-between">
-                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Spread</label>
-                <input id="contourSpreadValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="2">
-              </div>
-              <input type="range" id="contourSpread" min="0" max="6" value="2" step="1">
+            <div class="flex items-center gap-1">
+              <button id="contourStyleEdge" class="flex-1 text-[10px] uppercase tracking-wider py-1 px-2 font-label transition-colors bg-surface-high text-on-surface">Edge</button>
+              <button id="contourStyleTopo" class="flex-1 text-[10px] uppercase tracking-wider py-1 px-2 font-label transition-colors bg-surface-container text-[#71717a]">Topo</button>
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Sensitivity</label>
-                <input id="contourSensValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="5">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Smoothing</label>
+                <input id="contourSmoothingValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="2">
               </div>
-              <input type="range" id="contourSens" min="1" max="10" value="5" step="1">
+              <input type="range" id="contourSmoothing" min="0" max="10" value="2" step="1">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Detail</label>
+                <input id="contourDetailValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="5">
+              </div>
+              <input type="range" id="contourDetail" min="1" max="10" value="5" step="1">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Thickness</label>
+                <input id="contourThicknessValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="2">
+              </div>
+              <input type="range" id="contourThickness" min="0" max="6" value="2" step="1">
+            </div>
+            <div id="contourTopoSettings" class="hidden flex flex-col gap-3">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Levels</label>
+                  <input id="contourLevelsValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="8">
+                </div>
+                <input type="range" id="contourLevels" min="2" max="20" value="8" step="1">
+              </div>
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Fill</label>
+                <label class="toggle-switch"><input type="checkbox" id="contourFillToggle"><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+            <div id="contourEdgeSettings" class="flex flex-col gap-3">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Sigma Ratio</label>
+                  <input id="contourSigmaRatioValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="1.6">
+                </div>
+                <input type="range" id="contourSigmaRatio" min="1.2" max="3.0" value="1.6" step="0.1">
+              </div>
             </div>
           </div>
         </div>
@@ -780,6 +813,27 @@
         <div id="outlineControls" class="hidden">
           <div class="section-label">OUTLINE</div>
           <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Levels</label>
+                <input id="outlineLevelsValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="8">
+              </div>
+              <input type="range" id="outlineLevels" min="2" max="16" value="8" step="1">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Smoothing</label>
+                <input id="outlineSmoothingValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="0">
+              </div>
+              <input type="range" id="outlineSmoothing" min="0" max="10" value="0" step="1">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Min Size</label>
+                <input id="outlineMinSizeValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="3">
+              </div>
+              <input type="range" id="outlineMinSize" min="0" max="20" value="3" step="1">
+            </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
                 <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Stroke</label>
@@ -793,6 +847,20 @@
                 <input id="outlineCornerRadiusValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-12 font-mono outline-none border-none" value="0">
               </div>
               <input type="range" id="outlineCornerRadius" min="0" max="12" value="0" step="0.5">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Stroke Opacity</label>
+                <input id="outlineStrokeOpacityValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="100">
+              </div>
+              <input type="range" id="outlineStrokeOpacity" min="0" max="100" value="100" step="5">
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Depth</label>
+                <input id="outlineDepthValue" type="text" class="text-primary text-[10px] tabular-nums px-1.5 py-0.5 bg-transparent text-right w-10 font-mono outline-none border-none" value="0">
+              </div>
+              <input type="range" id="outlineDepth" min="0" max="10" value="0" step="1">
             </div>
           </div>
         </div>
@@ -839,11 +907,14 @@
               <label class="toggle-switch"><input type="checkbox" id="charRotationToggle"><span class="toggle-slider"></span></label>
             </div>
             <div id="outlineFillSection" class="hidden flex flex-col gap-3 pt-3">
-              <div class="flex items-center justify-between">
-                <label class="text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label">Fill Shapes</label>
-                <label class="toggle-switch"><input type="checkbox" id="outlineFillToggle"><span class="toggle-slider"></span></label>
+              <div class="relative">
+                <button id="outlineFillModeBtn" class="w-full flex items-center justify-between bg-surface-container px-3 py-2 text-[10px] uppercase tracking-wider text-on-surface hover:bg-surface-high transition-colors">
+                  <span>Fill Mode</span>
+                  <span id="outlineFillModeLabel" class="text-primary">Off</span>
+                </button>
+                <input type="hidden" id="outlineFillMode" value="off">
               </div>
-              <div id="outlineFillControls" class="hidden flex flex-col gap-2">
+              <div id="outlineFillColorSection" class="hidden flex flex-col gap-2">
                 <div class="relative">
                   <button id="outlineFillBtn" class="w-full flex items-center justify-between bg-surface-container px-3 py-2 text-[10px] uppercase tracking-wider text-on-surface hover:bg-surface-high transition-colors">
                     <span>Fill Color</span>
@@ -1123,13 +1194,16 @@
       },
       fractalGlass: {
         label: 'Fractal',
-        defaults: { texture: 'reeded', distortion: 50, smoothness: 3, scale: 40, angle: 0 },
+        defaults: { texture: 'reeded', distortion: 50, smoothness: 3, scale: 40, angle: 0, jitter: 0, centerX: 50, centerY: 50 },
         params: [
-          { key: 'texture',    type: 'select', options: ['reeded', 'tubes', 'frosted', 'blocks', 'tinyLens', 'diamond'], label: 'Texture' },
-          { key: 'distortion', type: 'range', min: 0,   max: 100, step: 1, label: 'Distortion' },
+          { key: 'texture',    type: 'select', options: ['reeded', 'frosted', 'blocks', 'tinyLens', 'diamond', 'radial', 'spiral', 'honeycomb', 'ripple', 'chevron', 'lens'], label: 'Texture' },
+          { key: 'distortion', type: 'range', min: 0,   max: 500, step: 1, label: 'Distortion' },
           { key: 'smoothness', type: 'range', min: 0,   max: 50,  step: 1, label: 'Smoothness' },
-          { key: 'scale',      type: 'range', min: 4,   max: 200, step: 1, label: 'Scale' },
-          { key: 'angle',      type: 'range', min: 0,   max: 360, step: 1, label: 'Angle' }
+          { key: 'scale',      type: 'range', min: 4,   max: 1000, step: 1, label: 'Scale' },
+          { key: 'angle',      type: 'range', min: 0,   max: 360, step: 1, label: 'Angle' },
+          { key: 'jitter',     type: 'range', min: 0,   max: 100, step: 1, label: 'Jitter' },
+          { key: 'centerX',   type: 'range', min: 0,   max: 100, step: 1, label: 'Center X', fullFrameOnly: true },
+          { key: 'centerY',   type: 'range', min: 0,   max: 100, step: 1, label: 'Center Y', fullFrameOnly: true }
         ]
       },
       blur: {
@@ -1143,14 +1217,19 @@
       },
       halftone: {
         label: 'CMYK',
-        defaults: { dotSize: 6, shape: 'round', contrast: 50, bleed: 20, paper: 100, colorMix: 0 },
+        defaults: { dotSize: 8, shape: 'round', contrast: 50, bleed: 30, paper: 100, colorMix: 0, misreg: 0, dotGrain: 15, paperTone: 0, inkWeight: 50, angleShift: 0 },
         params: [
-          { key: 'dotSize', type: 'range', min: 2, max: 30, step: 1, label: 'Dot Size' },
-          { key: 'shape', type: 'select', options: ['round', 'diamond', 'line', 'square'], label: 'Dot Shape' },
-          { key: 'contrast', type: 'range', min: 0, max: 100, step: 1, label: 'Contrast' },
-          { key: 'bleed', type: 'range', min: 0, max: 100, step: 1, label: 'Bleed' },
-          { key: 'paper', type: 'range', min: 0, max: 100, step: 1, label: 'Paper' },
-          { key: 'colorMix', type: 'range', min: 0, max: 100, step: 1, label: 'Color Mix' }
+          { key: 'dotSize',    type: 'range',  min: 2, max: 30, step: 1,  label: 'Screen Size' },
+          { key: 'shape',      type: 'select', options: ['round', 'elliptical', 'diamond', 'line', 'square', 'stochastic'], label: 'Dot Shape' },
+          { key: 'contrast',   type: 'range',  min: 0, max: 100, step: 1, label: 'Ink Curve' },
+          { key: 'bleed',      type: 'range',  min: 0, max: 100, step: 1, label: 'Dot Gain' },
+          { key: 'inkWeight',  type: 'range',  min: 0, max: 100, step: 1, label: 'Ink Weight' },
+          { key: 'misreg',     type: 'range',  min: 0, max: 100, step: 1, label: 'Misregistration' },
+          { key: 'dotGrain',   type: 'range',  min: 0, max: 100, step: 1, label: 'Dot Noise' },
+          { key: 'angleShift', type: 'range',  min: 0, max: 30,  step: 1, label: 'Angle Shift' },
+          { key: 'paperTone',  type: 'range',  min: 0, max: 100, step: 1, label: 'Paper Tone' },
+          { key: 'paper',      type: 'range',  min: 0, max: 100, step: 1, label: 'Paper Show' },
+          { key: 'colorMix',   type: 'range',  min: 0, max: 100, step: 1, label: 'Color Mix' }
         ]
       },
       lens: {
@@ -1195,7 +1274,47 @@
             ]
           }
         }
-      }
+      },
+      feedback: {
+        label: 'Feedback',
+        defaults: { zoom: 0.97, rotation: 1.5, centerX: 50, centerY: 50, iterations: 15, decay: 70, colorShift: 8 },
+        params: [
+          { key: 'zoom',       type: 'range', min: 0.8,  max: 1.2,  step: 0.005, label: 'Zoom' },
+          { key: 'rotation',   type: 'range', min: -360, max: 360,  step: 0.5,   label: 'Rotation' },
+          { key: 'centerX',    type: 'range', min: 0,    max: 100,  step: 0.1,   label: 'Center X' },
+          { key: 'centerY',    type: 'range', min: 0,    max: 100,  step: 0.1,   label: 'Center Y' },
+          { key: 'iterations', type: 'range', min: 1,    max: 30,   step: 1,     label: 'Iterations' },
+          { key: 'decay',      type: 'range', min: 0,    max: 100,  step: 1,     label: 'Decay' },
+          { key: 'colorShift', type: 'range', min: 0,    max: 100,  step: 1,     label: 'Color Shift' }
+        ]
+      },
+      pixelSort: {
+        label: 'Pixel Sort',
+        defaults: { angle: 0, threshold: 20, length: 80, mode: 'luminance', reverse: 0 },
+        params: [
+          { key: 'angle',     type: 'range',  min: 0,   max: 360, step: 1,   label: 'Angle' },
+          { key: 'threshold', type: 'range',  min: 0,   max: 100, step: 1,   label: 'Threshold' },
+          { key: 'length',    type: 'range',  min: 1,   max: 256, step: 1,   label: 'Length' },
+          { key: 'mode',      type: 'select', options: ['luminance', 'hue', 'saturation'], label: 'Sort By' },
+          { key: 'reverse',   type: 'range',  min: 0,   max: 1,   step: 1,   label: 'Reverse' }
+        ]
+      },
+      gradientMap: {
+        label: 'Gradient Map',
+        defaults: { preset: 'neon', intensity: 100, contrast: 100, midpoint: 50, reverse: 0, color0: '#020105', color1: '#0d0d80', color2: '#cc1ab3', color3: '#1ae6e6', color4: '#ffffff' },
+        params: [
+          { key: 'preset',    type: 'select', options: ['neon', 'midnight', 'sunset', 'infrared', 'vintage', 'arctic', 'toxic', 'ember', 'tealOrange', 'cyanotype', 'portra', 'vaporwave', 'bleach', 'velvia', 'crossProcess', 'cyberpunk', 'desert', 'sapphire', 'custom'], label: 'Preset' },
+          { key: 'intensity', type: 'range',  min: 0,   max: 100, step: 1, label: 'Intensity' },
+          { key: 'contrast',  type: 'range',  min: 0,   max: 200, step: 1, label: 'Contrast' },
+          { key: 'midpoint',  type: 'range',  min: 0,   max: 100, step: 1, label: 'Midpoint' },
+          { key: 'reverse',   type: 'toggle', label: 'Reverse' },
+          { key: 'color0',    type: 'color', label: 'Shadow' },
+          { key: 'color1',    type: 'color', label: 'Dark' },
+          { key: 'color2',    type: 'color', label: 'Mid' },
+          { key: 'color3',    type: 'color', label: 'Light' },
+          { key: 'color4',    type: 'color', label: 'Highlight' }
+        ]
+      },
     };
 
     let _fxIdCounter = 0;
@@ -1229,13 +1348,23 @@
       charRotation: false,
       manualColorEnabled: false,
       manualColor: '#f2f0d8',
-      outlineFill: false,
+      outlineLevels: 8,
+      outlineSmoothing: 0,
+      outlineMinSize: 3,
+      outlineDepth: 0,
+      outlineFillMode: 'off',
       outlineFillColor: '#1f7a4f',
+      outlineStrokeOpacity: 100,
       brightness: 1,
       contrast: 1,
       saturation: 1,
-      contourSpread: 2,
-      contourSens: 5,
+      contourStyle: 'edge',
+      contourSmoothing: 2,
+      contourDetail: 5,
+      contourThickness: 2,
+      contourLevels: 8,
+      contourFill: false,
+      contourSigmaRatio: 1.6,
       outlineStrokeSize: 1.5,
       outlineCornerRadius: 0,
       bloom: false,
@@ -1323,14 +1452,14 @@
       recording: false,
       _exporting: false,
       sourceVersion: 0,
-      layers: [createLayer()],
+      layers: [],
       activeLayerId: null,
       forceGrid: false,
       forceGridSize: 10,
       forceGridPadding: 0,
       previewResolution: 'full'  // 'full' | '1/2' | '1/4' | 'auto'
     };
-    state.activeLayerId = state.layers[0].id;
+    state.activeLayerId = state.layers.length ? state.layers[0].id : null;
 
     // ============ PROJECT SAVES ============
     let currentProjectName = null;
@@ -1641,6 +1770,7 @@
       if (!sourceLayer) {
         sourceLayer = createSourceLayer({ name });
         state.layers.unshift(sourceLayer);
+        state.activeLayerId = sourceLayer.id;
       } else {
         sourceLayer.name = name;
         sourceLayer.visible = true;
@@ -2166,7 +2296,7 @@
     }
 
     function getMask(layer) {
-      if (!layer.mask) return null;
+      if (!layer || !layer.mask) return null;
       // Auto-migrate old single-polygon format to multi-region format
       if (layer.mask.points && !layer.mask.regions) {
         layer.mask.regions = [{ points: layer.mask.points, op: 'new' }];
@@ -2596,6 +2726,26 @@
       return nx0 + (nx1 - nx0) * sy;
     }
 
+    function tilingValueNoise2D(x, y, seed, periodX, periodY) {
+      const x0 = Math.floor(x);
+      const y0 = Math.floor(y);
+      const tx = x - x0;
+      const ty = y - y0;
+      const sx = tx * tx * (3 - 2 * tx);
+      const sy = ty * ty * (3 - 2 * ty);
+      const px0 = ((x0 % periodX) + periodX) % periodX;
+      const py0 = ((y0 % periodY) + periodY) % periodY;
+      const px1 = (px0 + 1) % periodX;
+      const py1 = (py0 + 1) % periodY;
+      const n00 = hashNoise2D(px0, py0, seed);
+      const n10 = hashNoise2D(px1, py0, seed);
+      const n01 = hashNoise2D(px0, py1, seed);
+      const n11 = hashNoise2D(px1, py1, seed);
+      const nx0 = n00 + (n10 - n00) * sx;
+      const nx1 = n01 + (n11 - n01) * sx;
+      return nx0 + (nx1 - nx0) * sy;
+    }
+
     function fbmNoise2D(x, y, seed) {
       let amplitude = 0.5;
       let frequency = 1;
@@ -2613,73 +2763,328 @@
     /* ── Glass texture generators ── */
 
     const GLASS_TEXTURE_GENERATORS = {
-      reeded(tileW, tileH, seed) {
+      reeded(tileW, tileH, seed, jitter) {
         const map = new Float32Array(tileW * tileH);
+        // 2 half-cycles (1 full sine cycle) at jitter=0
+        // 16 half-cycles (8 full cycles) at jitter>0 — each with random width
+        const numSegs = jitter > 0 ? 16 : 2;
+        const segWidths = [];
+        let totalW = 0;
+        for (let i = 0; i < numSegs; i++) {
+          const n = jitter > 0 ? hashNoise2D(i, 0, seed + 77) : 1;
+          const w = Math.max(0.15, 1 + (n * 2 - 1) * jitter * 1.2);
+          segWidths.push(w);
+          totalW += w;
+        }
+        const phase = new Float32Array(tileW);
+        let pxStart = 0;
+        for (let seg = 0; seg < numSegs; seg++) {
+          const pxEnd = pxStart + segWidths[seg] / totalW * tileW;
+          const iStart = Math.round(pxStart);
+          const iEnd = Math.min(Math.round(pxEnd), tileW);
+          const segPhase = seg * Math.PI;
+          const segW = pxEnd - pxStart;
+          for (let x = iStart; x < iEnd; x++) {
+            phase[x] = segPhase + ((x - pxStart) / segW) * Math.PI;
+          }
+          pxStart = pxEnd;
+        }
         for (let y = 0; y < tileH; y++) {
           for (let x = 0; x < tileW; x++) {
-            map[y * tileW + x] = 0.5 + 0.5 * Math.sin(x / tileW * Math.PI * 2);
+            map[y * tileW + x] = 0.5 + 0.5 * Math.sin(phase[x]);
           }
         }
         return map;
       },
-      tubes(tileW, tileH, seed) {
+      frosted(tileW, tileH, seed, jitter) {
         const map = new Float32Array(tileW * tileH);
+        const totalOctaves = 3 + Math.round(jitter * 3);
+        const freqBoost = 1 + jitter * 2;
+        const basePeriod = Math.max(1, Math.round(4 * freqBoost));
         for (let y = 0; y < tileH; y++) {
           for (let x = 0; x < tileW; x++) {
-            map[y * tileW + x] = x / tileW;
+            let amp = 0.5, freqMul = 1, sum = 0, norm = 0;
+            for (let oct = 0; oct < totalOctaves; oct++) {
+              const period = basePeriod * freqMul;
+              sum += tilingValueNoise2D(x * period / tileW, y * period / tileH, seed + oct * 1013, period, period) * amp;
+              norm += amp;
+              amp *= 0.5;
+              freqMul *= 2;
+            }
+            map[y * tileW + x] = norm > 0 ? sum / norm : 0;
           }
         }
         return map;
       },
-      frosted(tileW, tileH, seed) {
+      blocks(tileW, tileH, seed, jitter) {
         const map = new Float32Array(tileW * tileH);
+        const numDivs = 4;
+        function makeDivs(size, axisSeed) {
+          const divs = [0];
+          for (let i = 1; i < numDivs; i++) {
+            const uniform = Math.round(i / numDivs * size);
+            const noise = (hashNoise2D(i, 0, axisSeed) * 2 - 1) * (size / numDivs) * jitter * 0.6;
+            divs.push(Math.max(divs[i - 1] + 1, Math.min(size - (numDivs - i), Math.round(uniform + noise))));
+          }
+          divs.push(size);
+          return divs;
+        }
+        const xDivs = makeDivs(tileW, seed + 200);
+        const yDivs = makeDivs(tileH, seed + 300);
+        const xCell = new Uint8Array(tileW);
+        const yCell = new Uint8Array(tileH);
+        for (let c = 0; c < numDivs; c++)
+          for (let x = xDivs[c]; x < xDivs[c + 1]; x++) xCell[x] = c;
+        for (let r = 0; r < numDivs; r++)
+          for (let y = yDivs[r]; y < yDivs[r + 1]; y++) yCell[y] = r;
+        // Wrap last cell to match first for seamless tiling
+        const wrapX = numDivs - 1, wrapY = numDivs - 1;
         for (let y = 0; y < tileH; y++) {
           for (let x = 0; x < tileW; x++) {
-            map[y * tileW + x] = fbmNoise2D(x * 4 / tileW, y * 4 / tileH, seed);
+            map[y * tileW + x] = hashNoise2D(xCell[x] % wrapX, yCell[y] % wrapY, seed);
           }
         }
         return map;
       },
-      blocks(tileW, tileH, seed) {
+      tinyLens(tileW, tileH, seed, jitter) {
         const map = new Float32Array(tileW * tileH);
-        const blockSize = Math.max(1, Math.round(Math.min(tileW, tileH) / 4));
+        const numCells = 4;
+        const csx = tileW / numCells;
+        const csy = tileH / numCells;
+        const halfCX = csx / 2;
+        const halfCY = csy / 2;
+        const halfCell = Math.min(halfCX, halfCY);
         for (let y = 0; y < tileH; y++) {
           for (let x = 0; x < tileW; x++) {
-            map[y * tileW + x] = hashNoise2D(Math.floor(x / blockSize), Math.floor(y / blockSize), seed);
-          }
-        }
-        return map;
-      },
-      tinyLens(tileW, tileH, seed) {
-        const map = new Float32Array(tileW * tileH);
-        const cellSize = Math.max(1, Math.round(Math.min(tileW, tileH) / 4));
-        const halfCell = cellSize / 2;
-        for (let y = 0; y < tileH; y++) {
-          for (let x = 0; x < tileW; x++) {
-            const cx = (x % cellSize) - halfCell;
-            const cy = (y % cellSize) - halfCell;
-            const dist = Math.sqrt(cx * cx + cy * cy) / halfCell;
+            const col = Math.floor(x / csx);
+            const row = Math.floor(y / csy);
+            let minD2 = Infinity;
+            for (let dr = -1; dr <= 1; dr++) {
+              for (let dc = -1; dc <= 1; dc++) {
+                const cc = col + dc, cr = row + dr;
+                const wcx = ((cc % numCells) + numCells) % numCells;
+                const wcr = ((cr % numCells) + numCells) % numCells;
+                let cenX = wcx * csx + halfCX;
+                let cenY = wcr * csy + halfCY;
+                if (jitter > 0) {
+                  cenX += (hashNoise2D(wcx, wcr, seed + 50) * 2 - 1) * halfCX * jitter * 0.7;
+                  cenY += (hashNoise2D(wcx, wcr, seed + 51) * 2 - 1) * halfCY * jitter * 0.7;
+                }
+                let dx = x - cenX, dy = y - cenY;
+                if (dx > tileW * 0.5) dx -= tileW;
+                else if (dx < -tileW * 0.5) dx += tileW;
+                if (dy > tileH * 0.5) dy -= tileH;
+                else if (dy < -tileH * 0.5) dy += tileH;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < minD2) minD2 = d2;
+              }
+            }
+            const dist = Math.sqrt(minD2) / halfCell;
             map[y * tileW + x] = Math.max(0, 1 - dist * dist);
           }
         }
         return map;
       },
-      diamond(tileW, tileH, seed) {
+      diamond(tileW, tileH, seed, jitter) {
         const map = new Float32Array(tileW * tileH);
-        const cellSize = Math.max(1, Math.round(Math.min(tileW, tileH) / 4));
-        const halfCell = cellSize / 2;
+        const numCells = 4;
+        const csx = tileW / numCells;
+        const csy = tileH / numCells;
+        const halfCX = csx / 2;
+        const halfCY = csy / 2;
+        const halfCell = Math.min(halfCX, halfCY);
         for (let y = 0; y < tileH; y++) {
           for (let x = 0; x < tileW; x++) {
-            const cx = Math.abs((x % cellSize) - halfCell) / halfCell;
-            const cy = Math.abs((y % cellSize) - halfCell) / halfCell;
-            map[y * tileW + x] = Math.max(0, 1 - (cx + cy));
+            const col = Math.floor(x / csx);
+            const row = Math.floor(y / csy);
+            let minD = Infinity;
+            for (let dr = -1; dr <= 1; dr++) {
+              for (let dc = -1; dc <= 1; dc++) {
+                const cc = col + dc, cr = row + dr;
+                const wcx = ((cc % numCells) + numCells) % numCells;
+                const wcr = ((cr % numCells) + numCells) % numCells;
+                let cenX = wcx * csx + halfCX;
+                let cenY = wcr * csy + halfCY;
+                if (jitter > 0) {
+                  cenX += (hashNoise2D(wcx, wcr, seed + 60) * 2 - 1) * halfCX * jitter * 0.7;
+                  cenY += (hashNoise2D(wcx, wcr, seed + 61) * 2 - 1) * halfCY * jitter * 0.7;
+                }
+                let dx = x - cenX, dy = y - cenY;
+                if (dx > tileW * 0.5) dx -= tileW;
+                else if (dx < -tileW * 0.5) dx += tileW;
+                if (dy > tileH * 0.5) dy -= tileH;
+                else if (dy < -tileH * 0.5) dy += tileH;
+                const d = Math.abs(dx) + Math.abs(dy);
+                if (d < minD) minD = d;
+              }
+            }
+            map[y * tileW + x] = Math.max(0, 1 - minD / halfCell);
+          }
+        }
+        return map;
+      },
+      radial(tileW, tileH, seed, jitter) {
+        const map = new Float32Array(tileW * tileH);
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const cx = x / tileW - 0.5, cy = y / tileH - 0.5;
+            const dist = Math.sqrt(cx * cx + cy * cy) * 2;
+            let freqMod = 1;
+            if (jitter > 0) {
+              const angNoise = tilingValueNoise2D(x * 4 / tileW, y * 4 / tileH, seed + 101, 4, 4);
+              freqMod = 1 + (angNoise * 2 - 1) * jitter * 0.5;
+            }
+            map[y * tileW + x] = 0.5 + 0.5 * Math.sin(dist * Math.PI * 6 * freqMod);
+          }
+        }
+        return map;
+      },
+      spiral(tileW, tileH, seed, jitter) {
+        const map = new Float32Array(tileW * tileH);
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const cx = x / tileW - 0.5, cy = y / tileH - 0.5;
+            const dist = Math.sqrt(cx * cx + cy * cy) * 2;
+            const angle = Math.atan2(cy, cx);
+            let freqMod = 1, armWobble = 0;
+            if (jitter > 0) {
+              const angNoise = tilingValueNoise2D(x * 4 / tileW, y * 4 / tileH, seed + 111, 4, 4);
+              freqMod = 1 + (angNoise * 2 - 1) * jitter * 0.5;
+              const radNoise = tilingValueNoise2D(x * 3 / tileW, y * 3 / tileH, seed + 112, 3, 3);
+              armWobble = (radNoise * 2 - 1) * jitter * 0.8;
+            }
+            map[y * tileW + x] = 0.5 + 0.5 * Math.sin((angle + armWobble) * 3 + dist * Math.PI * 6 * freqMod);
+          }
+        }
+        return map;
+      },
+      honeycomb(tileW, tileH, seed, jitter) {
+        const map = new Float32Array(tileW * tileH);
+        const targetCellSize = Math.max(1, Math.round(Math.min(tileW, tileH) / 4));
+        // Adjust spacings to divide tile dimensions evenly for seamless tiling
+        const rawHSpacing = targetCellSize * Math.sqrt(3);
+        const numCols = Math.max(1, Math.round(tileW / rawHSpacing));
+        const hSpacing = tileW / numCols;
+        const rawVSpacing = targetCellSize * 1.5;
+        let numRows = Math.max(2, Math.round(tileH / rawVSpacing));
+        if (numRows % 2 !== 0) numRows++;
+        const vSpacing = tileH / numRows;
+        const cellSize = hSpacing / Math.sqrt(3);
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const row = Math.floor(y / vSpacing);
+            const wr0 = ((row % numRows) + numRows) % numRows;
+            const isOddRow = wr0 % 2 === 1;
+            const colOffset = isOddRow ? hSpacing * 0.5 : 0;
+            const col = Math.floor((x + colOffset) / hSpacing);
+            let minDist = Infinity;
+            for (let dr = -1; dr <= 1; dr++) {
+              for (let dc = -1; dc <= 1; dc++) {
+                const r = row + dr, c = col + dc;
+                const wr = ((r % numRows) + numRows) % numRows;
+                const wc = ((c % numCols) + numCols) % numCols;
+                const isOddR = wr % 2 === 1;
+                let cenX = wc * hSpacing + (isOddR ? hSpacing * 0.5 : 0);
+                let cenY = wr * vSpacing + vSpacing * 0.5;
+                if (jitter > 0) {
+                  cenX += (hashNoise2D(wc, wr, seed + 70) * 2 - 1) * cellSize * jitter * 0.4;
+                  cenY += (hashNoise2D(wc, wr, seed + 71) * 2 - 1) * cellSize * jitter * 0.4;
+                }
+                let dx = x - cenX, dy = y - cenY;
+                if (dx > tileW * 0.5) dx -= tileW;
+                else if (dx < -tileW * 0.5) dx += tileW;
+                if (dy > tileH * 0.5) dy -= tileH;
+                else if (dy < -tileH * 0.5) dy += tileH;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                if (d < minDist) minDist = d;
+              }
+            }
+            const norm = minDist / (cellSize * 0.5);
+            map[y * tileW + x] = Math.max(0, 1 - norm * norm);
+          }
+        }
+        return map;
+      },
+      ripple(tileW, tileH, seed, jitter) {
+        const map = new Float32Array(tileW * tileH);
+        const numSources = 8 + Math.round(jitter * 12);
+        const sources = [];
+        for (let i = 0; i < numSources; i++) {
+          sources.push({
+            x: hashNoise2D(i, 0, seed + 50),
+            y: hashNoise2D(i, 1, seed + 50),
+            freq: 6 + hashNoise2D(i, 2, seed + 50) * 14,
+            phase: hashNoise2D(i, 3, seed + 50) * Math.PI * 2,
+            amp: 0.3 + hashNoise2D(i, 4, seed + 50) * 0.7,
+            decay: 1.5 + hashNoise2D(i, 5, seed + 50) * 2.0
+          });
+        }
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const nx = x / tileW, ny = y / tileH;
+            let sum = 0, totalAmp = 0;
+            for (const s of sources) {
+              let minDist = Infinity;
+              for (let wy = -1; wy <= 1; wy++) {
+                for (let wx = -1; wx <= 1; wx++) {
+                  const dx = nx - (s.x + wx), dy = ny - (s.y + wy);
+                  const d = Math.sqrt(dx * dx + dy * dy);
+                  if (d < minDist) minDist = d;
+                }
+              }
+              const envelope = Math.exp(-minDist * s.decay * 4);
+              sum += Math.sin(minDist * Math.PI * 2 * s.freq + s.phase) * envelope * s.amp;
+              totalAmp += s.amp * envelope;
+            }
+            const val = totalAmp > 0.001 ? sum / (totalAmp * 0.7) : 0;
+            map[y * tileW + x] = 0.5 + 0.5 * Math.max(-1, Math.min(1, val));
+          }
+        }
+        return map;
+      },
+      chevron(tileW, tileH, seed, jitter) {
+        const map = new Float32Array(tileW * tileH);
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const nx = x / tileW, ny = y / tileH;
+            const pattern = nx + Math.abs(ny - 0.5);
+            let freqMod = 1;
+            if (jitter > 0) {
+              const n = tilingValueNoise2D(nx * 3, ny * 3, seed + 130, 3, 3);
+              freqMod = 1 + (n * 2 - 1) * jitter * 0.5;
+            }
+            map[y * tileW + x] = 0.5 + 0.5 * Math.sin(pattern * Math.PI * 4 * freqMod);
+          }
+        }
+        return map;
+      },
+      lens(tileW, tileH, seed, jitter, scale, cnx, cny) {
+        // Jitter: angular + radial ring thickness modulation
+        const map = new Float32Array(tileW * tileH);
+        const rings = Math.max(1, (scale || 40) / 5);
+        for (let y = 0; y < tileH; y++) {
+          for (let x = 0; x < tileW; x++) {
+            const cx = x / tileW - cnx, cy = y / tileH - cny;
+            const dist = Math.sqrt(cx * cx + cy * cy) * 2;
+            let freqMod = 1;
+            if (jitter > 0) {
+              const angle = Math.atan2(cy, cx);
+              const angNoise = valueNoise2D(Math.cos(angle) * 2 + 3, Math.sin(angle) * 2 + 3, seed + 141);
+              const radNoise = valueNoise2D(dist * 5, 0.5, seed + 142);
+              freqMod = (1 + (angNoise * 2 - 1) * jitter * 0.5) * (1 + (radNoise * 2 - 1) * jitter * 0.3);
+            }
+            map[y * tileW + x] = 0.5 + 0.5 * Math.sin(dist * Math.PI * rings * freqMod);
           }
         }
         return map;
       }
     };
 
+    // Full-frame textures stretch across the whole image instead of tiling
+    const FULL_FRAME_TEXTURES = new Set(['lens']);
+
     function blurDisplacementMap(map, w, h, radius) {
+      radius = Math.min(radius, Math.floor(Math.min(w, h) / 2) - 1);
       if (radius < 1) return map;
       const out = new Float32Array(map.length);
       const tmp = new Float32Array(map.length);
@@ -2713,26 +3118,40 @@
 
     const _glassMapCache = { key: '', map: null, gradX: null, gradY: null, tileW: 0, tileH: 0 };
 
-    function getGlassDisplacementMap(texture, scale, smoothness) {
-      const tileW = Math.max(4, Math.round(scale));
+    function getGlassDisplacementMap(texture, scale, smoothness, centerX, centerY, imgW, imgH, jitter) {
+      const isFF = FULL_FRAME_TEXTURES.has(texture);
+      const ffRings = isFF ? Math.max(1, Math.round(scale) / 5) : 0;
+      const baseTileW = isFF ? Math.max(128, Math.min(512, Math.round(ffRings * 4))) : Math.max(4, Math.round(scale));
+      // Expand tile for reeded with jitter to fit multiple columns for width variation
+      const needsExpand = !isFF && jitter > 0 && texture === 'reeded';
+      const tileW = needsExpand ? baseTileW * 8 : baseTileW;
       const tileH = tileW;
-      const cacheKey = texture + '|' + tileW + '|' + smoothness;
+      // Convert image-space center % to map UV space
+      // Map covers [0,1]x[0,1], image covers [0,w/longEdge]x[0,h/longEdge]
+      const longEdge = Math.max(imgW || 1, imgH || 1);
+      const cx = isFF ? Math.round(((centerX ?? 50) / 100 * (imgW || 1) / longEdge) * 1000) / 1000 : 0.5;
+      const cy = isFF ? Math.round(((centerY ?? 50) / 100 * (imgH || 1) / longEdge) * 1000) / 1000 : 0.5;
+      const jit = Math.round((jitter || 0) * 100) / 100;
+      const cacheKey = texture + '|' + tileW + '|' + scale + '|' + smoothness + '|' + cx + '|' + cy + '|' + jit;
       if (_glassMapCache.key === cacheKey) return { map: _glassMapCache.map, gradX: _glassMapCache.gradX, gradY: _glassMapCache.gradY, tileW: _glassMapCache.tileW, tileH: _glassMapCache.tileH };
       const gen = GLASS_TEXTURE_GENERATORS[texture] || GLASS_TEXTURE_GENERATORS.reeded;
-      let map = gen(tileW, tileH, 42);
+      let map = isFF ? gen(tileW, tileH, 42, jit, scale, cx, cy) : gen(tileW, tileH, 42, jit);
       if (smoothness > 0) {
-        for (let pass = 0; pass < 3; pass++) map = blurDisplacementMap(map, tileW, tileH, smoothness);
+        const featureScale = baseTileW;
+        const maxR = Math.max(2, Math.min(20, Math.round(featureScale / 8)));
+        const blurR = Math.max(1, Math.min(maxR, Math.round(smoothness * featureScale / 200)));
+        for (let pass = 0; pass < 3; pass++) map = blurDisplacementMap(map, tileW, tileH, blurR);
       }
       // Pre-compute central-difference gradients
       const len = tileW * tileH;
       const gradX = new Float32Array(len);
       const gradY = new Float32Array(len);
       for (let ty = 0; ty < tileH; ty++) {
-        const tyP = (ty + 1) % tileH;
-        const tyN = (ty - 1 + tileH) % tileH;
+        const tyP = isFF ? Math.min(ty + 1, tileH - 1) : (ty + 1) % tileH;
+        const tyN = isFF ? Math.max(ty - 1, 0) : (ty - 1 + tileH) % tileH;
         for (let tx = 0; tx < tileW; tx++) {
-          const txP = (tx + 1) % tileW;
-          const txN = (tx - 1 + tileW) % tileW;
+          const txP = isFF ? Math.min(tx + 1, tileW - 1) : (tx + 1) % tileW;
+          const txN = isFF ? Math.max(tx - 1, 0) : (tx - 1 + tileW) % tileW;
           const idx = ty * tileW + tx;
           gradX[idx] = (map[ty * tileW + txP] - map[ty * tileW + txN]) * 0.5;
           gradY[idx] = (map[tyP * tileW + tx] - map[tyN * tileW + tx]) * 0.5;
@@ -2970,12 +3389,17 @@
     }
 
     function applyCmykHalftone(ctx, w, h, fx, effectScale = 1, gridStep = 0, layer = null, geometry = null) {
-      const cellSize = gridStep > 0 ? gridStep : Math.max(2, Math.round((fx.params.dotSize || 6) * effectScale));
-      const contrastVal = (fx.params.contrast || 50) / 100;
-      const bleedVal = (fx.params.bleed || 20) / 100;
-      const paperVal = (fx.params.paper != null ? fx.params.paper : 100) / 100;
-      const colorMixVal = (fx.params.colorMix != null ? fx.params.colorMix : 0) / 100;
+      const cellSize = gridStep > 0 ? gridStep : Math.max(2, Math.round((fx.params.dotSize || 8) * effectScale));
+      const contrastVal = (fx.params.contrast ?? 50) / 100;
+      const bleedVal = (fx.params.bleed ?? 30) / 100;
+      const paperVal = (fx.params.paper ?? 100) / 100;
+      const colorMixVal = (fx.params.colorMix ?? 0) / 100;
       const shape = fx.params.shape || 'round';
+      const misregVal = (fx.params.misreg ?? 0) / 100;
+      const dotGrainVal = (fx.params.dotGrain ?? 15) / 100;
+      const paperToneVal = (fx.params.paperTone ?? 0) / 100;
+      const inkWeightVal = (fx.params.inkWeight ?? 50) / 100;
+      const angleShift = fx.params.angleShift ?? 0;
 
       const srcData = ctx.getImageData(0, 0, w, h);
       const src = srcData.data;
@@ -3004,48 +3428,23 @@
       const halfCell2 = halfCell * halfCell;
       const invCell = 1 / cellSize;
 
-      // Build per-pixel mask strength for feathered dot-size modulation.
-      // Strength goes from 0 (outside/edge) to 1 (deep inside mask).
-      // When no mask or no feather, maskStr stays null and is skipped.
-      let maskStr = null;
-      if (layer && geometry) {
-        const mask = getMask(layer);
-        if (mask && mask.enabled !== false && maskHasRegions(mask) && mask.feather > 0) {
-          const bitmapData = buildMaskAlphaBitmap(layer.id, mask, geometry.srcW, geometry.srcH);
-          const transform = getImageTransform(geometry);
-          if (bitmapData && transform) {
-            maskStr = new Float32Array(len);
-            const { rect } = transform;
-            const sxScale = geometry.srcW / rect.width;
-            const syScale = geometry.srcH / rect.height;
-            const feather = mask.feather;
-            const outer = feather * 0.75;
-            const totalRange = feather + outer;
-            const invRange = 1 / totalRange;
-            for (let py = 0; py < h; py++) {
-              for (let px = 0; px < w; px++) {
-                const sx = (px - rect.left) * sxScale;
-                const sy = (py - rect.top) * syScale;
-                const isx = Math.round(sx);
-                const isy = Math.round(sy);
-                if (isx < 0 || isx >= bitmapData.w || isy < 0 || isy >= bitmapData.h) {
-                  maskStr[py * w + px] = 0; continue;
-                }
-                const bidx = isy * bitmapData.w + isx;
-                const inside = bitmapData.bitmap[bidx] > 128;
-                const keep = mask.inverted ? !inside : inside;
-                const distIn = mask.inverted ? bitmapData.distOut[bidx] : bitmapData.distIn[bidx];
-                const distOut = mask.inverted ? bitmapData.distIn[bidx] : bitmapData.distOut[bidx];
-                const signedDist = keep ? distIn : -distOut;
-                if (signedDist < -outer) { maskStr[py * w + px] = 0; continue; }
-                if (signedDist >= feather) { maskStr[py * w + px] = 1; continue; }
-                const t = (signedDist + outer) * invRange;
-                maskStr[py * w + px] = t * t * (3 - 2 * t); // smoothstep
-              }
-            }
-          }
-        }
-      }
+      // Ink opacity from ink weight
+      const inkOpacity = 0.3 + inkWeightVal * 0.7;
+
+      // Paper tone: white -> warm cream
+      const paperR = 255 - paperToneVal * 10;
+      const paperG = 255 - paperToneVal * 20;
+      const paperB = 255 - paperToneVal * 35;
+
+      // Misregistration offsets (deterministic per-channel, K stays at 0,0)
+      const misregPx = misregVal * cellSize * 1.5;
+      function hashF(seed) { let s = Math.sin(seed) * 43758.5453; return s - Math.floor(s); }
+      const offsets = [
+        [0, 0], // K - reference plate
+        [(hashF(cellSize * 7.919) - 0.5) * misregPx * 2, (hashF(cellSize * 13.731) - 0.5) * misregPx * 2], // C
+        [(hashF(cellSize * 23.197) - 0.5) * misregPx * 2, (hashF(cellSize * 31.853) - 0.5) * misregPx * 2], // M
+        [(hashF(cellSize * 47.629) - 0.5) * misregPx * 2, (hashF(cellSize * 59.371) - 0.5) * misregPx * 2]  // Y
+      ];
 
       // Contrast curve multiplier
       const contrastMul = 1 + contrastVal * 3;
@@ -3058,128 +3457,204 @@
 
       // Shape flags (avoid string comparison in hot loop)
       const isRound = shape === 'round';
+      const isElliptical = shape === 'elliptical';
       const isDiamond = shape === 'diamond';
       const isLine = shape === 'line';
+      const isStochastic = shape === 'stochastic';
 
-      // Output buffer: start with white (255), will multiply each channel
-      const out = new Float32Array(len * 3).fill(255);
+      // Output buffer: start with paper tone color
+      const out = new Float32Array(len * 3);
+      for (let i = 0; i < len; i++) {
+        out[i * 3] = paperR;
+        out[i * 3 + 1] = paperG;
+        out[i * 3 + 2] = paperB;
+      }
 
-      // Always track max dot coverage per pixel (needed for paper opacity)
+      // Track max dot coverage per pixel (needed for paper opacity)
       const dotCoverage = new Float32Array(len);
 
-      // Fast floor constant (offset trick avoids Math.floor call)
-      const FO = 1048576;
-      const wm1 = w - 1, hm1 = h - 1;
+      // Deterministic hash for dot noise
+      function cellHash(gu, gv, pass) {
+        let h = ((gu * 2654435761) ^ (gv * 2246822519) ^ (pass * 13)) >>> 0;
+        return ((h & 0xFFFF) / 65535.0 - 0.5) * 2; // -1 to 1
+      }
 
-      // Per-channel passes: trig constants in registers, cell caching,
-      // channel-specific blending (C/M/Y each touch only 1 RGB component)
-      // Channel config: [cmykIndex, angle, blendOffset (-1 = all three)]
-      const channels = [[3, 45, -1], [0, 15, 0], [1, 75, 1], [2, 0, 2]];
-
-      for (let pass = 0; pass < 4; pass++) {
-        const [chI, angle, blendOff] = channels[pass];
-        const rad = angle * Math.PI / 180;
-        const cosA = Math.cos(rad), sinA = Math.sin(rad);
-
-        // Cell cache: consecutive pixels in a row often share the same cell
-        // (~75-85% cache hit rate depending on angle), skipping un-rotation +
-        // sampling + contrast for the majority of pixels
-        let prevGu = -1e9, prevGv = -1e9;
-        let cIntensity = 0, cDotR2 = 0, cCu = 0, cCv = 0;
-
+      // Stochastic (FM) screening path
+      if (isStochastic) {
+        // 8x8 Bayer threshold matrix
+        const bayer8 = new Uint8Array([
+          0,32,8,40,2,34,10,42, 48,16,56,24,50,18,58,26,
+          12,44,4,36,14,46,6,38, 60,28,52,20,62,30,54,22,
+          3,35,11,43,1,33,9,41, 51,19,59,27,49,17,57,25,
+          15,47,7,39,13,45,5,37, 63,31,55,23,61,29,53,21
+        ]);
         for (let y = 0; y < h; y++) {
           const yRow = y * w;
-          const ysinA = y * sinA, ycosA = y * cosA;
-          prevGu = -1e9; // reset cache per row
-
           for (let x = 0; x < w; x++) {
-            // Rotate pixel to grid space
-            const u = x * cosA + ysinA;
-            const v = -x * sinA + ycosA;
-
-            // Fast floor to find grid cell
-            const gu = ((u * invCell + FO) | 0) - FO;
-            const gv = ((v * invCell + FO) | 0) - FO;
-
-            // Cell cache: reuse intensity/dotR when pixel is in same cell
-            if (gu !== prevGu || gv !== prevGv) {
-              prevGu = gu; prevGv = gv;
-              cCu = (gu + 0.5) * cellSize;
-              cCv = (gv + 0.5) * cellSize;
-              // Un-rotate cell center to image space for sampling
-              const sx = cCu * cosA - cCv * sinA;
-              const sy = cCu * sinA + cCv * cosA;
-              const ix = sx < 0 ? 0 : sx > wm1 ? wm1 : (sx + 0.5) | 0;
-              const iy = sy < 0 ? 0 : sy > hm1 ? hm1 : (sy + 0.5) | 0;
-              let val = cmyk[(iy * w + ix) * 4 + chI];
-              if (contrastVal > 0) {
-                val = ((val - 0.5) * contrastMul) + 0.5;
-                if (val < 0) val = 0; else if (val > 1) val = 1;
-              }
-              cIntensity = val;
-              cDotR2 = halfCell2 * val;
-            }
-
-            if (cIntensity < 0.01) continue;
-
-            // Scale dot size by mask feather strength at this pixel
-            let dotR2 = cDotR2;
-            if (maskStr) {
-              const ms = maskStr[yRow + x];
-              if (ms <= 0) continue;
-              if (ms < 1) dotR2 = cDotR2 * ms;
-            }
-
-            // Distance² from pixel to cell center (shape-dependent)
-            const du = u - cCu;
-            const dv = v - cCv;
-            let dist2;
-            if (isRound) {
-              dist2 = du * du + dv * dv;
-            } else if (isLine) {
-              dist2 = dv * dv;
-            } else if (isDiamond) {
-              const d = (du < 0 ? -du : du) + (dv < 0 ? -dv : dv);
-              dist2 = d * d;
-            } else {
-              const adu = du < 0 ? -du : du;
-              const adv = dv < 0 ? -dv : dv;
-              const d = adu > adv ? adu : adv;
-              dist2 = d * d;
-            }
-
-            // Compute coverage using squared comparisons (avoids sqrt)
-            let coverage;
-            if (!hasBleed) {
-              coverage = dist2 <= dotR2 ? 1 : 0;
-            } else {
-              const innerR2 = dotR2 * innerMul2;
-              const outerR2 = dotR2 * outerMul2;
-              if (dist2 <= innerR2) {
-                coverage = 1;
-              } else if (dist2 >= outerR2) {
-                coverage = 0;
-              } else {
-                const d = Math.sqrt(dist2);
-                const dotR = Math.sqrt(dotR2);
-                const t = (d - dotR * innerMul) / (dotR * bleedRange);
-                coverage = 1 - t * t * (3 - 2 * t);
-              }
-            }
-
-            if (coverage <= 0) continue;
-
             const pixIdx = yRow + x;
-            if (coverage > dotCoverage[pixIdx]) dotCoverage[pixIdx] = coverage;
-
-            // Channel-specific multiply blend
-            // K(pass=0): all 3 RGB; C: R only; M: G only; Y: B only
-            const m = 1 - coverage;
+            const i4 = pixIdx * 4;
+            const threshold = bayer8[(y & 7) * 8 + (x & 7)] / 64.0;
+            // Get CMYK at this pixel
+            let ck = cmyk[i4 + 3], cc = cmyk[i4], cm = cmyk[i4 + 1], cy = cmyk[i4 + 2];
+            // Apply contrast
+            if (contrastVal > 0) {
+              ck = Math.max(0, Math.min(1, (ck - 0.5) * contrastMul + 0.5));
+              cc = Math.max(0, Math.min(1, (cc - 0.5) * contrastMul + 0.5));
+              cm = Math.max(0, Math.min(1, (cm - 0.5) * contrastMul + 0.5));
+              cy = Math.max(0, Math.min(1, (cy - 0.5) * contrastMul + 0.5));
+            }
+            // Dot noise
+            if (dotGrainVal > 0) {
+              ck += cellHash(x, y, 0) * dotGrainVal * 0.3;
+              cc += cellHash(x, y, 1) * dotGrainVal * 0.3;
+              cm += cellHash(x, y, 2) * dotGrainVal * 0.3;
+              cy += cellHash(x, y, 3) * dotGrainVal * 0.3;
+              ck = Math.max(0, Math.min(1, ck));
+              cc = Math.max(0, Math.min(1, cc));
+              cm = Math.max(0, Math.min(1, cm));
+              cy = Math.max(0, Math.min(1, cy));
+            }
+            // Mask
+            if (maskStr) {
+              const ms = maskStr[pixIdx];
+              if (ms <= 0) continue;
+              if (ms < 1) { ck *= ms; cc *= ms; cm *= ms; cy *= ms; }
+            }
             const pi = pixIdx * 3;
-            if (blendOff < 0) {
-              out[pi] *= m; out[pi + 1] *= m; out[pi + 2] *= m;
-            } else {
-              out[pi + blendOff] *= m;
+            let maxCov = 0;
+            // K channel
+            if (ck > threshold) { out[pi] *= 1 - inkOpacity; out[pi+1] *= 1 - inkOpacity; out[pi+2] *= 1 - inkOpacity; maxCov = 1; }
+            // C channel (with misreg)
+            const cx2 = x + offsets[1][0], cy2 = y + offsets[1][1];
+            const cThresh = bayer8[((cy2 & 7) >>> 0) * 8 + ((cx2 & 7) >>> 0)] / 64.0;
+            if (cc > cThresh) { out[pi] *= 1 - inkOpacity; maxCov = 1; }
+            // M channel (with misreg)
+            const mx2 = x + offsets[2][0], my2 = y + offsets[2][1];
+            const mThresh = bayer8[((my2 & 7) >>> 0) * 8 + ((mx2 & 7) >>> 0)] / 64.0;
+            if (cm > mThresh) { out[pi+1] *= 1 - inkOpacity; maxCov = 1; }
+            // Y channel (with misreg)
+            const yx2 = x + offsets[3][0], yy2 = y + offsets[3][1];
+            const yThresh = bayer8[((yy2 & 7) >>> 0) * 8 + ((yx2 & 7) >>> 0)] / 64.0;
+            if (cy > yThresh) { out[pi+2] *= 1 - inkOpacity; maxCov = 1; }
+            dotCoverage[pixIdx] = maxCov;
+          }
+        }
+      } else {
+        // AM screening (grid-based) path
+        const FO = 1048576;
+        const wm1 = w - 1, hm1 = h - 1;
+
+        // Channel config: [cmykIndex, angle, blendOffset (-1 = all three)]
+        const channels = [[3, 45 + angleShift, -1], [0, 15 + angleShift, 0], [1, 75 + angleShift, 1], [2, 0 + angleShift, 2]];
+
+        for (let pass = 0; pass < 4; pass++) {
+          const [chI, angle, blendOff] = channels[pass];
+          const rad = angle * Math.PI / 180;
+          const cosA = Math.cos(rad), sinA = Math.sin(rad);
+          const offX = offsets[pass][0], offY = offsets[pass][1];
+
+          let prevGu = -1e9, prevGv = -1e9;
+          let cIntensity = 0, cDotR2 = 0, cCu = 0, cCv = 0;
+
+          for (let y = 0; y < h; y++) {
+            const yRow = y * w;
+            const ysinA = y * sinA, ycosA = y * cosA;
+            prevGu = -1e9;
+
+            for (let x = 0; x < w; x++) {
+              // Rotate pixel (with misregistration offset) to grid space
+              const px = x + offX, py = y + offY;
+              const u = px * cosA + py * sinA;
+              const v = -px * sinA + py * cosA;
+
+              const gu = ((u * invCell + FO) | 0) - FO;
+              const gv = ((v * invCell + FO) | 0) - FO;
+
+              if (gu !== prevGu || gv !== prevGv) {
+                prevGu = gu; prevGv = gv;
+                cCu = (gu + 0.5) * cellSize;
+                cCv = (gv + 0.5) * cellSize;
+                // Un-rotate cell center to image space for sampling
+                const sx = cCu * cosA - cCv * sinA - offX;
+                const sy = cCu * sinA + cCv * cosA - offY;
+                const ix = sx < 0 ? 0 : sx > wm1 ? wm1 : (sx + 0.5) | 0;
+                const iy = sy < 0 ? 0 : sy > hm1 ? hm1 : (sy + 0.5) | 0;
+                let val = cmyk[(iy * w + ix) * 4 + chI];
+                // Dot noise
+                if (dotGrainVal > 0) {
+                  val += cellHash(gu, gv, pass) * dotGrainVal * 0.3;
+                  if (val < 0) val = 0; else if (val > 1) val = 1;
+                }
+                if (contrastVal > 0) {
+                  val = ((val - 0.5) * contrastMul) + 0.5;
+                  if (val < 0) val = 0; else if (val > 1) val = 1;
+                }
+                cIntensity = val;
+                // Density-dependent dot gain
+                cDotR2 = halfCell2 * val;
+                if (hasBleed) cDotR2 *= 1 + bleedVal * val * 0.6;
+              }
+
+              if (cIntensity < 0.01) continue;
+
+              let dotR2 = cDotR2;
+              if (maskStr) {
+                const ms = maskStr[yRow + x];
+                if (ms <= 0) continue;
+                if (ms < 1) dotR2 = cDotR2 * ms;
+              }
+
+              const du = u - cCu;
+              const dv = v - cCv;
+              let dist2;
+              if (isRound) {
+                dist2 = du * du + dv * dv;
+              } else if (isElliptical) {
+                const duS = du * 1.4;
+                dist2 = duS * duS + dv * dv;
+              } else if (isLine) {
+                dist2 = dv * dv;
+              } else if (isDiamond) {
+                const d = (du < 0 ? -du : du) + (dv < 0 ? -dv : dv);
+                dist2 = d * d;
+              } else { // square
+                const adu = du < 0 ? -du : du;
+                const adv = dv < 0 ? -dv : dv;
+                const d = adu > adv ? adu : adv;
+                dist2 = d * d;
+              }
+
+              let coverage;
+              if (!hasBleed) {
+                coverage = dist2 <= dotR2 ? 1 : 0;
+              } else {
+                const innerR2 = dotR2 * innerMul2;
+                const outerR2 = dotR2 * outerMul2;
+                if (dist2 <= innerR2) {
+                  coverage = 1;
+                } else if (dist2 >= outerR2) {
+                  coverage = 0;
+                } else {
+                  const d = Math.sqrt(dist2);
+                  const dotR = Math.sqrt(dotR2);
+                  const t = (d - dotR * innerMul) / (dotR * bleedRange);
+                  coverage = 1 - t * t * (3 - 2 * t);
+                }
+              }
+
+              if (coverage <= 0) continue;
+
+              const pixIdx = yRow + x;
+              if (coverage > dotCoverage[pixIdx]) dotCoverage[pixIdx] = coverage;
+
+              // Multiply blend with ink weight
+              const m = 1 - coverage * inkOpacity;
+              const pi = pixIdx * 3;
+              if (blendOff < 0) {
+                out[pi] *= m; out[pi + 1] *= m; out[pi + 2] *= m;
+              } else {
+                out[pi + blendOff] *= m;
+              }
             }
           }
         }
@@ -3189,7 +3664,6 @@
       const dst = ctx.createImageData(w, h);
       const dd = dst.data;
       if (paperVal >= 1 && colorMixVal <= 0) {
-        // Fast path: no blending needed (common case: paper=100, colorMix=0)
         for (let i = 0; i < len; i++) {
           const i3 = i * 3, i4 = i * 4;
           dd[i4]     = (out[i3] + 0.5) | 0;
@@ -3201,43 +3675,22 @@
         for (let i = 0; i < len; i++) {
           const i3 = i * 3, i4 = i * 4;
           const maxCov = dotCoverage[i];
-
           let r = out[i3], g = out[i3 + 1], b = out[i3 + 2];
-
-          // Paper opacity: blend between original (paper=0) and white (paper=1) for uncovered areas
           if (paperVal < 1) {
             const showThrough = (1 - maxCov) * (1 - paperVal);
             r = r * (1 - showThrough) + src[i4]     * showThrough;
             g = g * (1 - showThrough) + src[i4 + 1] * showThrough;
             b = b * (1 - showThrough) + src[i4 + 2] * showThrough;
           }
-
-          // Color mix: blend toward original colors
           if (colorMixVal > 0) {
             r = r * (1 - colorMixVal) + src[i4]     * colorMixVal;
             g = g * (1 - colorMixVal) + src[i4 + 1] * colorMixVal;
             b = b * (1 - colorMixVal) + src[i4 + 2] * colorMixVal;
           }
-
           dd[i4]     = (r + 0.5) | 0;
           dd[i4 + 1] = (g + 0.5) | 0;
           dd[i4 + 2] = (b + 0.5) | 0;
           dd[i4 + 3] = src[i4 + 3];
-        }
-      }
-
-      // Halftone feather: use the pre-computed maskStr to set pixel alpha.
-      // Dots were already shrunk during rendering via maskStr; now apply the
-      // same strength as alpha so paper between dots also fades smoothly.
-      // This replaces the normal applyLayerMask for this layer.
-      if (maskStr && layer) {
-        layer._maskHandledByEffect = true;
-        for (let i = 0; i < len; i++) {
-          const ms = maskStr[i];
-          if (ms >= 1) continue; // deep inside mask — full opacity
-          const i4 = i * 4;
-          if (ms <= 0) { dd[i4 + 3] = 0; continue; } // outside mask
-          dd[i4 + 3] = Math.round(dd[i4 + 3] * ms);
         }
       }
 
@@ -3424,23 +3877,66 @@
       }
 
       const texture = fx.params.texture || 'reeded';
+      const isFullFrame = FULL_FRAME_TEXTURES.has(texture);
       // When grid-locked, blocks/tinyLens/diamond subdivide tiles by 4 internally,
       // so multiply gridStep by 4 so each sub-block = 1 grid cell
-      const cellTextures = ['blocks', 'tinyLens', 'diamond'];
+      const cellTextures = ['blocks', 'tinyLens', 'diamond', 'honeycomb'];
       const gridScale = gridStep > 0 && cellTextures.includes(texture) ? gridStep * 4 : gridStep;
       const scale = gridScale > 0 ? gridScale : Math.max(4, Math.round((fx.params.scale ?? 40) * effectScale));
       const smoothness = Math.round(fx.params.smoothness ?? 3);
       const distortion = (fx.params.distortion ?? 50) / 100;
       const angle = fx.params.angle || 0;
-      const maxDisp = scale * distortion * 15;
+      const jitter = (fx.params.jitter ?? 0) / 100;
+      const maxDisp = isFullFrame ? Math.max(w, h) * distortion * 0.5 : scale * distortion * 15;
 
       if (maxDisp < 0.5) return;
 
-      const { map: tileMap, gradX: gradXArr, gradY: gradYArr, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness);
+      const { map: tileMap, gradX: gradXArr, gradY: gradYArr, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness, fx.params.centerX, fx.params.centerY, w, h, jitter);
 
-      // Preview: nearest-neighbor (Uint32 copy, no interpolation) — ~4x faster
-      // Export: bilinear interpolation for smooth sub-pixel quality
-      const useNN = !forExport;
+      // Bilinear interpolation helper for displacement map lookup
+      // Produces smooth gradients instead of stair-stepping at tile boundaries
+      function sampleGrad(px, py) {
+        // Full-frame: aspect-correct mapping so pattern is a perfect circle
+        // Tiled: use modulo wrapping
+        let ftx, fty;
+        if (isFullFrame) {
+          const longEdge = Math.max(w, h);
+          let uvx = px / longEdge;
+          let uvy = py / longEdge;
+          // Per-ring twist: angle rotates each ring based on distance from center
+          if (angle !== 0) {
+            const cnx = (fx.params.centerX ?? 50) / 100 * w / longEdge;
+            const cny = (fx.params.centerY ?? 50) / 100 * h / longEdge;
+            let cx = uvx - cnx, cy = uvy - cny;
+            const dist = Math.sqrt(cx * cx + cy * cy);
+            const twist = angle * Math.PI / 180 * dist * 2;
+            const ct = Math.cos(twist), st = Math.sin(twist);
+            uvx = cx * ct - cy * st + cnx;
+            uvy = cx * st + cy * ct + cny;
+          }
+          ftx = clamp(uvx, 0, 1) * (tileW - 1);
+          fty = clamp(uvy, 0, 1) * (tileH - 1);
+        } else {
+          ftx = ((px % tileW) + tileW) % tileW;
+          fty = ((py % tileH) + tileH) % tileH;
+        }
+        const tx0 = ftx | 0;
+        const ty0 = fty | 0;
+        const tx1 = isFullFrame ? Math.min(tx0 + 1, tileW - 1) : (tx0 + 1) % tileW;
+        const ty1 = isFullFrame ? Math.min(ty0 + 1, tileH - 1) : (ty0 + 1) % tileH;
+        const fx1 = ftx - tx0;
+        const fy1 = fty - ty0;
+        const fx0 = 1 - fx1;
+        const fy0 = 1 - fy1;
+        const i00 = ty0 * tileW + tx0;
+        const i10 = ty0 * tileW + tx1;
+        const i01 = ty1 * tileW + tx0;
+        const i11 = ty1 * tileW + tx1;
+        return {
+          gx: gradXArr[i00] * fx0 * fy0 + gradXArr[i10] * fx1 * fy0 + gradXArr[i01] * fx0 * fy1 + gradXArr[i11] * fx1 * fy1,
+          gy: gradYArr[i00] * fx0 * fy0 + gradYArr[i10] * fx1 * fy0 + gradYArr[i01] * fx0 * fy1 + gradYArr[i11] * fx1 * fy1
+        };
+      }
 
       function applyGlassDisplacement(srcCanvas, dstCtx, sw, sh, clampRect) {
         const src = srcCanvas.getContext('2d', { willReadFrequently: true })
@@ -3449,78 +3945,38 @@
         const sData = src.data;
         const dData = dst.data;
         const sw4 = sw * 4;
-        // Clamp to image content region if provided, otherwise full canvas
         const cxMin = clampRect ? clampRect.left : 0;
         const cyMin = clampRect ? clampRect.top : 0;
         const cxMax = clampRect ? (clampRect.left + clampRect.width - 1) : (sw - 1);
         const cyMax = clampRect ? (clampRect.top + clampRect.height - 1) : (sh - 1);
 
-        // Uint32 views for fast nearest-neighbor pixel copy
-        const sData32 = new Uint32Array(sData.buffer);
-        const dData32 = new Uint32Array(dData.buffer);
+        for (let y = 0; y < sh; y++) {
+          const rowOff = y * sw4;
+          for (let x = 0; x < sw; x++) {
+            const { gx, gy } = sampleGrad(x, y);
+            let srcXf = x + gx * maxDisp;
+            let srcYf = y + gy * maxDisp;
 
-        if (useNN) {
-          // Nearest-neighbor: ~1 op per pixel via Uint32Array
-          for (let y = 0; y < sh; y++) {
-            const ty = y % tileH;
-            const tyOff = ty * tileW;
-            const rowOff32 = y * sw;
+            if (srcXf < cxMin) srcXf = cxMin;
+            else if (srcXf > cxMax) srcXf = cxMax;
+            if (srcYf < cyMin) srcYf = cyMin;
+            else if (srcYf > cyMax) srcYf = cyMax;
 
-            for (let x = 0; x < sw; x++) {
-              const tx = x % tileW;
-              const tileIdx = tyOff + tx;
-              let srcXf = x + gradXArr[tileIdx] * maxDisp;
-              let srcYf = y + gradYArr[tileIdx] * maxDisp;
-
-              if (srcXf < cxMin) srcXf = cxMin;
-              else if (srcXf > cxMax) srcXf = cxMax;
-              if (srcYf < cyMin) srcYf = cyMin;
-              else if (srcYf > cyMax) srcYf = cyMax;
-
-              dData32[rowOff32 + x] = sData32[(srcYf | 0) * sw + (srcXf | 0)];
-            }
-          }
-        } else {
-          // Bilinear interpolation: smooth sub-pixel sampling for export
-          for (let y = 0; y < sh; y++) {
-            const ty = y % tileH;
-            const tyOff = ty * tileW;
-            const rowOff = y * sw4;
-
-            for (let x = 0; x < sw; x++) {
-              const tx = x % tileW;
-              const tileIdx = tyOff + tx;
-              let srcXf = x + gradXArr[tileIdx] * maxDisp;
-              let srcYf = y + gradYArr[tileIdx] * maxDisp;
-
-              if (srcXf < cxMin) srcXf = cxMin;
-              else if (srcXf > cxMax) srcXf = cxMax;
-              if (srcYf < cyMin) srcYf = cyMin;
-              else if (srcYf > cyMax) srcYf = cyMax;
-
-              const sx0 = srcXf | 0;
-              const sy0 = srcYf | 0;
-              const sx1 = sx0 < cxMax ? sx0 + 1 : cxMax;
-              const sy1 = sy0 < cyMax ? sy0 + 1 : cyMax;
-              const fx1 = srcXf - sx0;
-              const fy1 = srcYf - sy0;
-              const fx0 = 1 - fx1;
-              const fy0 = 1 - fy1;
-
-              const r0 = sy0 * sw4;
-              const r1 = sy1 * sw4;
-              const i00 = r0 + sx0 * 4;
-              const i10 = r0 + sx1 * 4;
-              const i01 = r1 + sx0 * 4;
-              const i11 = r1 + sx1 * 4;
-              const di = rowOff + x * 4;
-
-              const w00 = fx0 * fy0, w10 = fx1 * fy0, w01 = fx0 * fy1, w11 = fx1 * fy1;
-              dData[di]     = sData[i00]     * w00 + sData[i10]     * w10 + sData[i01]     * w01 + sData[i11]     * w11;
-              dData[di + 1] = sData[i00 + 1] * w00 + sData[i10 + 1] * w10 + sData[i01 + 1] * w01 + sData[i11 + 1] * w11;
-              dData[di + 2] = sData[i00 + 2] * w00 + sData[i10 + 2] * w10 + sData[i01 + 2] * w01 + sData[i11 + 2] * w11;
-              dData[di + 3] = sData[i00 + 3] * w00 + sData[i10 + 3] * w10 + sData[i01 + 3] * w01 + sData[i11 + 3] * w11;
-            }
+            // Bilinear source pixel sampling
+            const sx0 = srcXf | 0;
+            const sy0 = srcYf | 0;
+            const sx1 = sx0 < cxMax ? sx0 + 1 : sx0;
+            const sy1 = sy0 < cyMax ? sy0 + 1 : sy0;
+            const bx = srcXf - sx0;
+            const by = srcYf - sy0;
+            const w00 = (1 - bx) * (1 - by), w10 = bx * (1 - by), w01 = (1 - bx) * by, w11 = bx * by;
+            const r0 = sy0 * sw4, r1 = sy1 * sw4;
+            const i00 = r0 + sx0 * 4, i10 = r0 + sx1 * 4, i01 = r1 + sx0 * 4, i11 = r1 + sx1 * 4;
+            const di = rowOff + x * 4;
+            dData[di]     = sData[i00]     * w00 + sData[i10]     * w10 + sData[i01]     * w01 + sData[i11]     * w11;
+            dData[di + 1] = sData[i00 + 1] * w00 + sData[i10 + 1] * w10 + sData[i01 + 1] * w01 + sData[i11 + 1] * w11;
+            dData[di + 2] = sData[i00 + 2] * w00 + sData[i10 + 2] * w10 + sData[i01 + 2] * w01 + sData[i11 + 2] * w11;
+            dData[di + 3] = sData[i00 + 3] * w00 + sData[i10 + 3] * w10 + sData[i01 + 3] * w01 + sData[i11 + 3] * w11;
           }
         }
         dstCtx.putImageData(dst, 0, 0);
@@ -3573,60 +4029,7 @@
         ctx.restore();
       }
 
-      // Fractal feather interaction: use glass displacement map to shape
-      // the mask feather edge so it follows the fractal glass texture.
-      // This replaces the normal applyLayerMask for this layer.
-      if (layer && geometry) {
-        const mask = getMask(layer);
-        if (mask && maskHasRegions(mask) && mask.feather > 0) {
-          layer._maskHandledByEffect = true;
-          const bitmapData = buildMaskAlphaBitmap(layer.id, mask, geometry.srcW, geometry.srcH);
-          const transform = getImageTransform(geometry);
-          if (bitmapData && transform) {
-            const { rect } = transform;
-            const scaleToSrcX = geometry.srcW / rect.width;
-            const scaleToSrcY = geometry.srcH / rect.height;
-            const feather = mask.feather;
-            const imgData = ctx.getImageData(0, 0, w, h);
-            const data = imgData.data;
-
-            for (let py = 0; py < h; py++) {
-              for (let px = 0; px < w; px++) {
-                const i = (py * w + px) * 4;
-                if (data[i + 3] === 0) continue;
-
-                // Map output pixel to source coordinates
-                const sx = (px - rect.left) * scaleToSrcX;
-                const sy = (py - rect.top) * scaleToSrcY;
-                const isx = Math.round(sx);
-                const isy = Math.round(sy);
-                if (isx < 0 || isx >= bitmapData.w || isy < 0 || isy >= bitmapData.h) continue;
-
-                const bidx = isy * bitmapData.w + isx;
-                const inside = bitmapData.bitmap[bidx] > 128;
-                const keep = mask.inverted ? !inside : inside;
-                if (!keep) { data[i + 3] = 0; continue; }
-
-                const dist = mask.inverted ? bitmapData.distOut[bidx] : bitmapData.distIn[bidx];
-
-                const range = feather * 2;
-                if (dist >= range) continue;
-
-                // Sample the glass tile map value (0–1) at this pixel
-                const tx = ((px % tileW) + tileW) % tileW;
-                const ty = ((py % tileH) + tileH) % tileH;
-                const mapVal = tileMap[ty * tileW + tx]; // 0–1
-
-                const edgeProgress = dist / range; // 0 at mask edge, 1 deep inside
-                const patternZone = 1 - smoothstep(0.4, 1.0, edgeProgress);
-                const alpha = edgeProgress * (1 - patternZone * (1 - clamp(mapVal, 0, 1)));
-                data[i + 3] = Math.round(data[i + 3] * clamp(alpha, 0, 1));
-              }
-            }
-            ctx.putImageData(imgData, 0, 0);
-          }
-        }
-      }
+      // Mask feathering is handled by applyLayerMask (GPU-accelerated blur)
     }
 
     function applyLensEffect(ctx, w, h, fx, effectScale = 1, geometry = null, forExport = false) {
@@ -3839,11 +4242,50 @@
       ctx.putImageData(dst, 0, 0);
     }
 
+    function hexToRgb01(hex) {
+      if (!hex || hex.length < 7) return [0, 0, 0];
+      const r = parseInt(hex.slice(1, 3), 16) / 255;
+      const g = parseInt(hex.slice(3, 5), 16) / 255;
+      const b = parseInt(hex.slice(5, 7), 16) / 255;
+      return [r, g, b];
+    }
+    function rgb01ToHex(c) {
+      const r = Math.round(c[0] * 255).toString(16).padStart(2, '0');
+      const g = Math.round(c[1] * 255).toString(16).padStart(2, '0');
+      const b = Math.round(c[2] * 255).toString(16).padStart(2, '0');
+      return '#' + r + g + b;
+    }
+
+    const GRADIENT_PRESETS = {
+      neon:         [[0.01,0.01,0.05],[0.05,0.05,0.5],[0.8,0.1,0.7],[0.1,0.9,0.9],[1,1,1]],
+      midnight:     [[0.02,0.02,0.12],[0.15,0.08,0.35],[0.4,0.1,0.55],[0.9,0.4,0.6],[1,0.95,0.98]],
+      sunset:       [[0.02,0.01,0.02],[0.5,0.08,0.05],[0.9,0.35,0.05],[0.95,0.7,0.2],[1,0.95,0.85]],
+      infrared:     [[0.02,0.0,0.05],[0.35,0.0,0.45],[0.85,0.1,0.1],[0.95,0.8,0.1],[1,1,0.9]],
+      vintage:      [[0.15,0.1,0.05],[0.4,0.28,0.15],[0.65,0.5,0.3],[0.85,0.75,0.6],[1,0.95,0.88]],
+      arctic:       [[0.0,0.12,0.18],[0.1,0.3,0.6],[0.5,0.75,0.9],[0.95,0.98,1],[1,0.85,0.88]],
+      toxic:        [[0.01,0.03,0.01],[0.05,0.25,0.05],[0.3,0.8,0.1],[0.85,0.95,0.15],[1,1,0.9]],
+      ember:        [[0.05,0.01,0.0],[0.4,0.05,0.02],[0.85,0.3,0.02],[0.95,0.6,0.1],[1,0.9,0.2]],
+      tealOrange:   [[0.02,0.08,0.15],[0.04,0.22,0.30],[0.55,0.35,0.22],[0.90,0.55,0.25],[1.0,0.92,0.78]],
+      cyanotype:    [[0.01,0.02,0.08],[0.02,0.10,0.28],[0.08,0.30,0.55],[0.35,0.60,0.78],[0.85,0.93,0.98]],
+      portra:       [[0.08,0.06,0.08],[0.28,0.18,0.16],[0.62,0.42,0.35],[0.88,0.72,0.58],[0.98,0.94,0.88]],
+      vaporwave:    [[0.06,0.02,0.18],[0.30,0.05,0.42],[0.75,0.15,0.55],[0.40,0.65,0.90],[0.85,0.95,1.0]],
+      bleach:       [[0.03,0.03,0.05],[0.14,0.15,0.18],[0.38,0.38,0.40],[0.70,0.68,0.65],[0.95,0.93,0.88]],
+      velvia:       [[0.05,0.02,0.02],[0.12,0.18,0.08],[0.22,0.45,0.18],[0.85,0.48,0.12],[1.0,0.95,0.60]],
+      crossProcess: [[0.02,0.05,0.12],[0.10,0.25,0.18],[0.55,0.65,0.15],[0.92,0.72,0.20],[1.0,0.90,0.75]],
+      cyberpunk:    [[0.02,0.01,0.06],[0.05,0.08,0.35],[0.12,0.30,0.65],[0.70,0.15,0.60],[1.0,0.85,0.95]],
+      desert:       [[0.10,0.05,0.02],[0.35,0.18,0.08],[0.68,0.42,0.22],[0.92,0.75,0.50],[1.0,0.96,0.88]],
+      sapphire:     [[0.02,0.02,0.10],[0.06,0.10,0.32],[0.18,0.28,0.58],[0.55,0.62,0.78],[0.90,0.92,0.96]]
+    };
+
     // ============ WebGL EFFECT PIPELINE ============
     const _glPipeline = (() => {
       const cvs = document.createElement('canvas');
       const gl = cvs.getContext('webgl2', { premultipliedAlpha: false, preserveDrawingBuffer: true });
       if (!gl) return null;
+
+      // Enable float texture filtering for smooth displacement maps
+      gl.getExtension('OES_texture_float_linear');
+      gl.getExtension('EXT_color_buffer_float');
 
       // --- Shader compilation helpers ---
       function compileShader(type, src) {
@@ -3883,14 +4325,14 @@
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
 
       // --- Framebuffer ping-pong ---
-      let fbA = null, fbB = null, texA = null, texB = null, fbW = 0, fbH = 0;
+      let fbA = null, fbB = null, texA = null, texB = null, fbC = null, texC = null, fbW = 0, fbH = 0;
       function ensureFBOs(w, h) {
         if (fbW === w && fbH === h) return;
         fbW = w; fbH = h;
         cvs.width = w; cvs.height = h;
         gl.viewport(0, 0, w, h);
-        [texA, texB].forEach(t => { if (t) gl.deleteTexture(t); });
-        [fbA, fbB].forEach(f => { if (f) gl.deleteFramebuffer(f); });
+        [texA, texB, texC].forEach(t => { if (t) gl.deleteTexture(t); });
+        [fbA, fbB, fbC].forEach(f => { if (f) gl.deleteFramebuffer(f); });
         function makeFBO() {
           const tex = gl.createTexture();
           gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -3904,8 +4346,8 @@
           gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
           return { fb, tex };
         }
-        const a = makeFBO(), b = makeFBO();
-        fbA = a.fb; texA = a.tex; fbB = b.fb; texB = b.tex;
+        const a = makeFBO(), b = makeFBO(), c = makeFBO();
+        fbA = a.fb; texA = a.tex; fbB = b.fb; texB = b.tex; fbC = c.fb; texC = c.tex;
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       }
 
@@ -3972,6 +4414,26 @@
       // --- Displacement map texture cache ---
       let dispMapTex = null, dispMapKey = '';
 
+      // --- Preserve original texture for multi-pass effects ---
+      const FRAG_COPY = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        void main() { fragColor = texture(uTex, vUv); }`;
+      function preserveOriginal(tex) {
+        if (tex !== texA && tex !== texB) return tex;
+        const prog = getProgram('_copy', FRAG_COPY);
+        if (!prog) return tex;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbC);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        drawQuad(prog);
+        return texC;
+      }
+
       // ========== SHADER SOURCES ==========
       const FRAG_SEPIA = `#version 300 es
         precision mediump float;
@@ -3999,11 +4461,11 @@
         uniform float uSize;
         uniform float uRoughness;
         uniform float uSeed;
-        // Simple hash noise
+        // Symmetric hash — no directional bias
         float hash(vec2 p) {
-          vec3 p3 = fract(vec3(p.xyx) * vec3(443.897, 441.423, 437.195));
-          p3 += dot(p3, p3.yzx + 19.19);
-          return fract((p3.x + p3.y) * p3.z);
+          p = fract(p * vec2(5.3983, 5.4427));
+          p += dot(p.yx, p.xy + vec2(21.5351, 14.3137));
+          return fract(p.x * p.y * 95.4337);
         }
         float valueNoise(vec2 p) {
           vec2 i = floor(p);
@@ -4016,10 +4478,11 @@
           vec4 c = texture(uTex, vUv);
           if (c.a == 0.0) { fragColor = c; return; }
           vec2 px = vUv * uRes;
-          float coarse = valueNoise(px / (uSize * 1.35) + uSeed) * 2.0 - 1.0;
-          float medium = valueNoise(px / max(1.0, uSize * (0.9 - uRoughness * 0.55)) + uSeed + 100.0) * 2.0 - 1.0;
-          float fine = valueNoise(px / max(1.0, uSize * (1.0 - uRoughness * 0.94)) + uSeed + 200.0) * 2.0 - 1.0;
-          float detail = valueNoise(px / max(1.0, uSize * 0.3) + uSeed + 300.0) * 2.0 - 1.0;
+          vec2 seedOff = vec2(uSeed, uSeed * 1.7);
+          float coarse = valueNoise(px / (uSize * 1.35) + seedOff) * 2.0 - 1.0;
+          float medium = valueNoise(px / max(1.0, uSize * (0.9 - uRoughness * 0.55)) + seedOff + vec2(100.0, 173.0)) * 2.0 - 1.0;
+          float fine = valueNoise(px / max(1.0, uSize * (1.0 - uRoughness * 0.94)) + seedOff + vec2(200.0, 317.0)) * 2.0 - 1.0;
+          float detail = valueNoise(px / max(1.0, uSize * 0.3) + seedOff + vec2(300.0, 491.0)) * 2.0 - 1.0;
           float n = mix(mix(fine, medium, uRoughness), coarse, uRoughness * 0.5) * 0.7 + detail * 0.3;
           float strength = uAmount * 80.0 / 255.0;
           fragColor = vec4(clamp(c.rgb + n * strength, 0.0, 1.0), c.a);
@@ -4175,7 +4638,7 @@
         }`;
 
       const FRAG_FRACTAL = `#version 300 es
-        precision mediump float;
+        precision highp float;
         in vec2 vUv;
         out vec4 fragColor;
         uniform sampler2D uTex;
@@ -4185,21 +4648,53 @@
         uniform float uMaxDisp;
         uniform float uAngle;
         uniform vec4 uClampRect;
+        uniform int uFullFrame;
+        uniform vec2 uCenter;
         void main() {
           vec2 px = vUv * uRes;
-          // Rotate pixel position for angled tile lookup
           float cosA = cos(uAngle);
           float sinA = sin(uAngle);
           vec2 center = uRes * 0.5;
           vec2 d = px - center;
-          vec2 rotPx = vec2(d.x * cosA - d.y * sinA, d.x * sinA + d.y * cosA) + center;
-          vec2 tileUv = fract(rotPx / uTileSize);
+          vec2 tilePx = vec2(d.x * cosA - d.y * sinA, d.x * sinA + d.y * cosA) + center;
+          vec2 tileUv;
+          if (uFullFrame == 1) {
+            // Center is baked into the displacement map so UV stays in [0,1]
+            float longEdge = max(uRes.x, uRes.y);
+            tileUv = vec2(tilePx.x, uRes.y - tilePx.y) / longEdge;
+            // Per-ring twist: angle rotates each ring based on distance from center
+            if (uAngle != 0.0) {
+              vec2 centerPt = uCenter;
+              vec2 centered = tileUv - centerPt;
+              float dist = length(centered);
+              float twist = uAngle * dist * 2.0;
+              float ct = cos(twist), st = sin(twist);
+              centered = vec2(centered.x * ct - centered.y * st, centered.x * st + centered.y * ct);
+              tileUv = centered + centerPt;
+            }
+          } else {
+            tileUv = fract(tilePx / uTileSize);
+          }
           vec2 grad = texture(uDispMap, tileUv).rg * 2.0 - 1.0;
-          // Rotate displacement back to screen space
-          vec2 rotGrad = vec2(grad.x * cosA + grad.y * sinA, -grad.x * sinA + grad.y * cosA);
-          vec2 displaced = vUv + rotGrad * uMaxDisp / uRes;
-          displaced = clamp(displaced, uClampRect.xy, uClampRect.zw);
-          fragColor = texture(uTex, displaced);
+          vec2 rotGrad = uFullFrame == 1
+            ? vec2(grad.x, -grad.y)
+            : vec2(grad.x * cosA + grad.y * sinA, -grad.x * sinA + grad.y * cosA);
+          // Skip displacement for pixels outside image bounds (keep black border)
+          if (vUv.x < uClampRect.x || vUv.x > uClampRect.z || vUv.y < uClampRect.y || vUv.y > uClampRect.w) {
+            fragColor = texture(uTex, vUv);
+          } else {
+            vec2 displaced = vUv + rotGrad * uMaxDisp / uRes;
+            // Mirror at image boundaries instead of clamping (prevents grey edge bands)
+            vec2 halfPx = 0.6 / uRes;
+            vec2 lo = uClampRect.xy + halfPx;
+            vec2 hi = uClampRect.zw - halfPx;
+            vec2 range = hi - lo;
+            vec2 n = (displaced - lo) / range;
+            n = n - 2.0 * floor(n * 0.5);
+            n = 1.0 - abs(n - 1.0);
+            displaced = lo + n * range;
+            fragColor = texture(uTex, displaced);
+          }
         }`;
 
       const FRAG_PIXELATE = `#version 300 es
@@ -4427,32 +4922,35 @@
 
       function glFractalGlass(tex, w, h, fx, effectScale, geometry) {
         const texture = fx.params.texture || 'reeded';
+        const isFullFrame = FULL_FRAME_TEXTURES.has(texture);
         const scale = Math.max(4, Math.round((fx.params.scale ?? 40) * (effectScale || 1)));
         const smoothness = Math.round(fx.params.smoothness ?? 3);
         const distortion = (fx.params.distortion ?? 50) / 100;
-        const maxDisp = scale * distortion * 15;
+        const jitterAmt = (fx.params.jitter ?? 0) / 100;
+        const maxDisp = isFullFrame ? Math.max(w, h) * distortion * 0.5 : scale * distortion * 15;
         if (maxDisp < 0.5) return tex;
 
         // Get displacement map (reuse CPU function for tile generation)
-        const { gradX, gradY, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness);
+        const { gradX, gradY, tileW, tileH } = getGlassDisplacementMap(texture, scale, smoothness, fx.params.centerX, fx.params.centerY, w, h, jitterAmt);
 
-        // Upload displacement map as texture (RG channels = gradX, gradY remapped 0-1)
-        const mapKey = texture + '|' + tileW + '|' + smoothness;
+        // Upload displacement map as 16-bit float texture for smooth gradients
+        const mapKey = texture + '|' + tileW + '|' + scale + '|' + smoothness + '|' + (fx.params.centerX ?? 50) + '|' + (fx.params.centerY ?? 50) + '|' + jitterAmt;
         if (mapKey !== dispMapKey) {
-          const mapData = new Uint8Array(tileW * tileH * 4);
+          const mapData = new Float32Array(tileW * tileH * 4);
           for (let i = 0; i < tileW * tileH; i++) {
-            mapData[i * 4] = Math.round((gradX[i] * 0.5 + 0.5) * 255);
-            mapData[i * 4 + 1] = Math.round((gradY[i] * 0.5 + 0.5) * 255);
+            mapData[i * 4] = gradX[i] * 0.5 + 0.5;
+            mapData[i * 4 + 1] = gradY[i] * 0.5 + 0.5;
             mapData[i * 4 + 2] = 0;
-            mapData[i * 4 + 3] = 255;
+            mapData[i * 4 + 3] = 1;
           }
           if (!dispMapTex) dispMapTex = gl.createTexture();
           gl.bindTexture(gl.TEXTURE_2D, dispMapTex);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, tileW, tileH, 0, gl.RGBA, gl.UNSIGNED_BYTE, mapData);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, tileW, tileH, 0, gl.RGBA, gl.FLOAT, mapData);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+          const wrapMode = isFullFrame ? gl.CLAMP_TO_EDGE : gl.REPEAT;
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapMode);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapMode);
           dispMapKey = mapKey;
         }
 
@@ -4476,8 +4974,14 @@
         gl.uniform2f(gl.getUniformLocation(prog, 'uTileSize'), tileW, tileH);
         gl.uniform1f(gl.getUniformLocation(prog, 'uMaxDisp'), maxDisp);
         gl.uniform1f(gl.getUniformLocation(prog, 'uAngle'), (fx.params.angle || 0) * Math.PI / 180);
-        // Note: GL has Y-flipped UVs, so flip top/bottom
         gl.uniform4f(gl.getUniformLocation(prog, 'uClampRect'), cLeft, 1.0 - cBottom, cRight, 1.0 - cTop);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uFullFrame'), FULL_FRAME_TEXTURES.has(texture) ? 1 : 0);
+        {
+          const longEdge = Math.max(w, h);
+          gl.uniform2f(gl.getUniformLocation(prog, 'uCenter'),
+            (fx.params.centerX ?? 50) / 100 * w / longEdge,
+            (fx.params.centerY ?? 50) / 100 * h / longEdge);
+        }
         drawQuad(prog);
         const outTex = pingIsA ? texA : texB;
         pingIsA = !pingIsA;
@@ -4502,6 +5006,562 @@
         return outTex;
       }
 
+      // ========== CMYK HALFTONE (GPU) ==========
+      const FRAG_CMYK = `#version 300 es
+        precision highp float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uRes;
+        uniform float uCellSize;
+        uniform float uContrast;
+        uniform float uBleed;
+        uniform float uInkWeight;
+        uniform float uPaper;
+        uniform float uColorMix;
+        uniform float uMisreg;
+        uniform float uDotGrain;
+        uniform float uPaperTone;
+        uniform float uAngleShift;
+        uniform int uShape; // 0=round,1=elliptical,2=diamond,3=line,4=square,5=stochastic
+
+        // Hash for deterministic noise
+        float hash21(vec2 p) {
+          p = fract(p * vec2(123.34, 456.21));
+          p += dot(p, p + 45.32);
+          return fract(p.x * p.y);
+        }
+        float hash11(float p) {
+          p = fract(p * 0.1031);
+          p *= p + 33.33;
+          p *= p + p;
+          return fract(p);
+        }
+
+        // 8x8 Bayer matrix for stochastic screening
+        float bayer8(vec2 p) {
+          ivec2 ip = ivec2(p) & 7;
+          int idx = ip.x + ip.y * 8;
+          // Compute Bayer value algorithmically
+          int v = 0;
+          int x = ip.x, y = ip.y;
+          for (int i = 0; i < 3; i++) {
+            v = v * 4 + ((x & 1) ^ (y & 1)) * 2 + (y & 1);
+            x >>= 1; y >>= 1;
+          }
+          return float(v) / 64.0;
+        }
+
+        void main() {
+          vec2 px = vUv * uRes; // pixel coordinates
+          vec4 src = texture(uTex, vUv);
+          vec3 rgb = src.rgb;
+
+          // RGB -> CMYK
+          float maxRGB = max(rgb.r, max(rgb.g, rgb.b));
+          float k, c, m, y;
+          if (maxRGB < 0.0001) {
+            k = 1.0; c = 0.0; m = 0.0; y = 0.0;
+          } else {
+            k = 1.0 - maxRGB;
+            float invK = 1.0 / (1.0 - k);
+            c = (1.0 - rgb.r - k) * invK;
+            m = (1.0 - rgb.g - k) * invK;
+            y = (1.0 - rgb.b - k) * invK;
+          }
+          vec4 cmyk = vec4(c, m, y, k);
+
+          // Paper tone: white -> warm cream
+          vec3 paperColor = vec3(
+            1.0 - uPaperTone * 0.039,
+            1.0 - uPaperTone * 0.078,
+            1.0 - uPaperTone * 0.137
+          );
+
+          // Ink opacity from ink weight
+          float inkOpacity = 0.3 + uInkWeight * 0.7;
+
+          // Contrast multiplier
+          float contrastMul = 1.0 + uContrast * 3.0;
+
+          // Bleed / dot gain params
+          float innerMul = 1.0 - uBleed;
+          float outerMul = 1.0 + uBleed * 0.5;
+
+          // Misregistration offsets (deterministic per-channel)
+          float misregPx = uMisreg * uCellSize * 1.5;
+          vec2 offC = vec2(hash11(uCellSize * 7.919) - 0.5, hash11(uCellSize * 13.731) - 0.5) * misregPx * 2.0;
+          vec2 offM = vec2(hash11(uCellSize * 23.197) - 0.5, hash11(uCellSize * 31.853) - 0.5) * misregPx * 2.0;
+          vec2 offY = vec2(hash11(uCellSize * 47.629) - 0.5, hash11(uCellSize * 59.371) - 0.5) * misregPx * 2.0;
+
+          // Channel angles (K@45, C@15, M@75, Y@0) + user shift
+          float angles[4];
+          angles[0] = radians(45.0 + uAngleShift); // K
+          angles[1] = radians(15.0 + uAngleShift); // C
+          angles[2] = radians(75.0 + uAngleShift); // M
+          angles[3] = radians(0.0 + uAngleShift);  // Y
+
+          // Channel indices: 0=K(cmyk.w), 1=C(cmyk.x), 2=M(cmyk.y), 3=Y(cmyk.z)
+          float halfCell = uCellSize * 0.5;
+          float halfCell2 = halfCell * halfCell;
+          float invCell = 1.0 / uCellSize;
+
+          vec3 out_rgb = paperColor; // start with paper
+          float maxCov = 0.0;
+
+          // Stochastic path
+          if (uShape == 5) {
+            float threshold = bayer8(px) + (hash21(px * 0.37) - 0.5) * 0.15;
+            // Apply contrast to channels
+            vec4 adj = cmyk;
+            if (uContrast > 0.0) {
+              adj = clamp((adj - 0.5) * contrastMul + 0.5, 0.0, 1.0);
+            }
+            // Dot noise
+            if (uDotGrain > 0.0) {
+              adj += (vec4(hash21(px*1.1), hash21(px*2.2), hash21(px*3.3), hash21(px*4.4)) - 0.5) * uDotGrain * 0.6;
+              adj = clamp(adj, 0.0, 1.0);
+            }
+            // K channel
+            float kCov = step(threshold, adj.w);
+            out_rgb *= mix(vec3(1.0), vec3(1.0 - inkOpacity), kCov);
+            maxCov = max(maxCov, kCov);
+            // C channel (with misreg)
+            vec2 cPx = px + offC;
+            float cThresh = bayer8(cPx) + (hash21(cPx * 0.37) - 0.5) * 0.15;
+            float cCov = step(cThresh, adj.x);
+            out_rgb.r *= mix(1.0, 1.0 - inkOpacity, cCov);
+            maxCov = max(maxCov, cCov);
+            // M channel (with misreg)
+            vec2 mPx = px + offM;
+            float mThresh = bayer8(mPx) + (hash21(mPx * 0.37) - 0.5) * 0.15;
+            float mCov = step(mThresh, adj.y);
+            out_rgb.g *= mix(1.0, 1.0 - inkOpacity, mCov);
+            maxCov = max(maxCov, mCov);
+            // Y channel (with misreg)
+            vec2 yPx = px + offY;
+            float yThresh = bayer8(yPx) + (hash21(yPx * 0.37) - 0.5) * 0.15;
+            float yCov = step(yThresh, adj.z);
+            out_rgb.b *= mix(1.0, 1.0 - inkOpacity, yCov);
+            maxCov = max(maxCov, yCov);
+          } else {
+            // AM screening (grid-based)
+            for (int pass = 0; pass < 4; pass++) {
+              float angle = angles[pass];
+              float cosA = cos(angle), sinA = sin(angle);
+
+              // Misregistration offset for this channel
+              vec2 off = vec2(0.0);
+              if (pass == 1) off = offC;
+              else if (pass == 2) off = offM;
+              else if (pass == 3) off = offY;
+
+              // Rotate pixel to grid space
+              vec2 rp = px + off;
+              float u = rp.x * cosA + rp.y * sinA;
+              float v = -rp.x * sinA + rp.y * cosA;
+
+              // Grid cell
+              float gu = floor(u * invCell);
+              float gv = floor(v * invCell);
+
+              // Cell center in rotated space
+              float cu = (gu + 0.5) * uCellSize;
+              float cv = (gv + 0.5) * uCellSize;
+
+              // Un-rotate cell center to image space to sample CMYK
+              vec2 sp = vec2(cu * cosA - cv * sinA, cu * sinA + cv * cosA) - off;
+              vec2 sUv = clamp(sp / uRes, 0.0, 1.0);
+              vec4 sampleColor = texture(uTex, sUv);
+
+              // RGB->CMYK at sample point
+              float sMax = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
+              float sK, sC, sM, sY;
+              if (sMax < 0.0001) {
+                sK = 1.0; sC = 0.0; sM = 0.0; sY = 0.0;
+              } else {
+                sK = 1.0 - sMax;
+                float sInvK = 1.0 / (1.0 - sK);
+                sC = (1.0 - sampleColor.r - sK) * sInvK;
+                sM = (1.0 - sampleColor.g - sK) * sInvK;
+                sY = (1.0 - sampleColor.b - sK) * sInvK;
+              }
+
+              // Select channel value
+              float val;
+              if (pass == 0) val = sK;
+              else if (pass == 1) val = sC;
+              else if (pass == 2) val = sM;
+              else val = sY;
+
+              // Dot noise
+              if (uDotGrain > 0.0) {
+                float noise = (hash21(vec2(gu, gv) * 127.1 + float(pass) * 311.7) - 0.5) * 2.0;
+                val += noise * uDotGrain * 0.3;
+                val = clamp(val, 0.0, 1.0);
+              }
+
+              // Contrast / ink curve
+              if (uContrast > 0.0) {
+                val = clamp((val - 0.5) * contrastMul + 0.5, 0.0, 1.0);
+              }
+
+              if (val < 0.01) continue;
+
+              // Dot radius squared (density-dependent with dot gain)
+              float dotR2 = halfCell2 * val;
+              if (uBleed > 0.01) {
+                dotR2 *= 1.0 + uBleed * val * 0.6;
+              }
+
+              // Distance from pixel to cell center (shape-dependent)
+              float du = u - cu;
+              float dv = v - cv;
+              float dist2;
+              if (uShape == 0) { // round
+                dist2 = du * du + dv * dv;
+              } else if (uShape == 1) { // elliptical
+                float duS = du * 1.4;
+                dist2 = duS * duS + dv * dv;
+              } else if (uShape == 2) { // diamond
+                float d = abs(du) + abs(dv);
+                dist2 = d * d;
+              } else if (uShape == 3) { // line
+                dist2 = dv * dv;
+              } else { // square
+                float d = max(abs(du), abs(dv));
+                dist2 = d * d;
+              }
+
+              // Coverage with dot gain edge softening
+              float coverage;
+              if (uBleed < 0.01) {
+                coverage = dist2 <= dotR2 ? 1.0 : 0.0;
+              } else {
+                float innerR2 = dotR2 * innerMul * innerMul;
+                float outerR2 = dotR2 * outerMul * outerMul;
+                if (dist2 <= innerR2) {
+                  coverage = 1.0;
+                } else if (dist2 >= outerR2) {
+                  coverage = 0.0;
+                } else {
+                  float d = sqrt(dist2);
+                  float dotR = sqrt(dotR2);
+                  float t = (d - dotR * innerMul) / (dotR * (outerMul - innerMul));
+                  coverage = 1.0 - t * t * (3.0 - 2.0 * t);
+                }
+              }
+
+              if (coverage <= 0.0) continue;
+              maxCov = max(maxCov, coverage);
+
+              // Multiply blend with ink weight
+              float mult = 1.0 - coverage * inkOpacity;
+              if (pass == 0) { // K -> all RGB
+                out_rgb *= mult;
+              } else if (pass == 1) { // C -> R
+                out_rgb.r *= mult;
+              } else if (pass == 2) { // M -> G
+                out_rgb.g *= mult;
+              } else { // Y -> B
+                out_rgb.b *= mult;
+              }
+            }
+          }
+
+          // Paper show-through: blend uncovered areas with original
+          if (uPaper < 1.0) {
+            float showThrough = (1.0 - maxCov) * (1.0 - uPaper);
+            out_rgb = mix(out_rgb, rgb, showThrough);
+          }
+
+          // Color mix: blend toward original colors
+          if (uColorMix > 0.0) {
+            out_rgb = mix(out_rgb, rgb, uColorMix);
+          }
+
+          fragColor = vec4(out_rgb, src.a);
+        }
+      `;
+
+      // ========== FEEDBACK SHADER ==========
+      const FRAG_FEEDBACK = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform sampler2D uPrev;
+        uniform float uZoom;
+        uniform float uRotation;
+        uniform vec2 uCenter;
+        uniform float uDecay;
+        uniform float uColorShift;
+        uniform float uIsFirst;
+        vec3 hueShift(vec3 c, float a) {
+          float co = cos(a), si = sin(a);
+          vec3 w = vec3(0.2126, 0.7152, 0.0722);
+          return vec3(
+            dot(c, vec3(w.x+(1.0-w.x)*co-w.x*si, w.y-w.y*co-w.y*si, w.z-w.z*co+(1.0-w.z)*si)),
+            dot(c, vec3(w.x-w.x*co+0.143*si, w.y+(1.0-w.y)*co+0.140*si, w.z-w.z*co-0.283*si)),
+            dot(c, vec3(w.x-w.x*co-(1.0-w.x)*si, w.y-w.y*co+w.y*si, w.z+(1.0-w.z)*co+w.z*si))
+          );
+        }
+        void main() {
+          vec2 uv = vUv - uCenter;
+          uv /= uZoom;
+          float c = cos(uRotation), s = sin(uRotation);
+          uv = vec2(uv.x*c - uv.y*s, uv.x*s + uv.y*c);
+          uv += uCenter;
+          // Soft edge fade instead of hard black cutoff
+          vec2 edge = smoothstep(vec2(0.0), vec2(0.03), uv) * smoothstep(vec2(0.0), vec2(0.03), 1.0 - uv);
+          float edgeFade = edge.x * edge.y;
+          vec4 prev = texture(uPrev, clamp(uv, 0.0, 1.0)) * edgeFade;
+          if (uColorShift > 0.001) prev.rgb = hueShift(prev.rgb, uColorShift);
+          vec4 orig = texture(uTex, vUv);
+          if (uIsFirst > 0.5) {
+            fragColor = orig;
+          } else {
+            // Screen blend for brighter, more luminous trails
+            vec3 blended = mix(orig.rgb, orig.rgb + prev.rgb * (1.0 - orig.rgb * 0.3), uDecay);
+            fragColor = vec4(blended, max(orig.a, prev.a * uDecay));
+          }
+        }`;
+
+      // ========== PIXEL SORT SHADER ==========
+      // O(N) rank-offset: count how many in segment are darker, shift by rank difference
+      const FRAG_PIXEL_SORT = `#version 300 es
+        precision highp float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform vec2 uRes;
+        uniform float uAngle;
+        uniform float uThreshold;
+        uniform int uMaxLen;
+        uniform int uMode;
+        uniform float uReverse;
+        float getSortVal(vec3 c) {
+          if (uMode == 1) {
+            float mx = max(c.r, max(c.g, c.b)), mn = min(c.r, min(c.g, c.b));
+            float d = mx - mn;
+            if (d < 0.001) return 0.0;
+            float h = mx == c.r ? mod((c.g-c.b)/d, 6.0) : mx == c.g ? (c.b-c.r)/d+2.0 : (c.r-c.g)/d+4.0;
+            return h / 6.0;
+          }
+          if (uMode == 2) {
+            float mx = max(c.r, max(c.g, c.b)), mn = min(c.r, min(c.g, c.b));
+            return mx < 0.001 ? 0.0 : (mx - mn) / mx;
+          }
+          return dot(c, vec3(0.2126, 0.7152, 0.0722));
+        }
+        void main() {
+          vec2 dir = vec2(cos(uAngle), sin(uAngle));
+          vec2 ps = dir / uRes;
+          vec4 me = texture(uTex, vUv);
+          float myVal = getSortVal(me.rgb);
+          if (myVal < uThreshold) { fragColor = me; return; }
+          // Find segment boundaries
+          int back = 0;
+          for (int i = 1; i <= 256; i++) {
+            if (i > uMaxLen) break;
+            vec2 uv = vUv - ps * float(i);
+            if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) break;
+            if (getSortVal(texture(uTex, uv).rgb) < uThreshold) break;
+            back = i;
+          }
+          int fwd = 0;
+          for (int i = 1; i <= 256; i++) {
+            if (i > uMaxLen) break;
+            vec2 uv = vUv + ps * float(i);
+            if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) break;
+            if (getSortVal(texture(uTex, uv).rgb) < uThreshold) break;
+            fwd = i;
+          }
+          int segLen = back + fwd + 1;
+          if (segLen < 2) { fragColor = me; return; }
+          int myPos = back;
+          // Count how many in segment have value < mine (= my rank in sorted order)
+          int rank = 0;
+          for (int i = -back; i <= fwd; i++) {
+            float sv = getSortVal(texture(uTex, vUv + ps * float(i)).rgb);
+            bool before = uReverse < 0.5 ? (sv < myVal) : (sv > myVal);
+            if (before || (abs(sv - myVal) < 0.0001 && i < 0)) rank++;
+          }
+          // Shift: sample from the pixel whose position = rank
+          int shift = rank - myPos;
+          vec2 sampleUV = vUv + ps * float(shift);
+          sampleUV = clamp(sampleUV, vec2(0.0), vec2(1.0));
+          fragColor = texture(uTex, sampleUV);
+        }`;
+
+      // ========== GRADIENT MAP SHADER ==========
+      const FRAG_GRADIENT_MAP = `#version 300 es
+        precision mediump float;
+        in vec2 vUv;
+        out vec4 fragColor;
+        uniform sampler2D uTex;
+        uniform float uIntensity;
+        uniform float uContrast;
+        uniform float uMidpoint;
+        uniform float uReverse;
+        uniform vec3 uC0, uC1, uC2, uC3, uC4;
+        vec3 sampleGradient(float t) {
+          t = clamp(t, 0.0, 1.0);
+          if (t < 0.25) return mix(uC0, uC1, t * 4.0);
+          if (t < 0.5)  return mix(uC1, uC2, (t - 0.25) * 4.0);
+          if (t < 0.75) return mix(uC2, uC3, (t - 0.5) * 4.0);
+          return mix(uC3, uC4, (t - 0.75) * 4.0);
+        }
+        void main() {
+          vec4 src = texture(uTex, vUv);
+          float lum = dot(src.rgb, vec3(0.2126, 0.7152, 0.0722));
+          float mid = uMidpoint;
+          lum = mid + (lum - mid) * uContrast;
+          lum = clamp(lum, 0.0, 1.0);
+          if (uReverse > 0.5) lum = 1.0 - lum;
+          vec3 mapped = sampleGradient(lum);
+          fragColor = vec4(mix(src.rgb, mapped, uIntensity), src.a);
+        }`;
+
+
+      function glCmykHalftone(tex, w, h, fx, effectScale, gridStep) {
+        const cellSize = gridStep > 0 ? gridStep : Math.max(2, Math.round((fx.params.dotSize || 8) * (effectScale || 1)));
+        const prog = getProgram('cmykHalftone', FRAG_CMYK);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uCellSize'), cellSize);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uContrast'), (fx.params.contrast ?? 50) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uBleed'), (fx.params.bleed ?? 30) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uInkWeight'), (fx.params.inkWeight ?? 50) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uPaper'), (fx.params.paper ?? 100) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uColorMix'), (fx.params.colorMix ?? 0) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uMisreg'), (fx.params.misreg ?? 0) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uDotGrain'), (fx.params.dotGrain ?? 15) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uPaperTone'), (fx.params.paperTone ?? 0) / 100);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAngleShift'), fx.params.angleShift ?? 0);
+        const shapeMap = { round: 0, elliptical: 1, diamond: 2, line: 3, square: 4, stochastic: 5 };
+        gl.uniform1i(gl.getUniformLocation(prog, 'uShape'), shapeMap[fx.params.shape] ?? 0);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      // ========== NEW EFFECT RUNNERS ==========
+
+      function glFeedback(tex, w, h, fx) {
+        const p = fx.params;
+        const zoom = p.zoom ?? 0.97;
+        const rotation = (p.rotation ?? 1.5) * Math.PI / 180;
+        const centerX = (p.centerX ?? 50) / 100;
+        const centerY = (p.centerY ?? 50) / 100;
+        const iterations = Math.max(1, Math.min(30, Math.round(p.iterations ?? 15)));
+        const decay = (p.decay ?? 70) / 100;
+        const colorShift = (p.colorShift ?? 8) / 100 * 0.4;
+        const prog = getProgram('feedback', FRAG_FEEDBACK);
+        if (!prog) return tex;
+        const origTex = preserveOriginal(tex);
+        let curTex = tex;
+        for (let i = 0; i < iterations; i++) {
+          const outFB = pingIsA ? fbA : fbB;
+          gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+          gl.useProgram(prog);
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, origTex);
+          gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+          gl.activeTexture(gl.TEXTURE1);
+          gl.bindTexture(gl.TEXTURE_2D, curTex);
+          gl.uniform1i(gl.getUniformLocation(prog, 'uPrev'), 1);
+          gl.uniform1f(gl.getUniformLocation(prog, 'uZoom'), zoom);
+          gl.uniform1f(gl.getUniformLocation(prog, 'uRotation'), rotation);
+          gl.uniform2f(gl.getUniformLocation(prog, 'uCenter'), centerX, 1.0 - centerY);
+          gl.uniform1f(gl.getUniformLocation(prog, 'uDecay'), decay);
+          gl.uniform1f(gl.getUniformLocation(prog, 'uColorShift'), colorShift * (i + 1));
+          gl.uniform1f(gl.getUniformLocation(prog, 'uIsFirst'), i === 0 ? 1.0 : 0.0);
+          drawQuad(prog);
+          curTex = pingIsA ? texA : texB;
+          pingIsA = !pingIsA;
+        }
+        return curTex;
+      }
+
+      function glPixelSort(tex, w, h, fx) {
+        const p = fx.params;
+        const angle = (p.angle ?? 0) * Math.PI / 180;
+        const threshold = (p.threshold ?? 25) / 100;
+        const maxLen = Math.min(256, Math.max(1, Math.round(p.length ?? 80)));
+        const modeMap = { luminance: 0, hue: 1, saturation: 2 };
+        const mode = modeMap[p.mode] ?? 0;
+        const reverse = (p.reverse ?? 0) > 0.5 ? 1.0 : 0.0;
+        const prog = getProgram('pixelSort', FRAG_PIXEL_SORT);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), w, h);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uAngle'), angle);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uThreshold'), threshold);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uMaxLen'), maxLen);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uMode'), mode);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uReverse'), reverse);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
+      function glGradientMap(tex, w, h, fx) {
+        const p = fx.params;
+        const intensity = (p.intensity ?? 100) / 100;
+        if (intensity <= 0) return tex;
+        const contrast = (p.contrast ?? 100) / 100;
+        const midpoint = (p.midpoint ?? 50) / 100;
+        const reverse = (p.reverse ?? 0) > 0.5 ? 1.0 : 0.0;
+        // Use custom colors if preset is 'custom' or color params are hex strings
+        let colors;
+        if (p.preset === 'custom' || (p.color0 && p.color0.startsWith('#'))) {
+          colors = [
+            hexToRgb01(p.color0 || '#000000'),
+            hexToRgb01(p.color1 || '#333333'),
+            hexToRgb01(p.color2 || '#808080'),
+            hexToRgb01(p.color3 || '#cccccc'),
+            hexToRgb01(p.color4 || '#ffffff')
+          ];
+        } else {
+          colors = GRADIENT_PRESETS[p.preset] || GRADIENT_PRESETS.neon;
+        }
+        const prog = getProgram('gradientMap', FRAG_GRADIENT_MAP);
+        if (!prog) return tex;
+        const outFB = pingIsA ? fbA : fbB;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outFB);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.useProgram(prog);
+        gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uIntensity'), intensity);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uContrast'), contrast);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uMidpoint'), midpoint);
+        gl.uniform1f(gl.getUniformLocation(prog, 'uReverse'), reverse);
+        gl.uniform3fv(gl.getUniformLocation(prog, 'uC0'), colors[0]);
+        gl.uniform3fv(gl.getUniformLocation(prog, 'uC1'), colors[1]);
+        gl.uniform3fv(gl.getUniformLocation(prog, 'uC2'), colors[2]);
+        gl.uniform3fv(gl.getUniformLocation(prog, 'uC3'), colors[3]);
+        gl.uniform3fv(gl.getUniformLocation(prog, 'uC4'), colors[4]);
+        drawQuad(prog);
+        const outTex = pingIsA ? texA : texB;
+        pingIsA = !pingIsA;
+        return outTex;
+      }
+
       // ========== CHAIN RUNNER ==========
       // Returns true if the entire chain was handled on GPU, false otherwise
       function runChain(ctx, chain, context) {
@@ -4509,7 +5569,7 @@
         const w = outW, h = outH;
 
         // Check if all effects in chain can be handled by GL
-        const glHandled = new Set(['sepia', 'grain', 'chromatic', 'pixelate', 'fractalGlass', 'lens', 'bloom', 'blur']);
+        const glHandled = new Set(['sepia', 'grain', 'chromatic', 'pixelate', 'fractalGlass', 'lens', 'bloom', 'blur', 'halftone', 'feedback', 'pixelSort', 'gradientMap']);
         // Blur subtypes we handle
         const glBlurSubs = new Set(['gaussian', 'motion', 'radial', 'box']);
         const canDoAll = chain.every(fx => {
@@ -4529,9 +5589,13 @@
             case 'grain': tex = glGrain(tex, w, h, fx, effectScale); break;
             case 'chromatic': tex = glChromatic(tex, w, h, fx, effectScale); break;
             case 'pixelate': tex = glPixelate(tex, w, h, fx, effectScale, context.gridStepY); break;
+            case 'halftone': tex = glCmykHalftone(tex, w, h, fx, effectScale, context.gridStepY); break;
             case 'fractalGlass': tex = glFractalGlass(tex, w, h, fx, effectScale, geometry); break;
             case 'lens': tex = glLens(tex, w, h, fx, effectScale); break;
             case 'bloom': tex = glBloom(tex, w, h, fx, effectScale, context.asciiCanvas); break;
+            case 'feedback': tex = glFeedback(tex, w, h, fx); break;
+            case 'pixelSort': tex = glPixelSort(tex, w, h, fx); break;
+            case 'gradientMap': tex = glGradientMap(tex, w, h, fx); break;
             case 'blur': {
               switch (fx.subtype) {
                 case 'gaussian': tex = glGaussianBlur(tex, w, h, fx, effectScale); break;
@@ -4576,7 +5640,10 @@
       halftone: (ctx, fx, context) => applyCmykHalftone(ctx, context.outW, context.outH, fx, context.effectScale, context.gridStepY, context.layer, context.geometry),
       fractalGlass: (ctx, fx, context) => applyFractalGlass(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport, context.gridStepY, context.layer),
       blur: applyBlurEffect,
-      lens: (ctx, fx, context) => applyLensEffect(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport)
+      lens: (ctx, fx, context) => applyLensEffect(ctx, context.outW, context.outH, fx, context.effectScale, context.geometry, !!context.forExport),
+      feedback: () => {},
+      pixelSort: () => {},
+      gradientMap: () => {}
     };
 
     function getGlobalGridStep(geometry) {
@@ -4633,11 +5700,21 @@
         layer.brightness,
         layer.contrast,
         layer.saturation,
-        layer.contourSpread,
-        layer.contourSens,
+        layer.contourStyle,
+        layer.contourSmoothing,
+        layer.contourDetail,
+        layer.contourThickness,
+        layer.contourLevels,
+        layer.contourFill ? 1 : 0,
+        layer.contourSigmaRatio,
         layer.outlineStrokeSize,
         layer.outlineCornerRadius,
-        layer.outlineFill ? 1 : 0,
+        layer.outlineLevels,
+        layer.outlineSmoothing,
+        layer.outlineMinSize,
+        layer.outlineDepth,
+        layer.outlineFillMode,
+        layer.outlineStrokeOpacity,
         layer.wordArtifactEnabled ? 1 : 0,
         layer.wordArtifact,
         layer.wordArtifactDistribution,
@@ -5284,62 +6361,112 @@
     });
 
     // Contour controls
-    const contourSpreadSlider = document.getElementById('contourSpread');
-    const contourSpreadValue = document.getElementById('contourSpreadValue');
-    const contourSensSlider = document.getElementById('contourSens');
-    const contourSensValue = document.getElementById('contourSensValue');
+    const contourSmoothingSlider = document.getElementById('contourSmoothing');
+    const contourSmoothingValue = document.getElementById('contourSmoothingValue');
+    const contourDetailSlider = document.getElementById('contourDetail');
+    const contourDetailValue = document.getElementById('contourDetailValue');
+    const contourThicknessSlider = document.getElementById('contourThickness');
+    const contourThicknessValue = document.getElementById('contourThicknessValue');
+    const contourLevelsSlider = document.getElementById('contourLevels');
+    const contourLevelsValue = document.getElementById('contourLevelsValue');
+    const contourFillToggle = document.getElementById('contourFillToggle');
+    const contourSigmaRatioSlider = document.getElementById('contourSigmaRatio');
+    const contourSigmaRatioValue = document.getElementById('contourSigmaRatioValue');
+    const contourStyleEdgeBtn = document.getElementById('contourStyleEdge');
+    const contourStyleTopoBtn = document.getElementById('contourStyleTopo');
+
+    function updateContourStyleUI() {
+      const style = activeLayer().contourStyle || 'edge';
+      const isEdge = style === 'edge';
+      contourStyleEdgeBtn.classList.toggle('bg-surface-high', isEdge);
+      contourStyleEdgeBtn.classList.toggle('text-on-surface', isEdge);
+      contourStyleEdgeBtn.classList.toggle('bg-surface-container', !isEdge);
+      contourStyleEdgeBtn.classList.toggle('text-[#71717a]', !isEdge);
+      contourStyleTopoBtn.classList.toggle('bg-surface-high', !isEdge);
+      contourStyleTopoBtn.classList.toggle('text-on-surface', !isEdge);
+      contourStyleTopoBtn.classList.toggle('bg-surface-container', isEdge);
+      contourStyleTopoBtn.classList.toggle('text-[#71717a]', isEdge);
+      document.getElementById('contourEdgeSettings').classList.toggle('hidden', !isEdge);
+      document.getElementById('contourTopoSettings').classList.toggle('hidden', isEdge);
+    }
+
+    contourStyleEdgeBtn.addEventListener('click', () => {
+      activeLayer().contourStyle = 'edge';
+      updateContourStyleUI();
+      render();
+    });
+    contourStyleTopoBtn.addEventListener('click', () => {
+      activeLayer().contourStyle = 'topo';
+      updateContourStyleUI();
+      render();
+    });
+
+    function contourSliderHandler(slider, valueEl, prop, min, max, defaultVal, isFloat) {
+      slider.addEventListener('input', () => {
+        activeLayer()[prop] = isFloat ? parseFloat(slider.value) : parseInt(slider.value);
+        valueEl.value = isFloat ? formatAdj(activeLayer()[prop]) : activeLayer()[prop];
+        scheduleRender();
+      });
+      valueEl.addEventListener('change', () => {
+        const parse = isFloat ? parseFloat : parseInt;
+        const v = Math.min(max, Math.max(min, parse(valueEl.value) || defaultVal));
+        activeLayer()[prop] = v;
+        slider.value = v;
+        valueEl.value = isFloat ? formatAdj(v) : v;
+        render();
+      });
+    }
+
+    contourSliderHandler(contourSmoothingSlider, contourSmoothingValue, 'contourSmoothing', 0, 10, 2, false);
+    contourSliderHandler(contourDetailSlider, contourDetailValue, 'contourDetail', 1, 10, 5, false);
+    contourSliderHandler(contourThicknessSlider, contourThicknessValue, 'contourThickness', 0, 6, 2, false);
+    contourSliderHandler(contourLevelsSlider, contourLevelsValue, 'contourLevels', 2, 20, 8, false);
+    contourSliderHandler(contourSigmaRatioSlider, contourSigmaRatioValue, 'contourSigmaRatio', 1.2, 3.0, 1.6, true);
+
+    contourFillToggle.addEventListener('change', () => {
+      activeLayer().contourFill = contourFillToggle.checked;
+      render();
+    });
+
+    // Outline controls
     const outlineStrokeSizeSlider = document.getElementById('outlineStrokeSize');
     const outlineStrokeSizeValue = document.getElementById('outlineStrokeSizeValue');
     const outlineCornerRadiusSlider = document.getElementById('outlineCornerRadius');
     const outlineCornerRadiusValue = document.getElementById('outlineCornerRadiusValue');
-    contourSpreadSlider.addEventListener('input', () => {
-      activeLayer().contourSpread = parseInt(contourSpreadSlider.value);
-      contourSpreadValue.value = activeLayer().contourSpread;
-      scheduleRender();
-    });
-    contourSpreadValue.addEventListener('change', () => {
-      const v = Math.min(6, Math.max(0, parseInt(contourSpreadValue.value) || 2));
-      activeLayer().contourSpread = v;
-      contourSpreadSlider.value = v;
-      contourSpreadValue.value = v;
-      render();
-    });
-    contourSensSlider.addEventListener('input', () => {
-      activeLayer().contourSens = parseInt(contourSensSlider.value);
-      contourSensValue.value = activeLayer().contourSens;
-      scheduleRender();
-    });
-    contourSensValue.addEventListener('change', () => {
-      const v = Math.min(10, Math.max(1, parseInt(contourSensValue.value) || 5));
-      activeLayer().contourSens = v;
-      contourSensSlider.value = v;
-      contourSensValue.value = v;
-      render();
-    });
-    outlineStrokeSizeSlider.addEventListener('input', () => {
-      activeLayer().outlineStrokeSize = parseFloat(outlineStrokeSizeSlider.value);
-      outlineStrokeSizeValue.value = formatAdj(activeLayer().outlineStrokeSize);
-      scheduleRender();
-    });
-    outlineStrokeSizeValue.addEventListener('change', () => {
-      const v = Math.min(8, Math.max(0.5, parseFloat(outlineStrokeSizeValue.value) || 1.5));
-      activeLayer().outlineStrokeSize = v;
-      outlineStrokeSizeSlider.value = v;
-      outlineStrokeSizeValue.value = formatAdj(v);
-      render();
-    });
-    outlineCornerRadiusSlider.addEventListener('input', () => {
-      activeLayer().outlineCornerRadius = parseFloat(outlineCornerRadiusSlider.value);
-      outlineCornerRadiusValue.value = formatAdj(activeLayer().outlineCornerRadius);
-      scheduleRender();
-    });
-    outlineCornerRadiusValue.addEventListener('change', () => {
-      const v = Math.min(12, Math.max(0, parseFloat(outlineCornerRadiusValue.value) || 0));
-      activeLayer().outlineCornerRadius = v;
-      outlineCornerRadiusSlider.value = v;
-      outlineCornerRadiusValue.value = formatAdj(v);
-      render();
-    });
+    const outlineLevelsSlider = document.getElementById('outlineLevels');
+    const outlineLevelsValue = document.getElementById('outlineLevelsValue');
+    const outlineSmoothingSlider = document.getElementById('outlineSmoothing');
+    const outlineSmoothingValue = document.getElementById('outlineSmoothingValue');
+    const outlineMinSizeSlider = document.getElementById('outlineMinSize');
+    const outlineMinSizeValue = document.getElementById('outlineMinSizeValue');
+    const outlineDepthSlider = document.getElementById('outlineDepth');
+    const outlineDepthValue = document.getElementById('outlineDepthValue');
+    const outlineStrokeOpacitySlider = document.getElementById('outlineStrokeOpacity');
+    const outlineStrokeOpacityValue = document.getElementById('outlineStrokeOpacityValue');
+
+    function outlineSliderHandler(slider, valueEl, prop, min, max, defaultVal, isFloat) {
+      slider.addEventListener('input', () => {
+        activeLayer()[prop] = isFloat ? parseFloat(slider.value) : parseInt(slider.value);
+        valueEl.value = isFloat ? formatAdj(activeLayer()[prop]) : activeLayer()[prop];
+        scheduleRender();
+      });
+      valueEl.addEventListener('change', () => {
+        const parse = isFloat ? parseFloat : parseInt;
+        const v = Math.min(max, Math.max(min, parse(valueEl.value) || defaultVal));
+        activeLayer()[prop] = v;
+        slider.value = v;
+        valueEl.value = isFloat ? formatAdj(v) : v;
+        render();
+      });
+    }
+
+    outlineSliderHandler(outlineStrokeSizeSlider, outlineStrokeSizeValue, 'outlineStrokeSize', 0.5, 8, 1.5, true);
+    outlineSliderHandler(outlineCornerRadiusSlider, outlineCornerRadiusValue, 'outlineCornerRadius', 0, 12, 0, true);
+    outlineSliderHandler(outlineLevelsSlider, outlineLevelsValue, 'outlineLevels', 2, 16, 8, false);
+    outlineSliderHandler(outlineSmoothingSlider, outlineSmoothingValue, 'outlineSmoothing', 0, 10, 0, false);
+    outlineSliderHandler(outlineMinSizeSlider, outlineMinSizeValue, 'outlineMinSize', 0, 20, 3, false);
+    outlineSliderHandler(outlineDepthSlider, outlineDepthValue, 'outlineDepth', 0, 10, 0, false);
+    outlineSliderHandler(outlineStrokeOpacitySlider, outlineStrokeOpacityValue, 'outlineStrokeOpacity', 0, 100, 100, false);
     // Toggles
     document.getElementById('invertToggle').addEventListener('change', (e) => {
       activeLayer().invert = e.target.checked;
@@ -5481,7 +6608,8 @@
         applyManualColorRgb(values[0], values[1], values[2]);
       });
     });
-    const outlineFillToggle = document.getElementById('outlineFillToggle');
+    const outlineFillModeBtn = document.getElementById('outlineFillModeBtn');
+    const outlineFillModeInput = document.getElementById('outlineFillMode');
     const outlineFillBtn = document.getElementById('outlineFillBtn');
     const outlineFillPopover = document.getElementById('outlineFillPopover');
     const outlineFillHex = document.getElementById('outlineFillHex');
@@ -5492,20 +6620,38 @@
     const outlineFillGValue = document.getElementById('outlineFillGValue');
     const outlineFillBValue = document.getElementById('outlineFillBValue');
 
+    const OUTLINE_FILL_MODE_OPTIONS = [
+      { value: 'off', label: 'Off' },
+      { value: 'solid', label: 'Solid' },
+      { value: 'source', label: 'Source' },
+      { value: 'tinted', label: 'Tinted' }
+    ];
+
+    outlineFillModeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openOptionMenu(outlineFillModeBtn, {
+        options: OUTLINE_FILL_MODE_OPTIONS,
+        value: activeLayer().outlineFillMode || 'off',
+        compact: true,
+        align: 'right',
+        placement: 'bottom',
+        gap: 6,
+        onSelect: (val) => {
+          activeLayer().outlineFillMode = val;
+          updateOutlineFillUI();
+          render();
+        }
+      });
+    });
+
     function applyOutlineFillRgb(r, g, b) {
       activeLayer().outlineFillColor = rgbToHex(r, g, b);
       updateOutlineFillUI();
       scheduleRender();
     }
 
-    outlineFillToggle.addEventListener('change', (e) => {
-      activeLayer().outlineFill = e.target.checked;
-      updateOutlineFillUI();
-      render();
-    });
     outlineFillBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (outlineFillBtn.disabled) return;
       toggleFloatingPanel(outlineFillPopover, outlineFillBtn, { align: 'right', placement: 'bottom', gap: 8, maxHeight: 360 });
     });
     outlineFillPopover.addEventListener('click', (e) => e.stopPropagation());
@@ -5521,7 +6667,7 @@
       [outlineFillR, outlineFillRValue],
       [outlineFillG, outlineFillGValue],
       [outlineFillB, outlineFillBValue]
-    ].forEach(([slider, input], idx, all) => {
+    ].forEach(([slider, input]) => {
       slider.addEventListener('input', () => {
         const rgb = [
           parseInt(outlineFillR.value, 10),
@@ -5661,6 +6807,9 @@
         // Generate param controls
         const params = getEffectParams(fx);
         params.forEach(pDef => {
+          // Hide full-frame-only params when texture isn't full-frame
+          if (pDef.fullFrameOnly && !FULL_FRAME_TEXTURES.has(fx.params.texture)) return;
+
           const row = document.createElement('div');
           row.className = 'flex flex-col gap-1';
 
@@ -5716,6 +6865,41 @@
               scheduleRender();
             });
             row.appendChild(slider);
+          } else if (pDef.type === 'toggle') {
+            const labelRow = document.createElement('div');
+            labelRow.className = 'flex items-center justify-between';
+            const label = document.createElement('label');
+            label.className = 'text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label';
+            label.textContent = pDef.label;
+            const toggle = document.createElement('input');
+            toggle.type = 'checkbox';
+            toggle.className = 'fx-enabled';
+            toggle.checked = !!(fx.params[pDef.key]);
+            toggle.addEventListener('change', () => {
+              fx.params[pDef.key] = toggle.checked ? 1 : 0;
+              render();
+            });
+            labelRow.appendChild(label);
+            labelRow.appendChild(toggle);
+            row.appendChild(labelRow);
+          } else if (pDef.type === 'color') {
+            const labelRow = document.createElement('div');
+            labelRow.className = 'flex items-center justify-between';
+            const label = document.createElement('label');
+            label.className = 'text-[#71717a] text-[10px] uppercase tracking-[0.12em] font-label';
+            label.textContent = pDef.label;
+            const colorInput = document.createElement('input');
+            colorInput.type = 'color';
+            colorInput.value = fx.params[pDef.key] || '#000000';
+            colorInput.style.cssText = 'width:28px;height:20px;padding:0;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;cursor:pointer;';
+            colorInput.addEventListener('input', () => {
+              fx.params[pDef.key] = colorInput.value;
+              fx.params.preset = 'custom';
+              scheduleRender();
+            });
+            labelRow.appendChild(label);
+            labelRow.appendChild(colorInput);
+            row.appendChild(labelRow);
           } else if (pDef.type === 'select') {
             const labelRow = document.createElement('div');
             labelRow.className = 'flex items-center justify-between';
@@ -5745,6 +6929,17 @@
                 onSelect: (value, option) => {
                   fx.params[pDef.key] = value;
                   setSelectButtonLabel(selectButton, option.label);
+                  // Sync color pickers when gradient map preset changes
+                  if (fx.type === 'gradientMap' && pDef.key === 'preset' && GRADIENT_PRESETS[value]) {
+                    const pc = GRADIENT_PRESETS[value];
+                    fx.params.color0 = rgb01ToHex(pc[0]);
+                    fx.params.color1 = rgb01ToHex(pc[1]);
+                    fx.params.color2 = rgb01ToHex(pc[2]);
+                    fx.params.color3 = rgb01ToHex(pc[3]);
+                    fx.params.color4 = rgb01ToHex(pc[4]);
+                    const layer = activeLayer();
+                    if (layer) syncUIToLayer(layer);
+                  }
                   render();
                 }
               });
@@ -5884,6 +7079,9 @@
       addItem('Pixelate', 'pixelate', null);
       addItem('CMYK', 'halftone', null);
       addItem('Fractal', 'fractalGlass', null);
+      addItem('Feedback', 'feedback', null);
+      addItem('Pixel Sort', 'pixelSort', null);
+      addItem('Gradient Map', 'gradientMap', null);
 
       // Blur subtypes
       const blurHeader = document.createElement('div');
@@ -6003,6 +7201,7 @@
       document.getElementById('fontRow').classList.toggle('hidden', isNone || v === 'Outline');
       updateManualColorUI();
       updateOutlineFillUI();
+      if (v === 'Contour') updateContourStyleUI();
     }
     // Variant custom dropdown with hover preview
     const variantOptions = Object.keys(VARIANTS);
@@ -6259,7 +7458,7 @@
     function applyLayerMask(layerCtx, layer, geometry, forExport) {
       const mask = getMask(layer);
       if (mask && mask.enabled === false) return;
-      // If an effect (halftone, fractal glass) already handled the mask
+      // If an effect (halftone) already handled the mask
       // with its own feather logic, skip the hard clip to avoid a visible edge
       if (layer._maskHandledByEffect) {
         delete layer._maskHandledByEffect;
@@ -6294,9 +7493,21 @@
         sctx.fill(path);
       }
 
+      // Apply feathering via GPU-accelerated canvas blur
+      let maskSource = scratch;
+      if (mask.feather > 0) {
+        const blurred = getScratchCanvas('maskBlurred', w, h);
+        const bctx = blurred.getContext('2d');
+        bctx.clearRect(0, 0, w, h);
+        bctx.filter = `blur(${mask.feather}px)`;
+        bctx.drawImage(scratch, 0, 0);
+        bctx.filter = 'none';
+        maskSource = blurred;
+      }
+
       layerCtx.save();
       layerCtx.globalCompositeOperation = mask.inverted ? 'destination-out' : 'destination-in';
-      layerCtx.drawImage(scratch, 0, 0);
+      layerCtx.drawImage(maskSource, 0, 0);
       layerCtx.restore();
     }
 
@@ -6351,20 +7562,28 @@
 
       const variant = VARIANTS[layer.variant] || VARIANTS.None;
 
-      // None variant — render source image directly (passthrough)
+      // None variant — passthrough source image only if layer has effects or BCS adjustments
       if (variant.mode === 'none') {
-        renderSourceLayer(layerCtx, layer, geometry);
         const chain = getEffectChain(layer);
-        if (chain.length > 0) {
-          const globalGrid = getGlobalGridStep(geometry);
-          const noneCtx = { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX: globalGrid || 0, gridStepY: globalGrid || 0 };
-          if (!applyEffectChainGL(layerCtx, chain, noneCtx)) {
-            for (const fx of chain) {
-              if (!fx.enabled) continue;
-              applyEffect(layerCtx, fx, noneCtx);
+        const hasActiveEffects = chain.some(fx => fx.enabled);
+        const hasBCS = Math.abs((layer.brightness ?? 1) - 1) > 0.001 ||
+                       Math.abs((layer.contrast ?? 1) - 1) > 0.001 ||
+                       Math.abs((layer.saturation ?? 1) - 1) > 0.001;
+        // Only render source if layer has effects or BCS adjustments;
+        // otherwise return transparent canvas so it doesn't cover layers below
+        if (hasActiveEffects || hasBCS) {
+          renderSourceLayer(layerCtx, layer, geometry);
+          if (hasActiveEffects) {
+            const globalGrid = getGlobalGridStep(geometry);
+            const noneCtx = { asciiCanvas: layerCanvas, outW, outH, layer, geometry, forExport, effectScale, gridStepX: globalGrid || 0, gridStepY: globalGrid || 0 };
+            if (!applyEffectChainGL(layerCtx, chain, noneCtx)) {
+              for (const fx of chain) {
+                if (!fx.enabled) continue;
+                applyEffect(layerCtx, fx, noneCtx);
+              }
             }
+            clipToImageBounds(layerCtx, geometry);
           }
-          clipToImageBounds(layerCtx, geometry);
         }
         applyLayerMask(layerCtx, layer, geometry, forExport);
         return layerCanvas;
@@ -6418,6 +7637,11 @@
         // can render and then be cleanly cut off at the bounds.
         clipToImageBounds(layerCtx, geometry);
 
+        // Outline mode handles masking internally via cell-level valid[] grid,
+        // so skip the smooth pixel-level mask clip to preserve the grid-stepped edges
+        if (variant.mode === 'outline') {
+          layer._maskHandledByEffect = true;
+        }
         applyLayerMask(layerCtx, layer, geometry, forExport);
       } finally {
         outputCtx = savedCtx;
@@ -6591,14 +7815,34 @@
         let layerCanvas;
         if (cached && cached.key === layerCacheKey) {
           layerCanvas = cached.canvas;
+          // Restore _effectedSourceCanvas from cache so ASCII layers can use it
+          if (layer.kind === 'source') {
+            const srcChain = getEffectChain(layer);
+            _effectedSourceCanvas = srcChain.some(fx => fx.enabled) ? layerCanvas : null;
+          }
         } else {
           let pixels = null;
           if (layer.kind !== 'source') {
-            const filterKey = `${layer.brightness}-${layer.contrast}-${layer.saturation}`;
+            const useEffected = !!_effectedSourceCanvas;
+            const filterKey = `${useEffected ? 'eff-' : ''}${layer.brightness}-${layer.contrast}-${layer.saturation}`;
             pixels = pixelCache.get(filterKey);
             if (!pixels) {
               sourceCtx.filter = `brightness(${layer.brightness}) contrast(${layer.contrast}) saturate(${layer.saturation})`;
-              sourceCtx.drawImage(src, 0, 0, srcW, srcH);
+              if (useEffected) {
+                // Sample from the effected source (source layer + its effects)
+                const imgT = getImageTransform(renderGeometry);
+                if (imgT) {
+                  sourceCtx.drawImage(
+                    _effectedSourceCanvas,
+                    imgT.rect.left, imgT.rect.top, imgT.rect.width, imgT.rect.height,
+                    0, 0, srcW, srcH
+                  );
+                } else {
+                  sourceCtx.drawImage(_effectedSourceCanvas, 0, 0, srcW, srcH);
+                }
+              } else {
+                sourceCtx.drawImage(src, 0, 0, srcW, srcH);
+              }
               sourceCtx.filter = 'none';
               pixels = sourceCtx.getImageData(0, 0, srcW, srcH).data;
               pixelCache.set(filterKey, pixels);
@@ -6936,40 +8180,396 @@
       return (py * srcW + px) * 4;
     }
 
-    function renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
-      // Background: render() handles black fill and imageUnderlay image draw
-      const stride = Math.round(cellSize * (1 + layer.gap));
+    // Separable Gaussian blur on a flat grid of floats
+    function gaussianBlurGrid(grid, cols, rows, sigma) {
+      if (sigma < 0.5) return new Float32Array(grid);
+      const radius = Math.ceil(sigma * 3);
+      const size = radius * 2 + 1;
+      const kernel = new Float32Array(size);
+      let sum = 0;
+      for (let i = 0; i < size; i++) {
+        const x = i - radius;
+        kernel[i] = Math.exp(-0.5 * (x * x) / (sigma * sigma));
+        sum += kernel[i];
+      }
+      for (let i = 0; i < size; i++) kernel[i] /= sum;
 
-      // Use Canny-style pipeline for clean object boundaries
+      const tmp = new Float32Array(rows * cols);
+      const out = new Float32Array(rows * cols);
+
+      // Horizontal pass
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          let v = 0;
+          for (let k = -radius; k <= radius; k++) {
+            const cc = Math.max(0, Math.min(cols - 1, c + k));
+            v += grid[r * cols + cc] * kernel[k + radius];
+          }
+          tmp[r * cols + c] = v;
+        }
+      }
+      // Vertical pass
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          let v = 0;
+          for (let k = -radius; k <= radius; k++) {
+            const rr = Math.max(0, Math.min(rows - 1, r + k));
+            v += tmp[rr * cols + c] * kernel[k + radius];
+          }
+          out[r * cols + c] = v;
+        }
+      }
+      return out;
+    }
+
+    // Shared: build luminance grid from source pixels
+    function buildLumGrid(pixels, srcW, srcH, cols, rows, cellSize, stride) {
       const n = rows * cols;
-      const mags = new Float32Array(n);
-      const angles = new Float32Array(n);
-
-      // Sobel pass — sample multiple points per cell and keep the strongest edge
+      const lum = new Float32Array(n);
       const sampleStep = Math.max(1, Math.floor(cellSize / 3));
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-          let bestMag = 0, bestAngle = 0;
+          let total = 0, count = 0;
           for (let dy = 0; dy < cellSize; dy += sampleStep) {
             for (let dx = 0; dx < cellSize; dx += sampleStep) {
               const px = col * stride + dx;
               const py = row * stride + dy;
-              const { magnitude, angle } = sobelAt(pixels, srcW, srcH, px, py);
-              if (magnitude > bestMag) { bestMag = magnitude; bestAngle = angle; }
+              const i = sourcePixelOffset(srcW, srcH, px, py);
+              total += 0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
+              count++;
             }
           }
-          mags[row * cols + col] = bestMag;
-          angles[row * cols + col] = bestAngle;
+          lum[row * cols + col] = total / count;
+        }
+      }
+      return lum;
+    }
+
+    // Shared: distance field spread from edge cells
+    function buildDistanceField(edgeCells, angles, cols, rows, maxDist) {
+      const n = rows * cols;
+      const dist = new Int8Array(n).fill(-1);
+      for (let i = 0; i < n; i++) {
+        if (edgeCells[i]) dist[i] = 0;
+      }
+      if (maxDist <= 0) return dist;
+      for (let i = 0; i < n; i++) {
+        if (!edgeCells[i]) continue;
+        const r0 = Math.floor(i / cols), c0 = i % cols;
+        const a = angles ? angles[i] : 0;
+        const gr = angles ? Math.sin(a) : 0;
+        const gc = angles ? Math.cos(a) : 0;
+        if (angles) {
+          for (const sign of [1, -1]) {
+            for (let step = 1; step <= maxDist; step++) {
+              const nr = Math.round(r0 + sign * gr * step);
+              const nc = Math.round(c0 + sign * gc * step);
+              if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) break;
+              const ni = nr * cols + nc;
+              if (dist[ni] >= 0 && dist[ni] <= step) continue;
+              if (edgeCells[ni]) break;
+              dist[ni] = step;
+            }
+          }
+        } else {
+          // BFS spread for topo mode (no gradient direction)
+          for (let dr = -maxDist; dr <= maxDist; dr++) {
+            for (let dc = -maxDist; dc <= maxDist; dc++) {
+              if (!dr && !dc) continue;
+              const step = Math.max(Math.abs(dr), Math.abs(dc));
+              if (step > maxDist) continue;
+              const nr = r0 + dr, nc = c0 + dc;
+              if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+              const ni = nr * cols + nc;
+              if (edgeCells[ni]) continue;
+              if (dist[ni] >= 0 && dist[ni] <= step) continue;
+              dist[ni] = step;
+            }
+          }
+        }
+      }
+      return dist;
+    }
+
+    // Shared: draw contour characters to outputCtx
+    function drawContourChars(dist, charPicker, angles, pixels, srcW, srcH, cols, rows, cellSize, stride, scale, offsetX, offsetY, layer, maskMetrics, palette) {
+      const fontSize = cellSize * scale * gapFontScale(layer.gap);
+      outputCtx.font = `${fontSize}px ${layer.font}`;
+      outputCtx.textBaseline = 'middle';
+      outputCtx.textAlign = 'center';
+      const ovPad = state.forceGrid ? state.forceGridPadding / 100 : 0;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const idx = row * cols + col;
+          const d = dist[idx];
+          if (d < 0) continue;
+
+          let char = charPicker(idx, d);
+          const aChar = wordArtifactChar(row, col, layer);
+          if (aChar) char = aChar;
+          const cx = col * stride + Math.floor(cellSize / 2);
+          const cy = row * stride + Math.floor(cellSize / 2);
+          const strength = sampleMaskStrength(maskMetrics, cx, cy);
+          if (!shouldRenderByStrength(strength, row, col)) continue;
+          char = attenuateCharFromPalette(char, palette, strength);
+          if (char === ' ') continue;
+
+          const pi = sourcePixelOffset(srcW, srcH, cx, cy);
+          const baseFill = layer.colorMode ? `rgb(${pixels[pi]},${pixels[pi+1]},${pixels[pi+2]})` : '#ffffff';
+          outputCtx.fillStyle = getLayerDrawColor(layer, baseFill);
+
+          const x = offsetX + (col + 0.5) * stride * scale;
+          const y = offsetY + (row + 0.5) * stride * scale;
+          if (layer.charRotation && angles) {
+            outputCtx.save();
+            outputCtx.translate(x, y);
+            outputCtx.rotate(angles[idx]);
+            if (ovPad > 0) outputCtx.scale(1 - ovPad, 1 - ovPad);
+            outputCtx.fillText(char, 0, 0);
+            outputCtx.restore();
+          } else if (ovPad > 0) {
+            outputCtx.save();
+            outputCtx.translate(x, y);
+            outputCtx.scale(1 - ovPad, 1 - ovPad);
+            outputCtx.fillText(char, 0, 0);
+            outputCtx.restore();
+          } else {
+            outputCtx.fillText(char, x, y);
+          }
+        }
+      }
+    }
+
+    // ============ TOPO MODE ============
+    function renderContourTopo(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics) {
+      const stride = Math.round(cellSize * (1 + layer.gap));
+      const n = rows * cols;
+      const levels = layer.contourLevels || 8;
+      const smoothing = layer.contourSmoothing || 0;
+      const thickness = layer.contourThickness || 0;
+      const detail = layer.contourDetail || 5;
+      const fill = layer.contourFill;
+
+      // Build luminance grid and smooth it
+      let lum = buildLumGrid(pixels, srcW, srcH, cols, rows, cellSize, stride);
+      if (smoothing > 0) {
+        lum = gaussianBlurGrid(lum, cols, rows, smoothing * 0.8);
+      }
+
+      // Quantize into N levels
+      const quantized = new Uint8Array(n);
+      for (let i = 0; i < n; i++) {
+        quantized[i] = Math.min(levels - 1, Math.floor(lum[i] / 255 * levels));
+      }
+
+      // Find boundary cells (where adjacent cells differ in level)
+      const edgeCells = new Uint8Array(n);
+      // Track which neighbors differ for direction-aware characters
+      const hasTop = new Uint8Array(n);
+      const hasBottom = new Uint8Array(n);
+      const hasLeft = new Uint8Array(n);
+      const hasRight = new Uint8Array(n);
+      const hasTL = new Uint8Array(n);
+      const hasTR = new Uint8Array(n);
+      const hasBL = new Uint8Array(n);
+      const hasBR = new Uint8Array(n);
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const idx = row * cols + col;
+          const v = quantized[idx];
+          if (row > 0 && quantized[(row-1)*cols+col] !== v) { edgeCells[idx] = 1; hasTop[idx] = 1; }
+          if (row < rows-1 && quantized[(row+1)*cols+col] !== v) { edgeCells[idx] = 1; hasBottom[idx] = 1; }
+          if (col > 0 && quantized[row*cols+col-1] !== v) { edgeCells[idx] = 1; hasLeft[idx] = 1; }
+          if (col < cols-1 && quantized[row*cols+col+1] !== v) { edgeCells[idx] = 1; hasRight[idx] = 1; }
+          if (row > 0 && col > 0 && quantized[(row-1)*cols+col-1] !== v) { hasTL[idx] = 1; }
+          if (row > 0 && col < cols-1 && quantized[(row-1)*cols+col+1] !== v) { hasTR[idx] = 1; }
+          if (row < rows-1 && col > 0 && quantized[(row+1)*cols+col-1] !== v) { hasBL[idx] = 1; }
+          if (row < rows-1 && col < cols-1 && quantized[(row+1)*cols+col+1] !== v) { hasBR[idx] = 1; }
         }
       }
 
-      // Non-maximum suppression — thin edges to 1-cell wide
+      // Connected component filter — remove small fragments based on Detail
+      const minChain = Math.max(1, Math.floor(11 - detail));
+      if (minChain > 1) {
+        const labels = new Int32Array(n).fill(-1);
+        let labelId = 0;
+        for (let i = 0; i < n; i++) {
+          if (!edgeCells[i] || labels[i] >= 0) continue;
+          const comp = [];
+          const bfs = [i];
+          labels[i] = labelId;
+          while (bfs.length > 0) {
+            const idx = bfs.shift();
+            comp.push(idx);
+            const r = Math.floor(idx / cols), c = idx % cols;
+            for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+              if (!dr && !dc) continue;
+              const nr = r+dr, nc = c+dc;
+              if (nr>=0 && nr<rows && nc>=0 && nc<cols) {
+                const ni = nr*cols+nc;
+                if (edgeCells[ni] && labels[ni] < 0) { labels[ni] = labelId; bfs.push(ni); }
+              }
+            }
+          }
+          if (comp.length < minChain) for (const idx of comp) edgeCells[idx] = 0;
+          labelId++;
+        }
+      }
+
+      // Distance field for thickness
+      const dist = buildDistanceField(edgeCells, null, cols, rows, thickness);
+
+      // Fill characters palette
+      const fillPalette = ' .:-=+*#%@';
+
+      // Direction-aware character picker
+      const topoCharPicker = (idx, d) => {
+        if (d > 0) {
+          // Spread cells get thinner chars
+          return d === 1 ? '·' : '.';
+        }
+        // Edge cell — pick direction-aware line character
+        const t = hasTop[idx], b = hasBottom[idx], l = hasLeft[idx], r = hasRight[idx];
+        const tl = hasTL[idx], tr = hasTR[idx], bl = hasBL[idx], br = hasBR[idx];
+        const hCount = (l ? 1 : 0) + (r ? 1 : 0);
+        const vCount = (t ? 1 : 0) + (b ? 1 : 0);
+
+        // Pure horizontal boundary
+        if (hCount === 0 && vCount > 0) return '─';
+        // Pure vertical boundary
+        if (vCount === 0 && hCount > 0) return '│';
+        // Corner/junction cases
+        if (t && r && !b && !l) return '└';
+        if (t && l && !b && !r) return '┘';
+        if (b && r && !t && !l) return '┌';
+        if (b && l && !t && !r) return '┐';
+        // Diagonal: only diagonal neighbors differ
+        if (!t && !b && !l && !r) {
+          if ((tl || br) && !tr && !bl) return '╲';
+          if ((tr || bl) && !tl && !br) return '╱';
+          return '·';
+        }
+        // Cross/T-junctions
+        if (t && b && l && r) return '┼';
+        if (t && b && r) return '├';
+        if (t && b && l) return '┤';
+        if (l && r && b) return '┬';
+        if (l && r && t) return '┴';
+        return '─';
+      };
+
+      // If fill is on, draw fill characters first
+      if (fill) {
+        const fontSize = cellSize * scale * gapFontScale(layer.gap);
+        outputCtx.font = `${fontSize}px ${layer.font}`;
+        outputCtx.textBaseline = 'middle';
+        outputCtx.textAlign = 'center';
+        const ovPad = state.forceGrid ? state.forceGridPadding / 100 : 0;
+
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const idx = row * cols + col;
+            if (dist[idx] === 0) continue; // skip edge cells, drawn later
+            const level = quantized[idx];
+            const charIdx = Math.min(fillPalette.length - 1, Math.floor(level / levels * fillPalette.length));
+            let char = fillPalette[charIdx];
+            if (char === ' ') continue;
+
+            const cx = col * stride + Math.floor(cellSize / 2);
+            const cy = row * stride + Math.floor(cellSize / 2);
+            const strength = sampleMaskStrength(maskMetrics, cx, cy);
+            if (!shouldRenderByStrength(strength, row, col)) continue;
+            char = attenuateCharFromPalette(char, fillPalette, strength);
+            if (char === ' ') continue;
+
+            const pi = sourcePixelOffset(srcW, srcH, cx, cy);
+            const baseFill = layer.colorMode ? `rgb(${pixels[pi]},${pixels[pi+1]},${pixels[pi+2]})` : '#ffffff';
+            outputCtx.fillStyle = getLayerDrawColor(layer, baseFill);
+            outputCtx.globalAlpha = 0.4;
+
+            const x = offsetX + (col + 0.5) * stride * scale;
+            const y = offsetY + (row + 0.5) * stride * scale;
+            if (ovPad > 0) {
+              outputCtx.save();
+              outputCtx.translate(x, y);
+              outputCtx.scale(1 - ovPad, 1 - ovPad);
+              outputCtx.fillText(char, 0, 0);
+              outputCtx.restore();
+            } else {
+              outputCtx.fillText(char, x, y);
+            }
+          }
+        }
+        outputCtx.globalAlpha = 1;
+      }
+
+      // Draw contour line characters
+      drawContourChars(dist, topoCharPicker, null, pixels, srcW, srcH, cols, rows, cellSize, stride, scale, offsetX, offsetY, layer, maskMetrics, ' .·─│╱╲┌┐└┘├┤┬┴┼');
+    }
+
+    // ============ EDGE MODE (DoG) ============
+    function renderContourEdge(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics) {
+      const stride = Math.round(cellSize * (1 + layer.gap));
+      const n = rows * cols;
+      const smoothing = layer.contourSmoothing || 0;
+      const detail = layer.contourDetail || 5;
+      const thickness = layer.contourThickness || 0;
+      const sigmaRatio = layer.contourSigmaRatio || 1.6;
+
+      // Build luminance grid
+      let lum = buildLumGrid(pixels, srcW, srcH, cols, rows, cellSize, stride);
+
+      // Pre-blur for noise reduction (independent of DoG)
+      if (smoothing > 0) {
+        lum = gaussianBlurGrid(lum, cols, rows, smoothing * 0.8);
+      }
+
+      // DoG: two Gaussian blurs at small fixed sigmas (controlled by sigmaRatio only)
+      const sigma1 = 0.7;
+      const sigma2 = sigma1 * sigmaRatio;
+      const blur1 = gaussianBlurGrid(lum, cols, rows, sigma1);
+      const blur2 = gaussianBlurGrid(lum, cols, rows, sigma2);
+
+      // Subtract to get DoG response + compute gradient angles via Sobel on blurred image
+      const dog = new Float32Array(n);
+      const mags = new Float32Array(n);
+      const angles = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        dog[i] = Math.abs(blur1[i] - blur2[i]);
+      }
+
+      // Compute gradient angles from the smoothed luminance for NMS and char rotation
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const idx = row * cols + col;
+          // Sobel on the blurred grid
+          const tl = (row>0&&col>0) ? blur1[(row-1)*cols+col-1] : blur1[idx];
+          const tc = (row>0) ? blur1[(row-1)*cols+col] : blur1[idx];
+          const tr = (row>0&&col<cols-1) ? blur1[(row-1)*cols+col+1] : blur1[idx];
+          const ml = (col>0) ? blur1[row*cols+col-1] : blur1[idx];
+          const mr = (col<cols-1) ? blur1[row*cols+col+1] : blur1[idx];
+          const bl = (row<rows-1&&col>0) ? blur1[(row+1)*cols+col-1] : blur1[idx];
+          const bc = (row<rows-1) ? blur1[(row+1)*cols+col] : blur1[idx];
+          const br = (row<rows-1&&col<cols-1) ? blur1[(row+1)*cols+col+1] : blur1[idx];
+          const gx = -tl + tr - 2*ml + 2*mr - bl + br;
+          const gy = -tl - 2*tc - tr + bl + 2*bc + br;
+          angles[idx] = Math.atan2(gy, gx);
+          mags[idx] = dog[idx];
+        }
+      }
+
+      // Threshold based on Detail (detail=10 → low threshold, detail=1 → high threshold)
+      const threshold = Math.max(2, 30 - detail * 2.8);
+
+      // NMS — thin edges to 1-cell wide
       const nms = new Uint8Array(n);
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           const idx = row * cols + col;
           const mag = mags[idx];
-          if (mag < 50) continue;
+          if (mag < threshold * 0.5) continue;
           const a = ((angles[idx] % Math.PI) + Math.PI) % Math.PI;
           let dr1, dc1, dr2, dc2;
           if (a < Math.PI * 0.125 || a >= Math.PI * 0.875) { dr1=0;dc1=-1;dr2=0;dc2=1; }
@@ -6983,13 +8583,9 @@
         }
       }
 
-      // Hysteresis — thresholds scaled by sensitivity (1=least sensitive, 10=most)
-      const sens = layer.contourSens;
-      const baseStrong = Math.max(80, 160 - cellSize * 4);
-      const baseWeak = Math.max(40, 80 - cellSize * 2);
-      const sensScale = 1 + (5 - sens) * 0.15; // sens=5 → 1x, sens=10 → 0.25x (lower thresholds), sens=1 → 1.6x (higher)
-      const strongThresh = Math.max(20, Math.round(baseStrong * sensScale));
-      const weakThresh = Math.max(10, Math.round(baseWeak * sensScale));
+      // Hysteresis thresholding
+      const strongThresh = threshold;
+      const weakThresh = threshold * 0.4;
       const keep = new Uint8Array(n);
       const queue = [];
       for (let i = 0; i < n; i++) {
@@ -7010,10 +8606,10 @@
         }
       }
 
-      // Connected component filter — remove short fragments (noise)
-      const minChain = Math.max(3, Math.min(20, Math.floor(Math.min(cols, rows) / 4)));
+      // Connected component filter
+      const minChain = Math.max(2, Math.floor(11 - detail));
+      const edgeCells = new Uint8Array(n);
       const labels = new Int32Array(n).fill(-1);
-      const finalKeep = new Uint8Array(n);
       let labelId = 0;
       for (let i = 0; i < n; i++) {
         if (keep[i] !== 2 || labels[i] >= 0) continue;
@@ -7033,96 +8629,29 @@
             }
           }
         }
-        if (comp.length >= minChain) for (const idx of comp) finalKeep[idx] = 1;
+        if (comp.length >= minChain) for (const idx of comp) edgeCells[idx] = 1;
         labelId++;
       }
 
-      // Distance field — spread outward from edges along both gradient directions
-      // Each edge cell seeds falloff in both perpendicular directions (both sides of boundary)
-      // but NOT along the edge itself, preventing interior fill between nearby parallel edges
-      const maxDist = layer.contourSpread;
-      const dist = new Int8Array(n).fill(-1);
-      for (let i = 0; i < n; i++) {
-        if (finalKeep[i]) dist[i] = 0;
-      }
+      // Distance field spread
+      const dist = buildDistanceField(edgeCells, angles, cols, rows, thickness);
 
-      // For each edge cell, walk outward in the gradient direction (perpendicular to edge)
-      for (let i = 0; i < n; i++) {
-        if (!finalKeep[i]) continue;
-        const r0 = Math.floor(i / cols), c0 = i % cols;
-        const a = angles[i];
-        // Gradient direction components (perpendicular to edge)
-        const gr = Math.sin(a), gc = Math.cos(a);
+      // Character picker
+      const edgeCharPicker = (idx, d) => {
+        if (d === 0) return mags[idx] >= threshold * 2 ? 'O' : 'o';
+        if (d === 1) return ':';
+        return '.';
+      };
 
-        // Walk in both +gradient and -gradient directions
-        for (const sign of [1, -1]) {
-          for (let step = 1; step <= maxDist; step++) {
-            const nr = Math.round(r0 + sign * gr * step);
-            const nc = Math.round(c0 + sign * gc * step);
-            if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) break;
-            const ni = nr * cols + nc;
-            // Don't overwrite edge cells or closer distances
-            if (dist[ni] >= 0 && dist[ni] <= step) continue;
-            // Stop if we hit another edge (don't fill between edges)
-            if (finalKeep[ni]) break;
-            dist[ni] = step;
-          }
-        }
-      }
+      drawContourChars(dist, edgeCharPicker, angles, pixels, srcW, srcH, cols, rows, cellSize, stride, scale, offsetX, offsetY, layer, maskMetrics, ' .:oO');
+    }
 
-      // Draw contour characters
-      // chars = '.:oO' — edge cells get o/O by magnitude, falloff gets ./:
-      const fontSize = cellSize * scale * gapFontScale(layer.gap);
-      outputCtx.font = `${fontSize}px ${layer.font}`;
-      outputCtx.textBaseline = 'middle';
-      outputCtx.textAlign = 'center';
-
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          const idx = row * cols + col;
-          const d = dist[idx];
-          if (d < 0) continue;
-
-          let char;
-          if (d === 0) {
-            char = mags[idx] >= 200 ? 'O' : 'o';
-          } else if (d === 1) {
-            char = ':';
-          } else {
-            char = '.';
-          }
-          const aChar = wordArtifactChar(row, col, layer);
-          if (aChar) char = aChar;
-          const x = offsetX + (col + 0.5) * stride * scale;
-          const y = offsetY + (row + 0.5) * stride * scale;
-          const cx = col * stride + Math.floor(cellSize / 2);
-          const cy = row * stride + Math.floor(cellSize / 2);
-          const strength = sampleMaskStrength(maskMetrics, cx, cy);
-          if (!shouldRenderByStrength(strength, row, col)) continue;
-          char = attenuateCharFromPalette(char, ' .:oO', strength);
-          if (char === ' ') continue;
-          const pi = sourcePixelOffset(srcW, srcH, cx, cy);
-
-          const baseFill = layer.colorMode ? `rgb(${pixels[pi]},${pixels[pi+1]},${pixels[pi+2]})` : '#ffffff';
-          outputCtx.fillStyle = getLayerDrawColor(layer, baseFill);
-          const ovPad = state.forceGrid ? state.forceGridPadding / 100 : 0;
-          if (layer.charRotation) {
-            outputCtx.save();
-            outputCtx.translate(x, y);
-            outputCtx.rotate(angles[idx]);
-            if (ovPad > 0) outputCtx.scale(1 - ovPad, 1 - ovPad);
-            outputCtx.fillText(char, 0, 0);
-            outputCtx.restore();
-          } else if (ovPad > 0) {
-            outputCtx.save();
-            outputCtx.translate(x, y);
-            outputCtx.scale(1 - ovPad, 1 - ovPad);
-            outputCtx.fillText(char, 0, 0);
-            outputCtx.restore();
-          } else {
-            outputCtx.fillText(char, x, y);
-          }
-        }
+    // ============ CONTOUR DISPATCHER ============
+    function renderOverlay(pixels, srcW, srcH, cols, rows, cellSize, chars, scale, offsetX, offsetY, layer, maskMetrics) {
+      if ((layer.contourStyle || 'edge') === 'topo') {
+        renderContourTopo(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
+      } else {
+        renderContourEdge(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics);
       }
     }
 
@@ -7717,21 +9246,32 @@
     // ============ OUTLINE MODE ============
     function renderOutline(pixels, srcW, srcH, cols, rows, cellSize, scale, offsetX, offsetY, layer, maskMetrics) {
       const stride = Math.round(cellSize * (1 + layer.gap));
-      const levels = 8;
+      const levels = layer.outlineLevels || 8;
+      const smoothing = layer.outlineSmoothing || 0;
+      const minSize = layer.outlineMinSize || 0;
+      const depth = layer.outlineDepth || 0;
+      const fillMode = layer.outlineFillMode || 'off';
+      const strokeOpacity = (layer.outlineStrokeOpacity != null ? layer.outlineStrokeOpacity : 100) / 100;
       const sampleStep = Math.max(1, Math.floor(cellSize / 4));
       const total = rows * cols;
       const strokeWidth = Math.max(0.5, (layer.outlineStrokeSize || 1.5) * scale);
       const strideScale = stride * scale;
-      const cornerRadius = Math.max(0, Math.min((layer.outlineCornerRadius || 0) * scale, Math.max(0, strideScale * 0.5 - strokeWidth * 0.25)));
+      const cr = Math.max(0, Math.min((layer.outlineCornerRadius || 0) * scale, strideScale * 0.5 - strokeWidth * 0.25));
 
-      const grid = new Uint8Array(rows * cols);
-      const valid = new Uint8Array(rows * cols);
+      const grid = new Uint8Array(total);
+      const valid = new Uint8Array(total);
+      const cellR = new Float32Array(total);
+      const cellG = new Float32Array(total);
+      const cellB = new Float32Array(total);
+      const lumGrid = new Float32Array(total);
 
+      // Sample source pixels per cell
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
+          const idx = row * cols + col;
           const cx = col * stride + Math.floor(cellSize / 2);
           const cy = row * stride + Math.floor(cellSize / 2);
-          valid[row * cols + col] = sampleMaskStrength(maskMetrics, cx, cy) > 0 ? 1 : 0;
+          valid[idx] = sampleMaskStrength(maskMetrics, cx, cy) > 0 ? 1 : 0;
 
           let r = 0, g = 0, b = 0, count = 0;
           for (let dy = 0; dy < cellSize; dy += sampleStep) {
@@ -7742,190 +9282,280 @@
               r += pixels[i]; g += pixels[i + 1]; b += pixels[i + 2]; count++;
             }
           }
-          let lum = (0.299 * r / count + 0.587 * g / count + 0.114 * b / count) / 255;
-          if (layer.invert) lum = 1 - lum;
-          grid[row * cols + col] = Math.min(Math.floor(lum * levels), levels - 1);
+          cellR[idx] = r / count;
+          cellG[idx] = g / count;
+          cellB[idx] = b / count;
+          lumGrid[idx] = 0.299 * cellR[idx] + 0.587 * cellG[idx] + 0.114 * cellB[idx];
         }
       }
 
+      // Smoothing: pre-blur luminance
+      let smoothedLum = lumGrid;
+      if (smoothing > 0) {
+        smoothedLum = gaussianBlurGrid(lumGrid, cols, rows, smoothing * 0.8);
+      }
+
+      // Quantize
+      for (let i = 0; i < total; i++) {
+        let lum = smoothedLum[i] / 255;
+        if (layer.invert) lum = 1 - lum;
+        grid[i] = Math.min(Math.floor(lum * levels), levels - 1);
+      }
+
+      // Connected components
+      const componentIds = new Int32Array(total).fill(-1);
+      const components = [];
+      let componentId = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const startIdx = row * cols + col;
+          if (!valid[startIdx] || componentIds[startIdx] !== -1) continue;
+          const queue = [startIdx];
+          const cells = [];
+          const level = grid[startIdx];
+          componentIds[startIdx] = componentId;
+          let touchesBoundary = row === 0 || row === rows - 1 || col === 0 || col === cols - 1;
+          while (queue.length) {
+            const idx = queue.pop();
+            cells.push(idx);
+            const r = Math.floor(idx / cols), c = idx % cols;
+            if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) touchesBoundary = true;
+            for (const [nr, nc] of [[r,c-1],[r,c+1],[r-1,c],[r+1,c]]) {
+              if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+              const ni = nr * cols + nc;
+              if (!valid[ni] || grid[ni] !== level || componentIds[ni] !== -1) continue;
+              componentIds[ni] = componentId;
+              queue.push(ni);
+            }
+          }
+          components.push({ id: componentId, cells, level, touchesBoundary });
+          componentId++;
+        }
+      }
+
+      // Min size filter — remove small components
+      if (minSize > 0) {
+        for (const comp of components) {
+          if (comp.cells.length < minSize) {
+            for (const idx of comp.cells) valid[idx] = 0;
+            comp.removed = true;
+          }
+        }
+      }
+
+      // Find exterior (largest boundary-touching component)
+      let exteriorId = -1;
+      let exteriorSize = -1;
+      for (const comp of components) {
+        if (comp.removed) continue;
+        if (!comp.touchesBoundary) continue;
+        if (comp.cells.length > exteriorSize) {
+          exteriorSize = comp.cells.length;
+          exteriorId = comp.id;
+        }
+      }
+
+      // Edge detection — suppress canvas boundary edges, add mask boundary edges
       const hEdges = new Uint8Array((rows + 1) * cols);
       const vEdges = new Uint8Array(rows * (cols + 1));
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           const idx = row * cols + col;
           if (!valid[idx]) continue;
-
           const val = grid[idx];
-          const leftMatch = col > 0 && valid[idx - 1] && grid[idx - 1] === val;
-          const rightMatch = col < cols - 1 && valid[idx + 1] && grid[idx + 1] === val;
-          const topMatch = row > 0 && valid[idx - cols] && grid[idx - cols] === val;
-          const bottomMatch = row < rows - 1 && valid[idx + cols] && grid[idx + cols] === val;
-
-          if (!topMatch) hEdges[row * cols + col] = 1;
-          if (!bottomMatch) hEdges[(row + 1) * cols + col] = 1;
-          if (!leftMatch) vEdges[row * (cols + 1) + col] = 1;
-          if (!rightMatch) vEdges[row * (cols + 1) + col + 1] = 1;
+          // Top edge: skip if at canvas top (row=0), but add if neighbor is invalid (mask edge)
+          if (row > 0) {
+            const topIdx = idx - cols;
+            if (!valid[topIdx] || grid[topIdx] !== val) hEdges[row * cols + col] = 1;
+          }
+          // Bottom edge: skip if at canvas bottom
+          if (row < rows - 1) {
+            const botIdx = idx + cols;
+            if (!valid[botIdx] || grid[botIdx] !== val) hEdges[(row + 1) * cols + col] = 1;
+          }
+          // Left edge: skip if at canvas left
+          if (col > 0) {
+            const leftIdx = idx - 1;
+            if (!valid[leftIdx] || grid[leftIdx] !== val) vEdges[row * (cols + 1) + col] = 1;
+          }
+          // Right edge: skip if at canvas right
+          if (col < cols - 1) {
+            const rightIdx = idx + 1;
+            if (!valid[rightIdx] || grid[rightIdx] !== val) vEdges[row * (cols + 1) + col + 1] = 1;
+          }
+          // Mask boundary edges: valid cell next to invalid cell that's not canvas edge
+          if (row > 0 && !valid[idx - cols]) hEdges[row * cols + col] = 1;
+          if (row < rows - 1 && !valid[idx + cols]) hEdges[(row + 1) * cols + col] = 1;
+          if (col > 0 && !valid[idx - 1]) vEdges[row * (cols + 1) + col] = 1;
+          if (col < cols - 1 && !valid[idx + 1]) vEdges[row * (cols + 1) + col + 1] = 1;
         }
       }
 
-      if (layer.outlineFill) {
-        const componentIds = new Int32Array(total).fill(-1);
-        const components = [];
-        let componentId = 0;
+      // Compute average color per component (for source/tinted fill)
+      const compColors = [];
+      if (fillMode === 'source' || fillMode === 'tinted') {
+        for (const comp of components) {
+          if (comp.removed) { compColors.push(null); continue; }
+          let rSum = 0, gSum = 0, bSum = 0;
+          for (const idx of comp.cells) {
+            rSum += cellR[idx]; gSum += cellG[idx]; bSum += cellB[idx];
+          }
+          const n = comp.cells.length;
+          compColors.push({ r: rSum / n, g: gSum / n, b: bSum / n });
+        }
+      }
 
-        for (let row = 0; row < rows; row++) {
-          for (let col = 0; col < cols; col++) {
-            const startIdx = row * cols + col;
-            if (!valid[startIdx] || componentIds[startIdx] !== -1) continue;
+      // Depth shadow offset
+      const depthOx = depth * scale * 0.5;
+      const depthOy = depth * scale * 0.5;
 
-            const queue = [startIdx];
-            const cells = [];
-            const level = grid[startIdx];
-            componentIds[startIdx] = componentId;
-            let touchesBoundary = row === 0 || row === rows - 1 || col === 0 || col === cols - 1;
+      // Helper: draw filled rect for a cell
+      function fillCell(row, col, color, ox, oy) {
+        outputCtx.fillStyle = color;
+        const x = offsetX + col * strideScale + ox;
+        const y = offsetY + row * strideScale + oy;
+        outputCtx.fillRect(x, y, strideScale, strideScale);
+      }
 
-            while (queue.length) {
-              const idx = queue.pop();
-              cells.push(idx);
-              const r = Math.floor(idx / cols);
-              const c = idx % cols;
+      // Render levels back-to-front for depth
+      const levelOrder = [];
+      for (let l = 0; l < levels; l++) levelOrder.push(l);
 
-              if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
-                touchesBoundary = true;
-              }
+      // Draw fill
+      if (fillMode !== 'off') {
+        const fillColor = layer.outlineFillColor || '#1f7a4f';
+        const fillRgb = hexToRgb(fillColor) || { r: 31, g: 122, b: 79 };
 
-              const neighbors = [
-                [r, c - 1],
-                [r, c + 1],
-                [r - 1, c],
-                [r + 1, c]
-              ];
+        for (const l of levelOrder) {
+          for (const comp of components) {
+            if (comp.removed || comp.level !== l || comp.id === exteriorId) continue;
 
-              for (const [nr, nc] of neighbors) {
-                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
-                const ni = nr * cols + nc;
-                if (!valid[ni]) continue;
-                if (grid[ni] !== level) continue;
-                if (componentIds[ni] !== -1) continue;
-                componentIds[ni] = componentId;
-                queue.push(ni);
+            // Depth shadow
+            if (depth > 0) {
+              for (const idx of comp.cells) {
+                fillCell(Math.floor(idx / cols), idx % cols, 'rgba(0,0,0,0.3)', depthOx, depthOy);
               }
             }
 
-            components.push({ id: componentId, cells, touchesBoundary });
-            componentId++;
-          }
-        }
+            // Fill color
+            let color;
+            if (fillMode === 'solid') {
+              color = fillColor;
+            } else if (fillMode === 'source') {
+              const cc = compColors[comp.id];
+              color = cc ? `rgb(${Math.round(cc.r)},${Math.round(cc.g)},${Math.round(cc.b)})` : fillColor;
+            } else if (fillMode === 'tinted') {
+              const cc = compColors[comp.id];
+              if (cc) {
+                const lumFactor = (cc.r * 0.299 + cc.g * 0.587 + cc.b * 0.114) / 255;
+                const tr = Math.round(fillRgb.r * lumFactor);
+                const tg = Math.round(fillRgb.g * lumFactor);
+                const tb = Math.round(fillRgb.b * lumFactor);
+                color = `rgb(${tr},${tg},${tb})`;
+              } else {
+                color = fillColor;
+              }
+            }
 
-        let exteriorId = -1;
-        let exteriorSize = -1;
-        for (const component of components) {
-          if (!component.touchesBoundary) continue;
-          if (component.cells.length > exteriorSize) {
-            exteriorSize = component.cells.length;
-            exteriorId = component.id;
-          }
-        }
-
-        outputCtx.fillStyle = layer.outlineFillColor || '#1f7a4f';
-        for (const component of components) {
-          if (component.id === exteriorId) continue;
-          for (const idx of component.cells) {
-            const row = Math.floor(idx / cols);
-            const col = idx % cols;
-            const x = offsetX + col * stride * scale;
-            const y = offsetY + row * stride * scale;
-            const w = stride * scale;
-            const h = stride * scale;
-            outputCtx.fillRect(x, y, w, h);
+            for (const idx of comp.cells) {
+              fillCell(Math.floor(idx / cols), idx % cols, color, 0, 0);
+            }
           }
         }
       }
 
+      // Stroke rendering with corner radius
       const strokeColor = getLayerDrawColor(layer, '#ffffff');
-      outputCtx.strokeStyle = strokeColor;
-      outputCtx.lineWidth = strokeWidth;
-      outputCtx.lineJoin = 'round';
-      outputCtx.lineCap = 'round';
-      const vertexCodes = new Uint8Array((rows + 1) * (cols + 1));
-      if (cornerRadius > 0) {
-        for (let vr = 0; vr <= rows; vr++) {
-          for (let vc = 0; vc <= cols; vc++) {
-            const hasLeft = vc > 0 && hEdges[vr * cols + (vc - 1)] === 1;
-            const hasRight = vc < cols && hEdges[vr * cols + vc] === 1;
-            const hasUp = vr > 0 && vEdges[(vr - 1) * (cols + 1) + vc] === 1;
-            const hasDown = vr < rows && vEdges[vr * (cols + 1) + vc] === 1;
-            const horizCount = (hasLeft ? 1 : 0) + (hasRight ? 1 : 0);
-            const vertCount = (hasUp ? 1 : 0) + (hasDown ? 1 : 0);
+      if (strokeOpacity > 0) {
+        outputCtx.save();
+        outputCtx.globalAlpha = strokeOpacity;
+        outputCtx.strokeStyle = strokeColor;
+        outputCtx.lineWidth = strokeWidth;
+        outputCtx.lineJoin = 'round';
+        outputCtx.lineCap = 'round';
 
-            if (horizCount !== 1 || vertCount !== 1) continue;
-            let code = 0;
-            if (hasRight && hasDown) code = 1;
-            else if (hasLeft && hasDown) code = 2;
-            else if (hasRight && hasUp) code = 3;
-            else if (hasLeft && hasUp) code = 4;
-            vertexCodes[vr * (cols + 1) + vc] = code;
-          }
-        }
-      }
-
-      outputCtx.beginPath();
-      for (let row = 0; row <= rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          if (!hEdges[row * cols + col]) continue;
-          const leftCode = vertexCodes[row * (cols + 1) + col];
-          const rightCode = vertexCodes[row * (cols + 1) + col + 1];
-          const trimStart = (leftCode === 1 || leftCode === 3) ? cornerRadius : 0;
-          const trimEnd = (rightCode === 2 || rightCode === 4) ? cornerRadius : 0;
-          const x1 = offsetX + col * strideScale + trimStart;
-          const x2 = offsetX + (col + 1) * strideScale - trimEnd;
-          const y = offsetY + row * strideScale;
-          if (x2 <= x1) continue;
-          outputCtx.moveTo(x1, y);
-          outputCtx.lineTo(x2, y);
-        }
-      }
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col <= cols; col++) {
-          if (!vEdges[row * (cols + 1) + col]) continue;
-          const topCode = vertexCodes[row * (cols + 1) + col];
-          const bottomCode = vertexCodes[(row + 1) * (cols + 1) + col];
-          const trimStart = (topCode === 1 || topCode === 2) ? cornerRadius : 0;
-          const trimEnd = (bottomCode === 3 || bottomCode === 4) ? cornerRadius : 0;
-          const x = offsetX + col * strideScale;
-          const y1 = offsetY + row * strideScale + trimStart;
-          const y2 = offsetY + (row + 1) * strideScale - trimEnd;
-          if (y2 <= y1) continue;
-          outputCtx.moveTo(x, y1);
-          outputCtx.lineTo(x, y2);
-        }
-      }
-      if (cornerRadius > 0) {
-        for (let row = 0; row <= rows; row++) {
-          for (let col = 0; col <= cols; col++) {
-            const code = vertexCodes[row * (cols + 1) + col];
-            if (!code) continue;
-            const x = offsetX + col * strideScale;
-            const y = offsetY + row * strideScale;
-            if (code === 1) {
-              outputCtx.moveTo(x + cornerRadius, y);
-              outputCtx.arcTo(x, y, x, y + cornerRadius, cornerRadius);
-            } else if (code === 2) {
-              outputCtx.moveTo(x - cornerRadius, y);
-              outputCtx.arcTo(x, y, x, y + cornerRadius, cornerRadius);
-            } else if (code === 3) {
-              outputCtx.moveTo(x + cornerRadius, y);
-              outputCtx.arcTo(x, y, x, y - cornerRadius, cornerRadius);
-            } else if (code === 4) {
-              outputCtx.moveTo(x - cornerRadius, y);
-              outputCtx.arcTo(x, y, x, y - cornerRadius, cornerRadius);
+        // Compute vertex corner codes for rounded corners
+        const vertexCodes = new Uint8Array((rows + 1) * (cols + 1));
+        if (cr > 0) {
+          for (let vr = 0; vr <= rows; vr++) {
+            for (let vc = 0; vc <= cols; vc++) {
+              const hasLeft = vc > 0 && hEdges[vr * cols + (vc - 1)] === 1;
+              const hasRight = vc < cols && hEdges[vr * cols + vc] === 1;
+              const hasUp = vr > 0 && vEdges[(vr - 1) * (cols + 1) + vc] === 1;
+              const hasDown = vr < rows && vEdges[vr * (cols + 1) + vc] === 1;
+              const hc = (hasLeft ? 1 : 0) + (hasRight ? 1 : 0);
+              const vc2 = (hasUp ? 1 : 0) + (hasDown ? 1 : 0);
+              if (hc !== 1 || vc2 !== 1) continue;
+              let code = 0;
+              if (hasRight && hasDown) code = 1;
+              else if (hasLeft && hasDown) code = 2;
+              else if (hasRight && hasUp) code = 3;
+              else if (hasLeft && hasUp) code = 4;
+              vertexCodes[vr * (cols + 1) + vc] = code;
             }
           }
         }
+
+        outputCtx.beginPath();
+        // Horizontal edges
+        for (let row = 0; row <= rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            if (!hEdges[row * cols + col]) continue;
+            const leftCode = vertexCodes[row * (cols + 1) + col];
+            const rightCode = vertexCodes[row * (cols + 1) + col + 1];
+            const trimStart = (leftCode === 1 || leftCode === 3) ? cr : 0;
+            const trimEnd = (rightCode === 2 || rightCode === 4) ? cr : 0;
+            const x1 = offsetX + col * strideScale + trimStart;
+            const x2 = offsetX + (col + 1) * strideScale - trimEnd;
+            const y = offsetY + row * strideScale;
+            if (x2 <= x1) continue;
+            outputCtx.moveTo(x1, y);
+            outputCtx.lineTo(x2, y);
+          }
+        }
+        // Vertical edges
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col <= cols; col++) {
+            if (!vEdges[row * (cols + 1) + col]) continue;
+            const topCode = vertexCodes[row * (cols + 1) + col];
+            const bottomCode = vertexCodes[(row + 1) * (cols + 1) + col];
+            const trimStart = (topCode === 1 || topCode === 2) ? cr : 0;
+            const trimEnd = (bottomCode === 3 || bottomCode === 4) ? cr : 0;
+            const x = offsetX + col * strideScale;
+            const y1 = offsetY + row * strideScale + trimStart;
+            const y2 = offsetY + (row + 1) * strideScale - trimEnd;
+            if (y2 <= y1) continue;
+            outputCtx.moveTo(x, y1);
+            outputCtx.lineTo(x, y2);
+          }
+        }
+        // Rounded corners using quadraticCurveTo for smoother results
+        if (cr > 0) {
+          for (let row = 0; row <= rows; row++) {
+            for (let col = 0; col <= cols; col++) {
+              const code = vertexCodes[row * (cols + 1) + col];
+              if (!code) continue;
+              const x = offsetX + col * strideScale;
+              const y = offsetY + row * strideScale;
+              if (code === 1) { // top-left corner of a shape going right-down
+                outputCtx.moveTo(x + cr, y);
+                outputCtx.quadraticCurveTo(x, y, x, y + cr);
+              } else if (code === 2) { // top-right going left-down
+                outputCtx.moveTo(x - cr, y);
+                outputCtx.quadraticCurveTo(x, y, x, y + cr);
+              } else if (code === 3) { // bottom-left going right-up
+                outputCtx.moveTo(x + cr, y);
+                outputCtx.quadraticCurveTo(x, y, x, y - cr);
+              } else if (code === 4) { // bottom-right going left-up
+                outputCtx.moveTo(x - cr, y);
+                outputCtx.quadraticCurveTo(x, y, x, y - cr);
+              }
+            }
+          }
+        }
+        outputCtx.stroke();
+        outputCtx.restore();
       }
-      outputCtx.stroke();
-      outputCtx.lineJoin = 'miter';
-      outputCtx.lineCap = 'butt';
     }
 
     // ============ HIGHLIGHT MODE ============
@@ -8154,7 +9784,56 @@
     });
 
     outputCanvas.addEventListener('pointerdown', (e) => {
-      if (!selectionState.active || !state.sourceElement) return;
+      if (!state.sourceElement) return;
+      // Click-and-drag to set center for full-frame fractal textures (e.g. lens)
+      if (!selectionState.active) {
+        const layer = activeLayer();
+        if (layer && layer.effectChain) {
+          const fx = layer.effectChain.find(f => f.enabled && (
+            (f.type === 'fractalGlass' && FULL_FRAME_TEXTURES.has(f.params.texture)) ||
+            f.type === 'feedback'
+          ));
+          if (fx) {
+            const geometry = getRenderGeometry();
+            if (geometry) {
+              const cp = clientToCanvasPoint(e.clientX, e.clientY);
+              const sp = canvasToSourcePoint(cp.x, cp.y, geometry);
+              if (sp.inside) {
+                fx.params.centerX = Math.round(sp.x / geometry.srcW * 1000) / 10;
+                fx.params.centerY = Math.round(sp.y / geometry.srcH * 1000) / 10;
+                syncUIToLayer(layer);
+                scheduleRender();
+                // Start drag tracking
+                outputCanvas.setPointerCapture(e.pointerId);
+                const dragState = { fx, layer, pointerId: e.pointerId };
+                const onMove = (me) => {
+                  if (me.pointerId !== dragState.pointerId) return;
+                  const curGeo = getRenderGeometry();
+                  if (!curGeo) return;
+                  const mcp = clientToCanvasPoint(me.clientX, me.clientY);
+                  const msp = canvasToSourcePoint(mcp.x, mcp.y, curGeo);
+                  dragState.fx.params.centerX = clamp(Math.round(msp.x / curGeo.srcW * 1000) / 10, 0, 100);
+                  dragState.fx.params.centerY = clamp(Math.round(msp.y / curGeo.srcH * 1000) / 10, 0, 100);
+                  syncUIToLayer(dragState.layer);
+                  scheduleRender();
+                };
+                const onUp = (ue) => {
+                  if (ue.pointerId !== dragState.pointerId) return;
+                  outputCanvas.removeEventListener('pointermove', onMove);
+                  outputCanvas.removeEventListener('pointerup', onUp);
+                  outputCanvas.removeEventListener('pointercancel', onUp);
+                  if (outputCanvas.hasPointerCapture(ue.pointerId)) outputCanvas.releasePointerCapture(ue.pointerId);
+                };
+                outputCanvas.addEventListener('pointermove', onMove);
+                outputCanvas.addEventListener('pointerup', onUp);
+                outputCanvas.addEventListener('pointercancel', onUp);
+                e.preventDefault();
+              }
+            }
+          }
+        }
+        return;
+      }
       const geometry = getRenderGeometry();
       if (!geometry) return;
       const canvasPoint = clientToCanvasPoint(e.clientX, e.clientY);
@@ -8580,19 +10259,19 @@
     function updateOutlineFillUI() {
       const layer = activeLayer();
       const outlineSection = document.getElementById('outlineFillSection');
-      const outlineControls = document.getElementById('outlineFillControls');
-      const outlineToggle = document.getElementById('outlineFillToggle');
+      const outlineFillColorSection = document.getElementById('outlineFillColorSection');
       const swatch = document.getElementById('outlineFillSwatch');
       const preview = document.getElementById('outlineFillPreview');
-      const fillBtn = document.getElementById('outlineFillBtn');
       const isOutline = layer.variant === 'Outline';
+      const fillMode = layer.outlineFillMode || 'off';
       const color = layer.outlineFillColor || '#1f7a4f';
       const rgb = hexToRgb(color) || { r: 31, g: 122, b: 79 };
+      const showColor = fillMode === 'solid' || fillMode === 'tinted';
 
       outlineSection.classList.toggle('hidden', !isOutline);
-      outlineToggle.checked = !!layer.outlineFill;
-      outlineControls.classList.toggle('hidden', !isOutline || !layer.outlineFill);
-      fillBtn.disabled = !isOutline || !layer.outlineFill;
+      const modeLabel = OUTLINE_FILL_MODE_OPTIONS.find(o => o.value === fillMode);
+      document.getElementById('outlineFillModeLabel').textContent = modeLabel ? modeLabel.label : 'Off';
+      outlineFillColorSection.classList.toggle('hidden', !isOutline || !showColor);
       swatch.style.background = color;
       preview.style.background = color;
       document.getElementById('outlineFillHex').value = color;
@@ -8602,7 +10281,7 @@
       document.getElementById('outlineFillRValue').value = rgb.r;
       document.getElementById('outlineFillGValue').value = rgb.g;
       document.getElementById('outlineFillBValue').value = rgb.b;
-      if (!isOutline || !layer.outlineFill) {
+      if (!isOutline || !showColor) {
         hideFloatingPanel(document.getElementById('outlineFillPopover'));
       }
     }
@@ -8655,6 +10334,7 @@
     }
 
     function syncUIToLayer(layer) {
+      if (!layer) return;
       const isSource = layer.kind === 'source';
       const isAdjustment = layer.kind === 'adjustment';
       // Toggle section visibility based on layer kind
@@ -8719,16 +10399,34 @@
       document.getElementById('forceGridPaddingSlider').value = state.forceGridPadding;
       document.getElementById('forceGridPaddingValue').value = state.forceGridPadding;
       manualColorToggle.checked = !!layer.manualColorEnabled;
-      outlineFillToggle.checked = !!layer.outlineFill;
       // Contour
-      contourSpreadSlider.value = layer.contourSpread;
-      contourSpreadValue.value = layer.contourSpread;
-      contourSensSlider.value = layer.contourSens;
-      contourSensValue.value = layer.contourSens;
+      contourSmoothingSlider.value = layer.contourSmoothing;
+      contourSmoothingValue.value = layer.contourSmoothing;
+      contourDetailSlider.value = layer.contourDetail;
+      contourDetailValue.value = layer.contourDetail;
+      contourThicknessSlider.value = layer.contourThickness;
+      contourThicknessValue.value = layer.contourThickness;
+      contourLevelsSlider.value = layer.contourLevels;
+      contourLevelsValue.value = layer.contourLevels;
+      contourFillToggle.checked = !!layer.contourFill;
+      contourSigmaRatioSlider.value = layer.contourSigmaRatio;
+      contourSigmaRatioValue.value = formatAdj(layer.contourSigmaRatio);
+      updateContourStyleUI();
       outlineStrokeSizeSlider.value = layer.outlineStrokeSize;
       outlineStrokeSizeValue.value = formatAdj(layer.outlineStrokeSize);
       outlineCornerRadiusSlider.value = layer.outlineCornerRadius;
       outlineCornerRadiusValue.value = formatAdj(layer.outlineCornerRadius);
+      outlineLevelsSlider.value = layer.outlineLevels;
+      outlineLevelsValue.value = layer.outlineLevels;
+      outlineSmoothingSlider.value = layer.outlineSmoothing;
+      outlineSmoothingValue.value = layer.outlineSmoothing;
+      outlineMinSizeSlider.value = layer.outlineMinSize;
+      outlineMinSizeValue.value = layer.outlineMinSize;
+      outlineDepthSlider.value = layer.outlineDepth;
+      outlineDepthValue.value = layer.outlineDepth;
+      outlineStrokeOpacitySlider.value = layer.outlineStrokeOpacity;
+      outlineStrokeOpacityValue.value = layer.outlineStrokeOpacity;
+      updateOutlineFillUI();
       // Layer panel handles effects now
       renderLayerPanel();
       // Word artifact
@@ -8878,8 +10576,7 @@
 
         const displayName = isAdjustment ? layer.name : (isSource ? (state.source === 'video' ? 'Video' : 'Image') : layer.variant);
         const duplicateHidden = isSource ? 'hidden' : '';
-        const canDelete = isAdjustment || (!isSource && asciiLayerCount() > 1);
-        const deleteHidden = canDelete ? '' : 'hidden';
+        const deleteHidden = '';
 
         row.innerHTML = `
           <button class="layer-vis flex-shrink-0 flex items-center justify-center" data-id="${layer.id}" title="${layer.visible ? 'Hide' : 'Show'}" style="width:22px;height:22px;color:${layer.visible ? '#fb460d' : '#2a2a2a'}">${layerVisibilityIcon(layer.visible)}</button>
@@ -9258,16 +10955,17 @@
     }
 
     function removeLayer(id) {
-      if (id === getSourceLayer()?.id) return;
       const layerToRemove = state.layers.find(l => l.id === id);
       if (!layerToRemove) return;
-      // Adjustment layers are always deletable; ascii layers need at least 1 remaining
-      if (layerToRemove.kind === 'ascii' && asciiLayerCount() <= 1) return;
       const idx = state.layers.findIndex(l => l.id === id);
       state.layers.splice(idx, 1);
       if (state.activeLayerId === id) {
-        state.activeLayerId = state.layers[Math.min(idx, state.layers.length - 1)].id;
-        syncUIToLayer(activeLayer());
+        if (state.layers.length > 0) {
+          state.activeLayerId = state.layers[Math.min(idx, state.layers.length - 1)].id;
+          syncUIToLayer(activeLayer());
+        } else {
+          state.activeLayerId = null;
+        }
       }
       layerCanvasPool.delete(id);
       layerRenderCache.delete(id);
